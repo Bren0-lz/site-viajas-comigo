@@ -1,0 +1,371 @@
+.hero {
+  position: relative;
+  height: 55vh;
+  min-height: 380px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+  cursor: pointer;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 30%, rgba(10, 33, 64, 0.88));
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  padding-bottom: 40px;
+}
+
+.heroContent > * {
+  animation: heroRise 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+.heroContent > :nth-child(1) { animation-delay: 0.12s; }
+.heroContent > :nth-child(2) { animation-delay: 0.24s; }
+.heroContent > :nth-child(3) { animation-delay: 0.36s; }
+
+.badge {
+  display: inline-block;
+  background: rgba(10, 33, 64, 0.85);
+  color: var(--sand);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: 30px;
+  border: 1px solid var(--line);
+  margin-bottom: 14px;
+}
+
+.badge.esgotado {
+  color: #e08a8a;
+}
+
+.heroContent h1 {
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  margin-bottom: 10px;
+}
+
+.meta {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.photoCount {
+  position: absolute;
+  bottom: 16px;
+  right: 22px;
+  z-index: 1;
+  background: rgba(10, 33, 64, 0.72);
+  color: var(--muted);
+  font-size: 0.78rem;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 40px;
+  padding: 48px 22px 80px;
+  max-width: 1140px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.lead {
+  font-size: 1.08rem;
+  color: #d8d4c9;
+  line-height: 1.75;
+}
+
+.block h2 {
+  font-size: 1.7rem;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* INCLUSOS */
+.inclusos {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.inclusos li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  color: #d8d4c9;
+  font-size: 0.97rem;
+}
+
+.ck {
+  color: var(--gold);
+  font-weight: 600;
+  flex: 0 0 20px;
+}
+
+/* ROTEIRO */
+.roteiro {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-left: 2px solid var(--line);
+  padding-left: 24px;
+}
+
+.roteiro li {
+  position: relative;
+  padding: 10px 0;
+  color: #d8d4c9;
+  font-size: 0.97rem;
+}
+
+.roteiro li::before {
+  content: '';
+  position: absolute;
+  left: -29px;
+  top: 17px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0.6;
+}
+
+.roteiro b {
+  color: var(--gold-soft);
+}
+
+/* GALERIA */
+.galeria {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.gItem {
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  aspect-ratio: 4/3;
+}
+
+.gItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.3s;
+}
+
+.gItem:hover img {
+  transform: scale(1.04);
+}
+
+.gItem.feat {
+  grid-column: span 2;
+  grid-row: span 1;
+  aspect-ratio: 16/9;
+}
+
+/* MAPA */
+.loc {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-bottom: 14px;
+}
+
+.mapFrame {
+  width: 100%;
+  height: 340px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+}
+
+/* SIDEBAR */
+.side {
+  position: sticky;
+  top: 88px;
+}
+
+.cardPrice {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cardPrice small {
+  color: var(--muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: var(--cream);
+  line-height: 1.1;
+}
+
+.per {
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-bottom: 16px;
+}
+
+.facts {
+  list-style: none;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 16px 0;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.facts li {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.88rem;
+}
+
+.facts li span {
+  color: var(--muted);
+}
+
+.facts li b {
+  color: var(--cream);
+  font-weight: 500;
+}
+
+.btnWa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  background: var(--bronze);
+  color: #fdf7ea;
+  border: 1px solid var(--bronze);
+  padding: 14px;
+  border-radius: 40px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: 0.25s;
+  text-decoration: none;
+}
+
+.btnWa:hover {
+  background: var(--gold-soft);
+  transform: translateY(-2px);
+}
+
+.btnInsta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  padding: 12px;
+  border-radius: 40px;
+  font-weight: 500;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: 0.25s;
+  margin-top: 10px;
+  text-decoration: none;
+}
+
+.btnInsta:hover {
+  background: rgba(140, 107, 66, 0.12);
+}
+
+.reassure {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.78rem;
+  margin-top: 12px;
+}
+
+/* NOT FOUND */
+.notFound {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 16px;
+  padding: 80px 22px;
+}
+
+.notFound h1 {
+  font-size: 2.4rem;
+}
+
+.notFound p {
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .side {
+    position: static;
+  }
+
+  .galeria {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .gItem.feat {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 680px) {
+  .galeria {
+    grid-template-columns: 1fr;
+  }
+
+  .gItem.feat {
+    grid-column: span 1;
+  }
+}

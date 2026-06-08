@@ -1,0 +1,188 @@
+:root {
+  /* Paleta da marca Viajas Comigo */
+  --navy: #0a2140;        /* marinho — escuro principal */
+  --slate: #2e4159;       /* azul-ardósia — escuro secundário */
+  --bronze: #8c6b42;      /* bronze — acento / CTA */
+  --bronze-soft: #a9854f; /* bronze claro — hover */
+  --sand: #f2ddb6;        /* creme/areia — acento quente */
+  --cream-bg: #f7f1e4;    /* fundo das seções claras */
+  --gray: #d9d9d9;        /* cinza claro — bordas / superfícies claras */
+  --ink: #14233b;         /* texto escuro sobre seções claras */
+  --muted-l: #5a6377;     /* texto secundário sobre claro */
+
+  /* Aliases legados, reapontados para a nova paleta */
+  --black: var(--navy);
+  --black-soft: var(--slate);
+  --panel: #243352;
+  --gold: var(--bronze);
+  --gold-soft: var(--sand);
+  --cream: #f4f1ea;       /* quase-branco — texto corrido sobre escuro */
+  --muted: #b9bccb;       /* texto secundário sobre escuro */
+  --line: rgba(140, 107, 66, 0.3);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--black);
+  color: var(--cream);
+  font-family: 'Jost', system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 22px;
+}
+
+.gold {
+  color: var(--gold);
+}
+
+.eyebrow {
+  font-size: 0.74rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 14px 26px;
+  border-radius: 40px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  border: 1px solid var(--gold);
+  transition: 0.25s ease;
+  font-family: 'Jost', system-ui, sans-serif;
+}
+
+.btn {
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 0.3s ease;
+}
+
+.btn-solid {
+  background: var(--bronze);
+  color: #fdf7ea;
+}
+
+.btn-solid:hover {
+  background: var(--bronze-soft);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -10px rgba(140, 107, 66, 0.7);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--bronze);
+}
+
+.btn-ghost:hover {
+  background: rgba(140, 107, 66, 0.12);
+  transform: translateY(-2px);
+}
+
+/* ===== Motion ===== */
+@keyframes heroRise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes accentGrow {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes cueIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 14px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes floatCue {
+  0%, 100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, 6px);
+  }
+}
+
+@keyframes pageFade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pageFade {
+  animation: pageFade 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* Respeita a preferência de movimento reduzido em todo o site */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

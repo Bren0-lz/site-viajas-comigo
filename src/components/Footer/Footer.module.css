@@ -1,0 +1,68 @@
+.footer {
+  background: #061730;
+  border-top: 1px solid var(--line);
+  padding: 54px 0 30px;
+}
+
+.grid {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-bottom: 34px;
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: 'Great Vibes', cursive;
+  font-size: 2.1rem;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.brandV {
+  color: var(--bronze);
+}
+
+.brandC {
+  color: var(--sand);
+}
+
+.col p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  max-width: 300px;
+}
+
+.col h4 {
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+}
+
+.col a {
+  display: block;
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin-bottom: 9px;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.col a:hover {
+  color: var(--cream);
+}
+
+.copy {
+  border-top: 1px solid var(--line);
+  padding-top: 22px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.82rem;
+}

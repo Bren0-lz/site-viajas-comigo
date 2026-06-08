@@ -1,0 +1,87 @@
+<h2>Estrutura da app React</h2>
+<p class="subtitle">Baseado nas suas escolhas: Vite + React, JavaScript, CSS Modules, admin integrado.</p>
+
+<div class="section">
+  <h3>Rotas (React Router)</h3>
+  <div class="mockup">
+    <div class="mockup-header">src/App.jsx — Rotas</div>
+    <div class="mockup-body" style="font-family:monospace;font-size:0.85rem;line-height:1.8">
+      <span style="color:#c9a24b">/</span> → HomePage<br>
+      <span style="color:#c9a24b">/viagem/:slug</span> → TripDetailPage<br>
+      <span style="color:#c9a24b">/admin</span> → AdminPage
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Árvore de componentes</h3>
+  <div class="split">
+    <div class="mockup">
+      <div class="mockup-header">Páginas</div>
+      <div class="mockup-body" style="font-size:0.82rem;line-height:2">
+        <strong>HomePage</strong><br>
+        &nbsp;├─ Header<br>
+        &nbsp;├─ HeroSection<br>
+        &nbsp;├─ HowItWorks<br>
+        &nbsp;├─ TripsGrid<br>
+        &nbsp;│&nbsp;&nbsp;&nbsp;└─ TripCard<br>
+        &nbsp;├─ WhyGroup<br>
+        &nbsp;├─ Testimonials<br>
+        &nbsp;├─ CTASection<br>
+        &nbsp;└─ Footer<br>
+        <br>
+        <strong>TripDetailPage</strong><br>
+        &nbsp;├─ Header<br>
+        &nbsp;├─ TripHero<br>
+        &nbsp;├─ TripInfo<br>
+        &nbsp;├─ TripItinerary<br>
+        &nbsp;├─ TripGallery + Lightbox<br>
+        &nbsp;├─ TripMap<br>
+        &nbsp;└─ Footer<br>
+        <br>
+        <strong>AdminPage</strong><br>
+        &nbsp;├─ Header<br>
+        &nbsp;├─ TripForm<br>
+        &nbsp;└─ TripList
+      </div>
+    </div>
+    <div class="mockup">
+      <div class="mockup-header">Arquivos</div>
+      <div class="mockup-body" style="font-size:0.82rem;line-height:1.8">
+        <span style="color:#c9a24b">src/</span><br>
+        &nbsp;├─ <span style="color:#c9a24b">components/</span><br>
+        &nbsp;│&nbsp;&nbsp;&nbsp;├─ Header/<br>
+        &nbsp;│&nbsp;&nbsp;&nbsp;├─ TripCard/<br>
+        &nbsp;│&nbsp;&nbsp;&nbsp;├─ Lightbox/<br>
+        &nbsp;│&nbsp;&nbsp;&nbsp;└─ WhatsAppButton/<br>
+        &nbsp;├─ <span style="color:#c9a24b">pages/</span><br>
+        &nbsp;│&nbsp;&nbsp;&nbsp;├─ Home/<br>
+        &nbsp;│&nbsp;&nbsp;&nbsp;├─ TripDetail/<br>
+        &nbsp;│&nbsp;&nbsp;&nbsp;└─ Admin/<br>
+        &nbsp;├─ <span style="color:#c9a24b">hooks/</span><br>
+        &nbsp;│&nbsp;&nbsp;&nbsp;└─ useViagens.js<br>
+        &nbsp;├─ <span style="color:#c9a24b">data/</span><br>
+        &nbsp;│&nbsp;&nbsp;&nbsp;└─ viagens.js<br>
+        &nbsp;├─ <span style="color:#c9a24b">utils/</span><br>
+        &nbsp;│&nbsp;&nbsp;&nbsp;├─ slug.js<br>
+        &nbsp;│&nbsp;&nbsp;&nbsp;└─ waLink.js<br>
+        &nbsp;└─ styles/<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ global.css
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Gerenciamento de estado</h3>
+  <div class="mockup">
+    <div class="mockup-header">Hook centralizado: useViagens</div>
+    <div class="mockup-body" style="font-size:0.85rem;line-height:1.8">
+      <code>useViagens()</code> → lê/salva no localStorage, fallback para seed data<br>
+      Retorna: <code>{ viagens, addViagem, updateViagem, deleteViagem }</code><br>
+      Usado em: <strong>TripsGrid</strong>, <strong>TripDetailPage</strong>, <strong>AdminPage</strong>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:1rem">Isso cobre tudo do site atual com melhor organização. Sem estado global externo (Redux/Zustand) — <code>useViagens</code> via props é suficiente para esse tamanho de app.</p>

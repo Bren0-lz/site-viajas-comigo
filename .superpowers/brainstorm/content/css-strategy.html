@@ -1,0 +1,42 @@
+<h2>Como organizar o CSS?</h2>
+<p class="subtitle">O site já tem um CSS bem elaborado com variáveis, temas e responsividade. Como queremos estruturá-lo no React?</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>CSS Global + Módulos por componente</h3>
+      <p>Variáveis globais e reset em <code>global.css</code>. Cada componente tem seu próprio <code>Component.module.css</code> com estilos isolados.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Prós</h4><ul><li>Migração direta do CSS atual</li><li>Zero colisão de nomes</li><li>Padrão React moderno</li></ul></div>
+        <div class="cons"><h4>Contras</h4><ul><li>Mais arquivos para manter</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>CSS Global único (como está hoje)</h3>
+      <p>Todos os estilos num único <code>styles.css</code> como no HTML atual. Migração mais direta, sem refatoração de CSS.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Prós</h4><ul><li>Migração mais rápida</li><li>CSS já funciona bem</li></ul></div>
+        <div class="cons"><h4>Contras</h4><ul><li>Estilos globais podem colidir</li><li>Difícil de escalar</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Tailwind CSS</h3>
+      <p>Trocar todo o CSS por utilitários do Tailwind. Design system consistente, classes direto no JSX.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Prós</h4><ul><li>Desenvolvimento rápido após aprender</li><li>Fácil de manter consistência</li></ul></div>
+        <div class="cons"><h4>Contras</h4><ul><li>Reescrita completa do CSS atual</li><li>JSX fica verboso com muitas classes</li><li>Curva de aprendizado</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:1.5rem">Recomendação: <strong>A (CSS Global + Módulos)</strong> — aproveita o CSS existente nas variáveis globais e isola cada componente no seu próprio arquivo.</p>

@@ -1,0 +1,30 @@
+<h2>Qual estrutura React usar?</h2>
+<p class="subtitle">A escolha afeta roteamento, SEO, deploy e complexidade do projeto.</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Vite + React (SPA)</h3>
+      <p>App de página única com React Router. Simples, rápido de configurar, hot reload instantâneo. Deploy estático (Netlify, Vercel, GitHub Pages).</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Prós</h4><ul><li>Mais simples de configurar</li><li>Deploy estático fácil</li><li>Perfeito para o projeto atual</li><li>Admin integrado na mesma app</li></ul></div>
+        <div class="cons"><h4>Contras</h4><ul><li>SEO limitado (sem SSR)</li><li>Primeira carga pode ser mais lenta</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Next.js (SSR/SSG)</h3>
+      <p>Framework full-stack com renderização no servidor. Melhor SEO, rotas automáticas por arquivo. Ideal se quiser adicionar backend futuramente.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Prós</h4><ul><li>SEO excelente (páginas de viagens indexáveis)</li><li>Estrutura escalável</li><li>App Router moderno</li></ul></div>
+        <div class="cons"><h4>Contras</h4><ul><li>Mais complexo para começar</li><li>Deploy requer Node server (ou Vercel)</li><li>Curva de aprendizado maior</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:1.5rem">Recomendação: <strong>A (Vite + React)</strong> — o projeto é 100% client-side com localStorage, sem necessidade de SSR no momento. É possível migrar para Next.js depois se precisar.</p>

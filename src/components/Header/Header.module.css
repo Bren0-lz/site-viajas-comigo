@@ -1,0 +1,186 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition:
+    background 0.4s ease,
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+.header.scrolled {
+  background: #f8f3ea;
+  border-bottom: 1px solid #e2d6bd;
+  box-shadow: 0 6px 22px rgba(10, 33, 64, 0.1);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.brandImg {
+  display: block;
+  height: 84px;
+  width: auto;
+}
+
+.links {
+  display: flex;
+  gap: 38px;
+  align-items: center;
+}
+
+/* Estado padrão = topo, sobre o hero escuro: textos claros */
+.links a {
+  position: relative;
+  font-size: 1.04rem;
+  letter-spacing: 0.015em;
+  color: rgba(244, 241, 234, 0.82);
+  transition: color 0.25s ease;
+}
+
+.links a:hover {
+  color: #fff;
+}
+
+/* Underline animado (exceto o botão CTA) */
+.links a:not(.cta)::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 1.5px;
+  background: var(--sand);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.32s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.links a:not(.cta):hover::after {
+  transform: scaleX(1);
+}
+
+.header.scrolled .links a:not(.cta)::after {
+  background: var(--bronze);
+}
+
+.cta {
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.cta:hover {
+  transform: translateY(-1px);
+}
+
+.cta {
+  font-size: 0.95rem !important;
+  letter-spacing: 0.02em;
+  color: var(--sand) !important;
+  border: 1px solid rgba(242, 221, 182, 0.5);
+  padding: 13px 26px;
+  border-radius: 32px;
+}
+
+.cta:hover {
+  background: rgba(242, 221, 182, 0.12);
+}
+
+/* Estado rolado = faixa creme: textos escuros */
+.header.scrolled .links a {
+  color: var(--muted-l);
+}
+
+.header.scrolled .links a:hover {
+  color: var(--navy);
+}
+
+.header.scrolled .cta {
+  color: var(--bronze) !important;
+  border-color: var(--bronze);
+}
+
+.header.scrolled .cta:hover {
+  background: rgba(140, 107, 66, 0.1);
+}
+
+.burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: 0;
+}
+
+.burger span {
+  width: 24px;
+  height: 2px;
+  background: var(--cream);
+  display: block;
+}
+
+.header.scrolled .burger span {
+  background: var(--navy);
+}
+
+@media (max-width: 680px) {
+  .links {
+    position: fixed;
+    top: 100px;
+    right: 0;
+    left: 0;
+    background: var(--cream-bg);
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    border-bottom: 1px solid var(--gray);
+    max-height: 0;
+    overflow: hidden;
+    transition: 0.3s;
+  }
+
+  .links.open {
+    max-height: 340px;
+    padding: 14px 0;
+  }
+
+  /* o menu mobile é sempre creme → links escuros independente do scroll */
+  .links a,
+  .header.scrolled .links a {
+    padding: 12px 22px;
+    width: 100%;
+    color: var(--muted-l);
+  }
+
+  .links a:hover,
+  .header.scrolled .links a:hover {
+    color: var(--navy);
+  }
+
+  /* sem underline animado no menu mobile empilhado */
+  .links a:not(.cta)::after {
+    display: none;
+  }
+
+  .burger {
+    display: flex;
+  }
+}
