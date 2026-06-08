@@ -29,18 +29,28 @@ export default function Header() {
     <header className={`${s.header}${scrolled ? ' ' + s.scrolled : ''}`}>
       <div className={`wrap ${s.nav}`}>
         <Link to="/" className={s.brand} aria-label="Viajas Comigo">
-          <img
-            src={scrolled ? '/logo-header.png' : '/logo-light.png'}
-            alt="Viajas Comigo"
-            className={s.brandImg}
-          />
+          <picture>
+            <source
+              srcSet={scrolled ? '/logo-header.webp' : '/logo-light.webp'}
+              type="image/webp"
+            />
+            <img
+              src={scrolled ? '/logo-header.png' : '/logo-light.png'}
+              alt="Viajas Comigo"
+              className={s.brandImg}
+              width="569"
+              height="328"
+              decoding="async"
+              fetchPriority="high"
+            />
+          </picture>
         </Link>
 
         <nav className={`${s.links}${menuOpen ? ' ' + s.open : ''}`}>
           <a onClick={() => navTo('como')} href="#como">Como funciona</a>
           <a onClick={() => navTo('viagens')} href="#viagens">Próximas viagens</a>
           <a onClick={() => navTo('porque')} href="#porque">Por que em grupo</a>
-          <a onClick={() => navTo('depoimentos')} href="#depoimentos">Depoimentos</a>
+          {/* <a onClick={() => navTo('depoimentos')} href="#depoimentos">Depoimentos</a> */}
           <a onClick={() => navTo('contato')} href="#contato" className={s.cta}>Fale com a gente</a>
         </nav>
 

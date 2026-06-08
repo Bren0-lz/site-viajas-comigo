@@ -13,8 +13,10 @@
 }
 
 .header.scrolled {
-  background: #f8f3ea;
-  border-bottom: 1px solid #e2d6bd;
+  background: rgba(248, 243, 234, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(226, 214, 189, 0.6);
   box-shadow: 0 6px 22px rgba(10, 33, 64, 0.1);
 }
 
@@ -151,7 +153,7 @@
     flex-direction: column;
     gap: 0;
     padding: 0;
-    border-bottom: 1px solid var(--gray);
+    border-bottom: 0 solid var(--gray);
     max-height: 0;
     overflow: hidden;
     transition: 0.3s;
@@ -160,6 +162,7 @@
   .links.open {
     max-height: 340px;
     padding: 14px 0;
+    border-bottom-width: 1px;
   }
 
   /* o menu mobile é sempre creme → links escuros independente do scroll */

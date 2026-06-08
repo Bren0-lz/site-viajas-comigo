@@ -5,7 +5,7 @@ import HeroSection from './HeroSection.jsx'
 import HowItWorks from './HowItWorks.jsx'
 import TripsGrid from './TripsGrid.jsx'
 import WhyGroup from './WhyGroup.jsx'
-import Testimonials from './Testimonials.jsx'
+// import Testimonials from './Testimonials.jsx'
 import CTASection from './CTASection.jsx'
 
 export default function HomePage({ viagens }) {
@@ -17,7 +17,7 @@ export default function HomePage({ viagens }) {
         <HowItWorks />
         <TripsGrid viagens={viagens} />
         <WhyGroup />
-        <Testimonials />
+        {/* <Testimonials /> */}
         <CTASection />
       </main>
       <Footer />

@@ -1,10 +1,21 @@
 import { Link } from 'react-router-dom'
 import { slug } from '../../utils/slug.js'
+import { useFlight } from '../FlightTransition/FlightTransition.jsx'
 import s from './TripCard.module.css'
 
 export default function TripCard({ viagem }) {
+  const flyTo = useFlight()
+  const to = `/viagem/${slug(viagem.titulo)}`
+
+  const handleClick = e => {
+    // Deixa o usuário abrir em nova aba / ctrl+clique normalmente
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
+    e.preventDefault()
+    flyTo(to)
+  }
+
   return (
-    <Link to={`/viagem/${slug(viagem.titulo)}`} className={s.card}>
+    <Link to={to} onClick={handleClick} className={s.card}>
       <div className={s.img}>
         <div
           className={s.imgBg}

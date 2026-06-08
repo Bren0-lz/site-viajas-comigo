@@ -1,0 +1,82 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* "Céu" que varre a tela: cobre, navega por baixo, depois revela */
+.sky {
+  position: absolute;
+  top: -10%;
+  left: -25%;
+  width: 150%;
+  height: 120%;
+  background: linear-gradient(120deg, var(--navy) 0%, var(--slate) 60%, var(--navy) 100%);
+  transform: translateX(-130%) skewX(-12deg);
+  animation: skyWipe 1.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@keyframes skyWipe {
+  0%   { transform: translateX(-130%) skewX(-12deg); }
+  42%  { transform: translateX(0%) skewX(-12deg); }
+  58%  { transform: translateX(0%) skewX(-12deg); }
+  100% { transform: translateX(130%) skewX(-12deg); }
+}
+
+/* O avião e seu rastro voam juntos, na diagonal de baixo-esquerda p/ cima-direita */
+.flight {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  display: flex;
+  align-items: center;
+  transform: translate(-30vw, 28vh);
+  animation: fly 1.5s cubic-bezier(0.4, 0, 0.5, 1) forwards;
+}
+
+@keyframes fly {
+  0%   { transform: translate(-32vw, 30vh) rotate(-9deg); opacity: 0; }
+  18%  { opacity: 1; }
+  50%  { transform: translate(46vw, 0vh) rotate(-9deg); opacity: 1; }
+  82%  { opacity: 1; }
+  100% { transform: translate(132vw, -32vh) rotate(-9deg); opacity: 0; }
+}
+
+.plane {
+  width: clamp(64px, 9vw, 120px);
+  height: auto;
+  color: var(--sand);
+  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.45));
+}
+
+/* Rastro de condensação atrás do avião */
+.trail {
+  display: block;
+  height: 3px;
+  width: 46vw;
+  margin-right: -6px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(242, 221, 182, 0) 0%,
+    rgba(242, 221, 182, 0.55) 80%,
+    rgba(242, 221, 182, 0.9) 100%
+  );
+  transform-origin: right center;
+  animation: trailGrow 1.5s cubic-bezier(0.4, 0, 0.5, 1) forwards;
+}
+
+@keyframes trailGrow {
+  0%   { transform: scaleX(0); opacity: 0; }
+  20%  { opacity: 0.9; }
+  50%  { transform: scaleX(1); opacity: 0.9; }
+  100% { transform: scaleX(1); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    display: none;
+  }
+}

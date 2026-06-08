@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import Header from '../../components/Header/Header.jsx'
 import Footer from '../../components/Footer/Footer.jsx'
@@ -12,6 +12,10 @@ import s from './TripDetailPage.module.css'
 export default function TripDetailPage({ viagens }) {
   const { slug: slugParam } = useParams()
   const [lbIndex, setLbIndex] = useState(null)
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [slugParam])
 
   const viagem = viagens.find(v => slug(v.titulo) === slugParam)
 
@@ -73,7 +77,7 @@ export default function TripDetailPage({ viagens }) {
                     className={`${s.gItem}${i === 0 ? ' ' + s.feat : ''}`}
                     onClick={() => setLbIndex(allImages.indexOf(img))}
                   >
-                    <img src={img} alt={viagem.titulo} loading="lazy" />
+                    <img src={img} alt={viagem.titulo} loading="lazy" decoding="async" />
                   </div>
                 ))}
               </div>
