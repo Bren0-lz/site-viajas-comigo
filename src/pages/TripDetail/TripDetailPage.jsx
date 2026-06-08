@@ -9,7 +9,7 @@ import { slug } from '../../utils/slug.js'
 import { waLink } from '../../utils/waLink.js'
 import s from './TripDetailPage.module.css'
 
-export default function TripDetailPage({ viagens }) {
+export default function TripDetailPage({ viagens, loading }) {
   const { slug: slugParam } = useParams()
   const [lbIndex, setLbIndex] = useState(null)
 
@@ -18,6 +18,18 @@ export default function TripDetailPage({ viagens }) {
   }, [slugParam])
 
   const viagem = viagens.find(v => slug(v.titulo) === slugParam)
+
+  if (!viagem && loading) {
+    return (
+      <>
+        <Header />
+        <div className={s.notFound}>
+          <p>Carregando viagem…</p>
+        </div>
+        <Footer />
+      </>
+    )
+  }
 
   if (!viagem) {
     return (
@@ -84,37 +96,41 @@ export default function TripDetailPage({ viagens }) {
             </Reveal>
           )}
 
-          {viagem.inclusos?.length > 0 && (
-            <Reveal className={s.block}>
-              <h2><span className={s.dot} />O que está incluso</h2>
-              <ul className={s.inclusos}>
-                {viagem.inclusos.map(item => (
-                  <li key={item}>
-                    <span className={s.ck}>✓</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
-          )}
+          {(viagem.inclusos?.length > 0 || viagem.roteiro?.length > 0) && (
+            <div className={s.pair}>
+              {viagem.inclusos?.length > 0 && (
+                <Reveal className={s.block}>
+                  <h2><span className={s.dot} />O que está incluso</h2>
+                  <ul className={s.inclusos}>
+                    {viagem.inclusos.map(item => (
+                      <li key={item}>
+                        <span className={s.ck}>✓</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </Reveal>
+              )}
 
-          {viagem.roteiro?.length > 0 && (
-            <Reveal className={s.block}>
-              <h2><span className={s.dot} />Roteiro dia a dia</h2>
-              <ul className={s.roteiro}>
-                {viagem.roteiro.map(linha => {
-                  const partes = linha.split('—')
-                  return (
-                    <li key={linha}>
-                      {partes.length > 1
-                        ? <><b>{partes[0].trim()}</b> — {partes.slice(1).join('—').trim()}</>
-                        : linha
-                      }
-                    </li>
-                  )
-                })}
-              </ul>
-            </Reveal>
+              {viagem.roteiro?.length > 0 && (
+                <Reveal className={s.block}>
+                  <h2><span className={s.dot} />Roteiro dia a dia</h2>
+                  <ul className={s.roteiro}>
+                    {viagem.roteiro.map(linha => {
+                      const partes = linha.split('—')
+                      return (
+                        <li key={linha}>
+                          {partes.length > 1
+                            ? <><b>{partes[0].trim()}</b> — {partes.slice(1).join('—').trim()}</>
+                            : linha
+                          }
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </Reveal>
+              )}
+            </div>
           )}
 
           {viagem.local && (

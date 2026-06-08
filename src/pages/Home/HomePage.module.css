@@ -2,6 +2,7 @@
 .hero {
   position: relative;
   min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   align-items: center;
   background:
@@ -15,9 +16,16 @@
     url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1600&q=80') center / cover fixed;
 }
 
+/* background fixo trava/treme em telas de toque (iOS Safari) → rolagem normal */
+@media (hover: none), (max-width: 768px) {
+  .hero {
+    background-attachment: scroll;
+  }
+}
+
 .heroInner {
   max-width: 680px;
-  padding-top: 72px;
+  padding-top: var(--header-h);
 }
 
 /* Entrada encadeada no load */
@@ -42,7 +50,7 @@
 }
 
 .heroInner h1 {
-  font-size: clamp(3rem, 7.4vw, 5.2rem);
+  font-size: clamp(2.1rem, 8vw, 5.2rem);
   letter-spacing: -0.01em;
   margin-bottom: 22px;
 }
@@ -118,50 +126,51 @@ section {
   color: var(--muted-l);
 }
 
-.light .step {
-  background: #fff;
-  border-color: var(--gray);
-}
-
 .light .whyPhoto {
   border-color: var(--gray);
 }
 
-/* STEPS */
+/* STEPS — fluxo editorial, sem caixas, em escada */
 .steps {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 26px;
+  gap: 48px 44px;
 }
 
+/* desnível vertical (escada) só no layout de 3 colunas */
+.step:nth-child(2) { margin-top: 36px; }
+.step:nth-child(3) { margin-top: 72px; }
+
 .step {
-  background: var(--black-soft);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 34px 28px;
+  padding: 0 16px 0 0;
 }
 
 .stepNum {
+  display: block;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 2.6rem;
+  font-size: 3.2rem;
+  font-weight: 600;
   color: var(--gold);
-  opacity: 0.5;
+  opacity: 0.4;
   line-height: 1;
+  margin-bottom: 12px;
 }
 
 .step h3 {
   font-size: 1.5rem;
-  margin: 12px 0 8px;
+  margin: 0 0 8px;
 }
 
 .step p {
   color: var(--muted);
   font-size: 0.97rem;
+  max-width: 30ch;
 }
 
-/* DESTINOS */
+/* DESTINOS — seção mais arejada, quebra o ritmo uniforme */
 .destinos {
   background: var(--black-soft);
+  padding: 120px 0;
 }
 
 .grid {
@@ -179,55 +188,51 @@ section {
   border-radius: 16px;
 }
 
-/* POR QUE */
+/* POR QUE — lista editorial com fios, layout assimétrico, foto integrada */
 .whyGrid {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 60px;
-  align-items: center;
+  grid-template-columns: 1fr 0.82fr;
+  gap: 72px;
+  align-items: stretch;
 }
 
 .whyTitle {
   font-size: clamp(2rem, 4.5vw, 3rem);
-  margin-bottom: 30px;
+  margin-bottom: 8px;
 }
 
 .whyList {
   list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
 }
 
+/* cada vantagem é uma linha separada por um fio fino — feel de índice/revista */
 .whyList li {
-  display: flex;
-  gap: 16px;
+  padding: 22px 0;
+  border-top: 1px solid var(--line);
 }
 
-.whyIc {
-  flex: 0 0 42px;
-  height: 42px;
-  border: 1px solid var(--gold);
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  color: var(--gold);
+.whyList li:last-child {
+  padding-bottom: 0;
 }
 
 .whyList h3 {
-  font-size: 1.35rem;
-  margin-bottom: 3px;
+  font-size: 1.4rem;
+  margin-bottom: 5px;
 }
 
 .whyList p {
   color: var(--muted);
   font-size: 0.95rem;
+  max-width: 48ch;
 }
 
+/* foto: corte fotográfico (raio pequeno) + wash navy→bronze pra casar com a paleta */
 .whyPhoto {
-  height: 440px;
-  border-radius: 18px;
-  background: url('https://images.unsplash.com/photo-1530789253388-582c481c54b0?auto=format&fit=crop&w=900&q=80') center / cover;
+  min-height: 480px;
+  border-radius: 4px;
+  background:
+    linear-gradient(155deg, rgba(10, 33, 64, 0.32), rgba(140, 107, 66, 0.34)),
+    url('https://images.unsplash.com/photo-1530789253388-582c481c54b0?auto=format&fit=crop&w=900&q=80') center / cover;
   border: 1px solid var(--line);
 }
 
@@ -294,31 +299,75 @@ section {
 }
 
 /* RESPONSIVE */
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .steps,
   .grid,
   .depoGrid {
     grid-template-columns: 1fr 1fr;
   }
 
+  .destinos {
+    padding: 96px 0;
+  }
+
+  /* escada não faz sentido fora das 3 colunas */
+  .step:nth-child(2),
+  .step:nth-child(3) {
+    margin-top: 0;
+  }
+
   .whyGrid {
     grid-template-columns: 1fr;
-    gap: 30px;
+    gap: 36px;
   }
 
   .whyPhoto {
-    height: 300px;
+    min-height: 300px;
   }
 }
 
-@media (max-width: 680px) {
+@media (max-width: 768px) {
+  section,
+  .destinos {
+    padding: 64px 0;
+  }
+
+  .sectionHead {
+    margin-bottom: 40px;
+  }
+
+  .heroInner > p {
+    font-size: 1.06rem;
+  }
+
+  /* atrapalha em telas curtas e pode sobrepor conteúdo */
+  .scrollCue {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
   .steps,
   .grid,
   .depoGrid {
     grid-template-columns: 1fr;
+    gap: 18px;
   }
 
-  section {
-    padding: 70px 0;
+  section,
+  .destinos {
+    padding: 48px 0;
+  }
+
+  .step {
+    padding: 26px 22px;
+  }
+
+  .heroActions {
+    width: 100%;
+  }
+
+  .heroActions .btn {
+    flex: 1 1 auto;
   }
 }

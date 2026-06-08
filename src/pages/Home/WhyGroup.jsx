@@ -18,11 +18,8 @@ export default function WhyGroup() {
           <ul className={s.whyList}>
             {items.map((item, i) => (
               <Reveal as="li" key={item.title} delay={0.1 + i * 0.1}>
-                <span className={s.whyIc}>✓</span>
-                <div>
-                  <h3>{item.title}</h3>
-                  <p>{item.desc}</p>
-                </div>
+                <h3>{item.title}</h3>
+                <p>{item.desc}</p>
               </Reveal>
             ))}
           </ul>

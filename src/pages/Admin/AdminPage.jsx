@@ -1,7 +1,6 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { slug } from '../../utils/slug.js'
-import { SEED_VIAGENS } from '../../data/viagens.js'
 import s from './AdminPage.module.css'
 
 const EMPTY_FORM = {
@@ -22,7 +21,91 @@ function download(nome, conteudo) {
   URL.revokeObjectURL(a.href)
 }
 
-export default function AdminPage({ viagens, addViagem, updateViagem, deleteViagem, restaurar }) {
+function LoginScreen({ onSuccess }) {
+  const [senha, setSenha] = useState('')
+  const [erro, setErro] = useState('')
+  const [enviando, setEnviando] = useState(false)
+
+  async function entrar(e) {
+    e.preventDefault()
+    setEnviando(true)
+    setErro('')
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ senha }),
+      })
+      if (res.ok) {
+        onSuccess()
+      } else {
+        const data = await res.json().catch(() => ({}))
+        setErro(data.erro || 'Senha incorreta. Tente de novo.')
+        setSenha('')
+      }
+    } catch {
+      setErro('Não foi possível conectar. Tente de novo.')
+    } finally {
+      setEnviando(false)
+    }
+  }
+
+  return (
+    <div className={s.loginPage}>
+      <form className={s.loginCard} onSubmit={entrar}>
+        <div className={s.brand}>
+          <span className={s.brandV}>Viajas</span>
+          <span className={s.brandC}>Comigo</span>
+        </div>
+        <p className={s.loginTitle}>Painel de viagens</p>
+        <p className={s.loginSub}>Digite a senha para acessar.</p>
+
+        <input
+          className={s.input}
+          type="password"
+          value={senha}
+          autoFocus
+          onChange={e => { setSenha(e.target.value); setErro('') }}
+          placeholder="Senha"
+        />
+        {erro && <p className={s.loginErro}>{erro}</p>}
+
+        <button type="submit" className={s.btnSolid} style={{ width: '100%', marginTop: 18 }} disabled={enviando}>
+          {enviando ? 'Entrando…' : 'Entrar'}
+        </button>
+
+        <Link to="/" className={s.loginBack}>← Voltar ao site</Link>
+      </form>
+    </div>
+  )
+}
+
+export default function AdminPage(props) {
+  // null = ainda verificando a sessão no servidor
+  const [authed, setAuthed] = useState(null)
+
+  useEffect(() => {
+    let ativo = true
+    fetch('/api/me')
+      .then(r => r.json())
+      .then(d => { if (ativo) setAuthed(!!d.authed) })
+      .catch(() => { if (ativo) setAuthed(false) })
+    return () => { ativo = false }
+  }, [])
+
+  async function logout() {
+    await fetch('/api/logout', { method: 'POST' }).catch(() => {})
+    setAuthed(false)
+  }
+
+  if (authed === null) {
+    return <div className={s.loginPage}><p className={s.loginSub}>Carregando…</p></div>
+  }
+  if (!authed) return <LoginScreen onSuccess={() => setAuthed(true)} />
+  return <AdminPanel {...props} onLogout={logout} />
+}
+
+function AdminPanel({ viagens, addViagem, updateViagem, deleteViagem, restaurar, onLogout }) {
   const [form, setForm] = useState(EMPTY_FORM)
   const [editSlug, setEditSlug] = useState(null)
   const [toastMsg, setToastMsg] = useState('')
@@ -41,7 +124,7 @@ export default function AdminPage({ viagens, addViagem, updateViagem, deleteViag
     setForm(f => ({ ...f, [key]: value }))
   }
 
-  function salvar() {
+  async function salvar() {
     if (!form.titulo.trim()) { toast('Dê um título à viagem'); return }
     const obj = {
       titulo: form.titulo.trim(),
@@ -57,14 +140,18 @@ export default function AdminPage({ viagens, addViagem, updateViagem, deleteViag
       galeria: linhas(form.galeria),
       esgotado: form.esgotado,
     }
-    if (editSlug) {
-      updateViagem(editSlug, obj)
-      toast('Viagem atualizada ✓')
-    } else {
-      addViagem(obj)
-      toast('Viagem adicionada ✓')
+    try {
+      if (editSlug) {
+        await updateViagem(editSlug, obj)
+        toast('Viagem atualizada ✓')
+      } else {
+        await addViagem(obj)
+        toast('Viagem adicionada ✓')
+      }
+      limpar()
+    } catch (err) {
+      toast(err.message || 'Erro ao salvar')
     }
-    limpar()
   }
 
   function editar(viagem) {
@@ -86,10 +173,14 @@ export default function AdminPage({ viagens, addViagem, updateViagem, deleteViag
     formRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  function remover(viagem) {
+  async function remover(viagem) {
     if (!window.confirm(`Remover a viagem "${viagem.titulo}"?`)) return
-    deleteViagem(slug(viagem.titulo))
-    toast('Viagem removida')
+    try {
+      await deleteViagem(slug(viagem.titulo))
+      toast('Viagem removida')
+    } catch (err) {
+      toast(err.message || 'Erro ao remover')
+    }
   }
 
   function limpar() {
@@ -97,21 +188,19 @@ export default function AdminPage({ viagens, addViagem, updateViagem, deleteViag
     setEditSlug(null)
   }
 
-  function handleRestaurar() {
+  async function handleRestaurar() {
     if (!window.confirm('Isso volta para as viagens de exemplo e apaga as suas alterações. Continuar?')) return
-    restaurar()
-    toast('Exemplos restaurados')
+    try {
+      await restaurar()
+      toast('Exemplos restaurados')
+    } catch (err) {
+      toast(err.message || 'Erro ao restaurar')
+    }
   }
 
   function baixarJSON() {
     download('viagens-backup.json', JSON.stringify(viagens, null, 2))
     toast('Backup baixado')
-  }
-
-  function baixarSite() {
-    const js = '/* Arquivo gerado pelo painel da Viajas Comigo. */\nwindow.SEED_DESTINOS = ' + JSON.stringify(viagens, null, 2) + ';'
-    download('dados-viagens.js', js)
-    toast('Arquivo do site baixado')
   }
 
   return (
@@ -122,7 +211,10 @@ export default function AdminPage({ viagens, addViagem, updateViagem, deleteViag
           <span className={s.brandC}>Comigo</span>
           <span className={s.tag}>Painel de viagens</span>
         </div>
-        <Link to="/" className={s.viewLink}>Ver o site →</Link>
+        <div className={s.topActions}>
+          <Link to="/" className={s.viewLink}>Ver o site →</Link>
+          <button className={s.viewLink} onClick={onLogout}>Sair</button>
+        </div>
       </div>
 
       <div className={s.wrap}>
@@ -226,16 +318,14 @@ export default function AdminPage({ viagens, addViagem, updateViagem, deleteViag
             </div>
 
             <div className={s.btns} style={{ marginTop: 24 }}>
-              <button className={s.btnSolid} onClick={baixarSite}>⤓ Baixar arquivo do site</button>
               <button className={s.btnGhost} onClick={baixarJSON}>⤓ Backup JSON</button>
               <button className={s.btnDanger} onClick={handleRestaurar}>Restaurar exemplos</button>
             </div>
 
             <div className={s.pubBox}>
-              <b>Como publicar para todo mundo ver:</b><br />
-              1. Clique em <b>"Baixar arquivo do site"</b> — gera o arquivo <code>dados-viagens.js</code>.<br />
-              2. Substitua o <code>dados-viagens.js</code> da hospedagem por esse novo.<br />
-              3. Pronto — as viagens novas ficam no ar.
+              <b>Publicação automática:</b> toda viagem que você salva, edita ou remove
+              já fica no ar para todo mundo na hora — não precisa baixar nem subir arquivo.<br />
+              O <b>Backup JSON</b> é opcional, só para você guardar uma cópia de segurança.
             </div>
           </div>
         </div>

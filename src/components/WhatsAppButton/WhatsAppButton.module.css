@@ -1,7 +1,7 @@
 .btn {
   position: fixed;
-  bottom: 22px;
-  right: 22px;
+  bottom: calc(22px + env(safe-area-inset-bottom));
+  right: calc(22px + env(safe-area-inset-right));
   z-index: 60;
   background: #25d366;
   color: #fff;

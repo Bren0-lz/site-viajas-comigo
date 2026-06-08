@@ -12,6 +12,7 @@ node_modules/.vite/
 *.local
 .env
 .env.*
+!.env.example
 
 # Logs
 *.log

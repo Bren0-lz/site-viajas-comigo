@@ -4,8 +4,8 @@ import s from './HomePage.module.css'
 const steps = [
   {
     num: '01',
-    title: 'Escolhe a viagem',
-    desc: 'Olha as próximas viagens abaixo, abre os detalhes e vê tudo: roteiro, o que está incluso, fotos e o mapa.',
+    title: 'Você escolhe a viagem',
+    desc: 'Você olha as próximas viagens aqui embaixo, abre os detalhes e vê tudo: roteiro, o que está incluso, fotos e o mapa.',
   },
   {
     num: '02',

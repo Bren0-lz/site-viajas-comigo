@@ -13,12 +13,19 @@
   max-height: 85vh;
   object-fit: contain;
   border-radius: 8px;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .close {
   position: absolute;
-  top: 20px;
-  right: 24px;
+  top: calc(16px + env(safe-area-inset-top));
+  right: calc(16px + env(safe-area-inset-right));
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
   background: none;
   border: none;
   color: var(--cream);
@@ -57,19 +64,34 @@
 }
 
 .prev {
-  left: 20px;
+  left: calc(20px + env(safe-area-inset-left));
 }
 
 .next {
-  right: 20px;
+  right: calc(20px + env(safe-area-inset-right));
 }
 
 .counter {
   position: absolute;
-  bottom: 20px;
+  bottom: calc(20px + env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%);
   color: var(--muted);
   font-size: 0.8rem;
   letter-spacing: 0.1em;
+}
+
+@media (max-width: 480px) {
+  .prev,
+  .next {
+    width: 52px;
+    height: 52px;
+    top: auto;
+    bottom: calc(28px + env(safe-area-inset-bottom));
+    transform: none;
+  }
+
+  .counter {
+    bottom: calc(40px + env(safe-area-inset-bottom));
+  }
 }

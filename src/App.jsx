@@ -8,14 +8,14 @@ const TripDetailPage = lazy(() => import('./pages/TripDetail/TripDetailPage.jsx'
 const AdminPage = lazy(() => import('./pages/Admin/AdminPage.jsx'))
 
 export default function App() {
-  const { viagens, addViagem, updateViagem, deleteViagem, restaurar } = useViagens()
+  const { viagens, loading, addViagem, updateViagem, deleteViagem, restaurar } = useViagens()
 
   return (
     <FlightProvider>
     <Suspense fallback={null}>
     <Routes>
       <Route path="/" element={<HomePage viagens={viagens} />} />
-      <Route path="/viagem/:slug" element={<TripDetailPage viagens={viagens} />} />
+      <Route path="/viagem/:slug" element={<TripDetailPage viagens={viagens} loading={loading} />} />
       <Route
         path="/admin"
         element={

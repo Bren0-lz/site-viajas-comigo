@@ -33,7 +33,6 @@ export default function Footer() {
             <a onClick={() => navTo('como')}>Como funciona</a>
             <a onClick={() => navTo('viagens')}>Próximas viagens</a>
             <a onClick={() => navTo('porque')}>Por que em grupo</a>
-            <a onClick={() => navTo('depoimentos')}>Depoimentos</a>
           </div>
 
           <div className={s.col}>

@@ -24,7 +24,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 100px;
+  height: var(--header-h);
 }
 
 .brand {
@@ -143,10 +143,14 @@
   background: var(--navy);
 }
 
-@media (max-width: 680px) {
+@media (max-width: 768px) {
+  .brandImg {
+    height: 56px;
+  }
+
   .links {
     position: fixed;
-    top: 100px;
+    top: var(--header-h);
     right: 0;
     left: 0;
     background: var(--cream-bg);

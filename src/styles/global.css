@@ -19,6 +19,15 @@
   --cream: #f4f1ea;       /* quase-branco — texto corrido sobre escuro */
   --muted: #b9bccb;       /* texto secundário sobre escuro */
   --line: rgba(140, 107, 66, 0.3);
+
+  /* Altura do header fixo (usada no menu mobile e no scroll-margin das seções) */
+  --header-h: 100px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --header-h: 72px;
+  }
 }
 
 *,
@@ -27,6 +36,12 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
 }
 
 html {
@@ -40,6 +55,22 @@ body {
   font-weight: 300;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Rede de segurança contra overflow horizontal por mídia */
+img,
+picture,
+video,
+iframe {
+  max-width: 100%;
+}
+
+/* Seções com âncora não ficam escondidas sob o header fixo ao rolar */
+[id] {
+  scroll-margin-top: var(--header-h);
 }
 
 h1, h2, h3 {
@@ -60,6 +91,12 @@ a {
   padding: 0 22px;
 }
 
+@media (max-width: 480px) {
+  .wrap {
+    padding: 0 18px;
+  }
+}
+
 .gold {
   color: var(--gold);
 }
@@ -76,7 +113,9 @@ a {
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 9px;
+  min-height: 44px;
   padding: 14px 26px;
   border-radius: 40px;
   font-weight: 500;
