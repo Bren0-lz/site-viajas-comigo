@@ -3,13 +3,13 @@ import { SEED_VIAGENS } from '../../src/data/viagens.js'
 
 const KEY = 'viagens'
 
-// A integração da Upstash/Vercel injeta KV_REST_API_* ou UPSTASH_REDIS_REST_*.
-// Aceitamos os dois nomes para não depender de qual integração foi usada.
+// Aceita tanto os nomes da Upstash (UPSTASH_REDIS_REST_*) quanto os antigos
+// KV_REST_API_*, pra não depender de qual padrão você usou ao criar o banco.
 function client() {
-  const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL
-  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN
+  const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN
   if (!url || !token) {
-    throw new Error('Armazenamento não configurado (faltam as variáveis KV/Upstash).')
+    throw new Error('Armazenamento não configurado (faltam as variáveis do Upstash Redis).')
   }
   return new Redis({ url, token })
 }

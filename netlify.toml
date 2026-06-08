@@ -1,0 +1,17 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "netlify/functions"
+
+# /api/login → função login.js, /api/viagens → função viagens.js, etc.
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# Fallback de SPA: qualquer outra rota cai no index.html (React Router cuida do resto).
+# Precisa vir DEPOIS do /api/* para não capturar as chamadas de API.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

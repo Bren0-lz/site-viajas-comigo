@@ -9,10 +9,6 @@ function secret() {
   return s
 }
 
-function base64url(buf) {
-  return Buffer.from(buf).toString('base64url')
-}
-
 // Compara duas strings em tempo constante (evita vazar a senha pelo tempo de resposta).
 export function safeEqual(a, b) {
   const ha = crypto.createHash('sha256').update(String(a)).digest()
@@ -22,7 +18,7 @@ export function safeEqual(a, b) {
 
 // Gera um token de sessão assinado: payload.assinatura
 export function signSession() {
-  const payload = base64url(JSON.stringify({ exp: Date.now() + MAX_AGE * 1000 }))
+  const payload = Buffer.from(JSON.stringify({ exp: Date.now() + MAX_AGE * 1000 })).toString('base64url')
   const sig = crypto.createHmac('sha256', secret()).update(payload).digest('base64url')
   return `${payload}.${sig}`
 }
@@ -42,29 +38,21 @@ function verifySession(token) {
   }
 }
 
-function readCookie(req, name) {
-  const raw = req.headers.cookie || ''
-  for (const part of raw.split(';')) {
+function readCookie(cookieHeader, name) {
+  for (const part of (cookieHeader || '').split(';')) {
     const [k, ...v] = part.trim().split('=')
     if (k === name) return decodeURIComponent(v.join('='))
   }
   return null
 }
 
-export function isAuthed(req) {
-  return verifySession(readCookie(req, COOKIE_NAME))
+// Recebe o cabeçalho Cookie cru (event.headers.cookie) e diz se a sessão é válida.
+export function isAuthed(cookieHeader) {
+  return verifySession(readCookie(cookieHeader, COOKIE_NAME))
 }
 
 export function sessionCookie(token) {
-  const parts = [
-    `${COOKIE_NAME}=${token}`,
-    'HttpOnly',
-    'Secure',
-    'SameSite=Lax',
-    'Path=/',
-    `Max-Age=${MAX_AGE}`,
-  ]
-  return parts.join('; ')
+  return `${COOKIE_NAME}=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${MAX_AGE}`
 }
 
 export function clearCookie() {
