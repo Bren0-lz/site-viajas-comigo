@@ -219,77 +219,135 @@ function AdminPanel({ viagens, addViagem, updateViagem, deleteViagem, restaurar,
 
       <div className={s.wrap}>
         <div className={s.intro}>
-          Aqui você adiciona, edita e remove as viagens que aparecem no site — <b>sem precisar mexer em código nem chamar ninguém</b>.
-          Quanto mais campos você preencher (roteiro, o que está incluso, fotos e localização), <b>mais completa fica a página de detalhes</b>.
+          <span className={s.introIcon} aria-hidden="true">👋</span>
+          <div>
+            <b>Bem-vindo(a) ao seu painel.</b> Aqui você cria, edita e remove as viagens que aparecem no site —
+            sem precisar mexer em código nem chamar ninguém. É só preencher os campos do lado <b>esquerdo</b> e clicar
+            em <b>Salvar</b>. As viagens já cadastradas ficam à <b>direita</b>.
+          </div>
         </div>
 
         <div className={s.layout}>
           {/* FORM */}
           <div className={s.panel} ref={formRef}>
-            <h2>{editSlug ? 'Editando viagem' : 'Nova viagem'}</h2>
-            <p className={s.sub}>Os campos marcados com ✶ são os essenciais.</p>
-
-            <label className={s.formLabel}>✶ Título da viagem</label>
-            <input className={s.input} value={form.titulo} onChange={e => setField('titulo', e.target.value)} placeholder="Ex: Praia & Sol — Nordeste" />
-
-            <label className={s.formLabel}>✶ Datas</label>
-            <input className={s.input} value={form.data} onChange={e => setField('data', e.target.value)} placeholder="Ex: 15 a 22 de Setembro" />
-
-            <label className={s.formLabel}>✶ Resumo curto (aparece no cartão)</label>
-            <textarea className={s.textarea} value={form.descricao} onChange={e => setField('descricao', e.target.value)} placeholder="Uma frase chamativa sobre a viagem." />
-
-            <div className={s.row}>
+            <div className={s.panelHead}>
+              <span className={`${s.panelBadge} ${editSlug ? s.panelBadgeEdit : ''}`} aria-hidden="true">
+                {editSlug ? '✎' : '+'}
+              </span>
               <div>
-                <label className={s.formLabel}>✶ Preço (a partir de R$)</label>
-                <input className={s.input} value={form.preco} onChange={e => setField('preco', e.target.value)} placeholder="Ex: 2.490" />
-              </div>
-              <div>
-                <label className={s.formLabel}>✶ Vagas</label>
-                <input className={s.input} value={form.vagas} onChange={e => setField('vagas', e.target.value)} placeholder="Ex: 8 vagas" />
+                <h2>{editSlug ? 'Editando uma viagem' : 'Criar uma nova viagem'}</h2>
+                <p className={s.sub}>
+                  {editSlug
+                    ? 'Altere o que precisar e clique em Salvar lá embaixo.'
+                    : 'Preencha de cima para baixo. Leva poucos minutos.'}
+                </p>
               </div>
             </div>
 
-            <label className={s.formLabel}>✶ Foto principal (URL)</label>
-            <input className={s.input} value={form.imagem} onChange={e => setField('imagem', e.target.value)} placeholder="https://...jpg" />
+            {/* PASSO 1 — Obrigatório */}
+            <div className={s.section}>
+              <div className={s.sectionHead}>
+                <span className={s.stepNum}>1</span>
+                <div>
+                  <h3 className={s.sectionTitle}>Informações principais</h3>
+                  <p className={s.sectionDesc}>
+                    Esses campos são <b className={s.req}>obrigatórios</b> — são o mínimo para a viagem aparecer no site.
+                  </p>
+                </div>
+              </div>
 
-            <label className={s.formLabel}>Localização (para o mapa)</label>
-            <input className={s.input} value={form.local} onChange={e => setField('local', e.target.value)} placeholder="Ex: Maragogi, Alagoas, Brasil" />
-            <p className={s.hint}>Cidade e estado já bastam.</p>
+              <label className={s.formLabel}>Título da viagem <span className={s.tagReq}>obrigatório</span></label>
+              <input className={s.input} value={form.titulo} onChange={e => setField('titulo', e.target.value)} placeholder="Ex: Praia & Sol — Nordeste" />
 
-            <label className={s.formLabel}>Descrição completa</label>
-            <textarea className={s.textarea} value={form.detalhes} onChange={e => setField('detalhes', e.target.value)} placeholder="Conte com calma como é a viagem..." />
+              <label className={s.formLabel}>Datas <span className={s.tagReq}>obrigatório</span></label>
+              <input className={s.input} value={form.data} onChange={e => setField('data', e.target.value)} placeholder="Ex: 15 a 22 de Setembro" />
 
-            <label className={s.formLabel}>O que está incluso</label>
-            <textarea className={s.textarea} value={form.inclusos} onChange={e => setField('inclusos', e.target.value)} placeholder={'Um item por linha:\nPassagem aérea\nHospedagem com café'} />
-            <p className={s.hint}>Um item por linha.</p>
+              <label className={s.formLabel}>Resumo curto <span className={s.tagReq}>obrigatório</span></label>
+              <textarea className={s.textarea} value={form.descricao} onChange={e => setField('descricao', e.target.value)} placeholder="Uma frase chamativa sobre a viagem." />
+              <p className={s.hint}>Aparece no cartão da viagem, na página inicial.</p>
 
-            <label className={s.formLabel}>Roteiro dia a dia</label>
-            <textarea className={s.textarea} value={form.roteiro} onChange={e => setField('roteiro', e.target.value)} placeholder={'Um dia por linha:\nDia 1 — Chegada e check-in\nDia 2 — Passeio de barco'} />
-            <p className={s.hint}>Um dia por linha. Use o travessão (—) entre o dia e o que acontece.</p>
+              <div className={s.row}>
+                <div>
+                  <label className={s.formLabel}>Preço a partir de (R$) <span className={s.tagReq}>obrigatório</span></label>
+                  <input className={s.input} value={form.preco} onChange={e => setField('preco', e.target.value)} placeholder="Ex: 2.490" />
+                </div>
+                <div>
+                  <label className={s.formLabel}>Vagas <span className={s.tagReq}>obrigatório</span></label>
+                  <input className={s.input} value={form.vagas} onChange={e => setField('vagas', e.target.value)} placeholder="Ex: 8 vagas" />
+                </div>
+              </div>
 
-            <label className={s.formLabel}>Galeria de fotos (URLs)</label>
-            <textarea className={s.textarea} value={form.galeria} onChange={e => setField('galeria', e.target.value)} placeholder="Uma URL de imagem por linha" />
-            <p className={s.hint}>Uma URL por linha.</p>
-
-            <div className={s.checkRow}>
-              <input type="checkbox" id="esgotado" checked={form.esgotado} onChange={e => setField('esgotado', e.target.checked)} />
-              <label htmlFor="esgotado">Marcar como esgotado</label>
+              <label className={s.formLabel}>Foto principal <span className={s.tagReq}>obrigatório</span></label>
+              <input className={s.input} value={form.imagem} onChange={e => setField('imagem', e.target.value)} placeholder="Cole aqui o link (URL) de uma foto" />
+              <p className={s.hint}>Copie o endereço de uma imagem da internet e cole aqui. É a foto de capa da viagem.</p>
             </div>
 
-            <div className={s.btns}>
-              <button className={s.btnSolid} onClick={salvar}>Salvar viagem</button>
-              <button className={s.btnGhost} onClick={limpar}>Limpar</button>
+            {/* PASSO 2 — Opcional */}
+            <div className={s.section}>
+              <div className={s.sectionHead}>
+                <span className={s.stepNum}>2</span>
+                <div>
+                  <h3 className={s.sectionTitle}>Detalhes da viagem</h3>
+                  <p className={s.sectionDesc}>
+                    Tudo aqui é <b className={s.opt}>opcional</b>. Quanto mais você preencher, <b>mais bonita e completa</b> fica a página da viagem.
+                  </p>
+                </div>
+              </div>
+
+              <label className={s.formLabel}>Localização (para o mapa)</label>
+              <input className={s.input} value={form.local} onChange={e => setField('local', e.target.value)} placeholder="Ex: Maragogi, Alagoas, Brasil" />
+              <p className={s.hint}>Cidade e estado já bastam.</p>
+
+              <label className={s.formLabel}>Descrição completa</label>
+              <textarea className={s.textarea} value={form.detalhes} onChange={e => setField('detalhes', e.target.value)} placeholder="Conte com calma como é a viagem..." />
+
+              <label className={s.formLabel}>O que está incluso</label>
+              <textarea className={s.textarea} value={form.inclusos} onChange={e => setField('inclusos', e.target.value)} placeholder={'Um item por linha:\nPassagem aérea\nHospedagem com café'} />
+              <p className={s.hint}>Escreva <b>um item por linha</b> (aperte Enter para pular para o próximo).</p>
+
+              <label className={s.formLabel}>Roteiro dia a dia</label>
+              <textarea className={s.textarea} value={form.roteiro} onChange={e => setField('roteiro', e.target.value)} placeholder={'Um dia por linha:\nDia 1 — Chegada e check-in\nDia 2 — Passeio de barco'} />
+              <p className={s.hint}>Um dia por linha. Use o travessão (—) entre o dia e o que acontece.</p>
+
+              <label className={s.formLabel}>Galeria de fotos</label>
+              <textarea className={s.textarea} value={form.galeria} onChange={e => setField('galeria', e.target.value)} placeholder="Cole um link (URL) de imagem por linha" />
+              <p className={s.hint}>Um link de foto por linha.</p>
+
+              <div className={s.checkRow}>
+                <input type="checkbox" id="esgotado" checked={form.esgotado} onChange={e => setField('esgotado', e.target.checked)} />
+                <label htmlFor="esgotado">Marcar esta viagem como <b>esgotada</b> (sem vagas)</label>
+              </div>
+            </div>
+
+            <div className={s.saveBar}>
+              <button className={s.btnSolid} onClick={salvar}>
+                {editSlug ? '✓ Salvar alterações' : '✓ Salvar e publicar viagem'}
+              </button>
+              <button className={s.btnGhost} onClick={limpar}>
+                {editSlug ? 'Cancelar edição' : 'Limpar campos'}
+              </button>
             </div>
           </div>
 
           {/* LISTA */}
           <div className={s.panel}>
-            <h2>Viagens publicadas</h2>
-            <p className={s.sub}>{viagens.length} viagem(ns) cadastrada(s)</p>
+            <div className={s.panelHead}>
+              <span className={`${s.panelBadge} ${s.panelBadgeList}`} aria-hidden="true">≡</span>
+              <div>
+                <h2>Viagens no site</h2>
+                <p className={s.sub}>
+                  {viagens.length === 0
+                    ? 'Nenhuma viagem cadastrada ainda.'
+                    : `${viagens.length} viagem${viagens.length > 1 ? 's' : ''} publicada${viagens.length > 1 ? 's' : ''} no momento.`}
+                </p>
+              </div>
+            </div>
 
             <div className={s.list}>
               {viagens.length === 0 ? (
-                <div className={s.empty}>Nenhuma viagem ainda. Adicione a primeira ao lado.</div>
+                <div className={s.empty}>
+                  Nenhuma viagem ainda.<br />Crie a primeira preenchendo o formulário ao lado.
+                </div>
               ) : (
                 viagens.map(v => (
                   <div key={v.titulo} className={s.item}>
@@ -306,26 +364,36 @@ function AdminPanel({ viagens, addViagem, updateViagem, deleteViagem, restaurar,
                       <Link
                         to={`/viagem/${slug(v.titulo)}`}
                         target="_blank"
-                        className={s.icbtn}
-                        title="Ver no site"
-                      >↗</Link>
-                      <button className={s.icbtn} title="Editar" onClick={() => editar(v)}>✎</button>
-                      <button className={s.icbtn} title="Remover" onClick={() => remover(v)}>🗑</button>
+                        className={s.actbtn}
+                        title="Abrir a página desta viagem no site"
+                      ><span aria-hidden="true">↗</span> Ver</Link>
+                      <button className={s.actbtn} title="Alterar os dados desta viagem" onClick={() => editar(v)}>
+                        <span aria-hidden="true">✎</span> Editar
+                      </button>
+                      <button className={`${s.actbtn} ${s.actbtnDanger}`} title="Apagar esta viagem do site" onClick={() => remover(v)}>
+                        <span aria-hidden="true">🗑</span> Remover
+                      </button>
                     </div>
                   </div>
                 ))
               )}
             </div>
 
-            <div className={s.btns} style={{ marginTop: 24 }}>
-              <button className={s.btnGhost} onClick={baixarJSON}>⤓ Backup JSON</button>
-              <button className={s.btnDanger} onClick={handleRestaurar}>Restaurar exemplos</button>
+            <div className={s.pubBox}>
+              <b>✓ Tudo é publicado automaticamente.</b> Toda viagem que você salva, edita ou remove
+              já fica no ar para todo mundo na hora — não precisa fazer mais nada.
             </div>
 
-            <div className={s.pubBox}>
-              <b>Publicação automática:</b> toda viagem que você salva, edita ou remove
-              já fica no ar para todo mundo na hora — não precisa baixar nem subir arquivo.<br />
-              O <b>Backup JSON</b> é opcional, só para você guardar uma cópia de segurança.
+            <div className={s.tools}>
+              <p className={s.toolsTitle}>Ferramentas extras</p>
+              <div className={s.btns}>
+                <button className={s.btnGhost} onClick={baixarJSON}>⤓ Baixar cópia de segurança</button>
+                <button className={s.btnDanger} onClick={handleRestaurar}>Restaurar viagens de exemplo</button>
+              </div>
+              <p className={s.hint} style={{ marginTop: 10 }}>
+                A <b>cópia de segurança</b> é opcional — guarda um arquivo com todas as viagens no seu computador.
+                <br /><b>Restaurar exemplos</b> apaga tudo e volta às viagens de demonstração (cuidado!).
+              </p>
             </div>
           </div>
         </div>
