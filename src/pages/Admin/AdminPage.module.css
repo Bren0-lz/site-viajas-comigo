@@ -587,6 +587,309 @@
   transform: translateX(-50%) translateY(0);
 }
 
+/* ============================================================
+   PAINEL NOVO — CARDS + EDITOR INLINE
+   ============================================================ */
+
+/* Botão "Salvar alterações" no topo */
+.saveTop {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--gold);
+  background: var(--gold);
+  color: #fdf7ea;
+  padding: 9px 20px;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'Jost', sans-serif;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.saveTop:hover:not(:disabled) {
+  background: var(--gold-soft);
+}
+
+.saveTop:disabled {
+  opacity: 0.5;
+  cursor: default;
+  background: transparent;
+  color: var(--muted);
+  border-color: var(--line);
+}
+
+.dirtyDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
+}
+
+/* Área dos cards */
+.cardsWrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 38px 26px 90px;
+}
+
+.cardsBar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.cardsBar h2 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+}
+
+.cardsBar p {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-top: 6px;
+  max-width: 60ch;
+  line-height: 1.6;
+}
+
+.cardsBar b {
+  color: var(--gold-soft);
+}
+
+.cardWrap {
+  position: relative;
+}
+
+.trash {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(217, 106, 106, 0.5);
+  background: rgba(10, 33, 64, 0.82);
+  color: #ec9a9a;
+  font-size: 1rem;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: 0.2s;
+  z-index: 3;
+}
+
+.trash:hover {
+  background: #d96a6a;
+  color: #fff;
+  border-color: #d96a6a;
+  transform: scale(1.06);
+}
+
+.addCard {
+  border: 1.5px dashed var(--line);
+  border-radius: 18px;
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.015);
+  color: var(--muted);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.addCard:hover {
+  border-color: var(--gold);
+  color: var(--gold-soft);
+}
+
+.addInner {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.98rem;
+}
+
+.addPlus {
+  font-size: 2.6rem;
+  line-height: 1;
+  color: var(--gold);
+}
+
+/* ── Edição inline (lápis por campo) ── */
+.editable {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.editing {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.editingBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+}
+
+.ph {
+  color: var(--muted);
+  font-style: italic;
+  opacity: 0.75;
+}
+
+.pencil {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  background: rgba(140, 107, 66, 0.16);
+  color: var(--gold-soft);
+  font-size: 0.82rem;
+  cursor: pointer;
+  display: inline-grid;
+  place-items: center;
+  transition: 0.2s;
+  vertical-align: middle;
+  font-family: 'Jost', sans-serif;
+  line-height: 1;
+}
+
+.pencil:hover {
+  background: var(--gold);
+  color: #fdf7ea;
+}
+
+.pencilOk {
+  width: auto;
+  border-radius: 18px;
+  padding: 0 12px;
+  height: 30px;
+  white-space: nowrap;
+}
+
+.pencilFloat {
+  width: auto;
+  border-radius: 18px;
+  padding: 0 14px;
+  height: 32px;
+  margin-top: 14px;
+}
+
+.inlineInput,
+.inlineArea {
+  background: rgba(8, 22, 44, 0.72);
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  color: var(--cream);
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  padding: 4px 10px;
+  min-width: 120px;
+}
+
+.inlineArea {
+  width: 100%;
+  min-height: 96px;
+  resize: vertical;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.inlineInput:focus,
+.inlineArea:focus {
+  outline: none;
+}
+
+.listView {
+  position: relative;
+}
+
+.listEdit {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.listEditActions {
+  display: flex;
+}
+
+/* Badge de status clicável (vagas/esgotado) no editor */
+.badgeBtn {
+  cursor: pointer;
+  font-family: 'Jost', sans-serif;
+}
+
+.badgeBtn:hover {
+  border-color: var(--gold);
+  color: var(--gold-soft);
+}
+
+/* Editor da foto de capa sobre o hero */
+.heroEditWrap {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 2;
+  max-width: min(86%, 560px);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  background: rgba(8, 22, 44, 0.78);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+/* Caixa do resumo do cartão dentro do editor */
+.summaryBox {
+  margin: 16px 0;
+  padding: 14px;
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.summaryBox small {
+  color: var(--muted);
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Botão "fake" de WhatsApp (sem ação no editor) */
+.fakeWa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background: var(--bronze);
+  color: #fdf7ea;
+  border-radius: 40px;
+  padding: 14px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
 @media (max-width: 768px) {
   .layout {
     grid-template-columns: 1fr;
@@ -603,6 +906,11 @@
   .actbtn {
     padding: 9px 14px;
     min-height: 40px;
+  }
+
+  .cardsBar {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 

@@ -63,5 +63,8 @@ export function useViagens() {
 
   const restaurar = useCallback(() => persist(SEED_VIAGENS.map(v => ({ ...v }))), [persist])
 
-  return { viagens, loading, addViagem, updateViagem, deleteViagem, restaurar }
+  // Grava o array inteiro de uma vez (usado pelo botão "Salvar alterações" do admin).
+  const salvarTudo = useCallback((next) => persist(next), [persist])
+
+  return { viagens, loading, addViagem, updateViagem, deleteViagem, restaurar, salvarTudo }
 }

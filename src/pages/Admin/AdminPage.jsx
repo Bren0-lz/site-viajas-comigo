@@ -1,25 +1,30 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { slug } from '../../utils/slug.js'
 import s from './AdminPage.module.css'
+import c from '../../components/TripCard/TripCard.module.css'
+import g from '../Home/HomePage.module.css'
+import t from '../TripDetail/TripDetailPage.module.css'
 
-const EMPTY_FORM = {
-  titulo: '', data: '', descricao: '', preco: '', vagas: '',
-  imagem: '', local: '', detalhes: '', inclusos: '', roteiro: '', galeria: '', esgotado: false,
+const NOVA_VIAGEM = {
+  titulo: 'Nova viagem',
+  data: '',
+  descricao: '',
+  preco: '',
+  vagas: '',
+  imagem: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1200&q=80',
+  local: '',
+  detalhes: '',
+  inclusos: [],
+  roteiro: [],
+  galeria: [],
+  esgotado: false,
 }
 
 function linhas(v) {
   return (v || '').split('\n').map(x => x.trim()).filter(Boolean)
 }
 
-function download(nome, conteudo) {
-  const blob = new Blob([conteudo], { type: 'text/plain;charset=utf-8' })
-  const a = document.createElement('a')
-  a.href = URL.createObjectURL(blob)
-  a.download = nome
-  a.click()
-  URL.revokeObjectURL(a.href)
-}
+/* ───────────────────────── LOGIN ───────────────────────── */
 
 function LoginScreen({ onSuccess }) {
   const [senha, setSenha] = useState('')
@@ -105,103 +110,273 @@ export default function AdminPage(props) {
   return <AdminPanel {...props} onLogout={logout} />
 }
 
-function AdminPanel({ viagens, addViagem, updateViagem, deleteViagem, restaurar, onLogout }) {
-  const [form, setForm] = useState(EMPTY_FORM)
-  const [editSlug, setEditSlug] = useState(null)
+/* ─────────────── EDIÇÃO INLINE (lápis por campo) ─────────────── */
+
+// Campo de texto curto/longo: mostra o valor + lápis; ao clicar vira input.
+function EditText({ v, set, ph, area }) {
+  const [editing, setEditing] = useState(false)
+
+  if (editing) {
+    return (
+      <span className={area ? s.editingBlock : s.editing}>
+        {area ? (
+          <textarea
+            autoFocus
+            className={s.inlineArea}
+            value={v}
+            placeholder={ph}
+            onChange={e => set(e.target.value)}
+          />
+        ) : (
+          <input
+            autoFocus
+            className={s.inlineInput}
+            value={v}
+            placeholder={ph}
+            onChange={e => set(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') setEditing(false) }}
+          />
+        )}
+        <button
+          type="button"
+          className={`${s.pencil} ${s.pencilOk}`}
+          onMouseDown={e => e.preventDefault()}
+          onClick={() => setEditing(false)}
+          title="Pronto"
+        >✓</button>
+      </span>
+    )
+  }
+
+  return (
+    <span className={s.editable}>
+      {v ? <span>{v}</span> : <span className={s.ph}>{ph}</span>}
+      <button type="button" className={s.pencil} onClick={() => setEditing(true)} title="Editar este campo">✎</button>
+    </span>
+  )
+}
+
+// Campo de lista (um item por linha): mostra a lista renderizada + lápis;
+// ao editar, abre um campo de texto com um item por linha.
+function EditList({ value, onChange, ph, children }) {
+  const [editing, setEditing] = useState(false)
+  const [text, setText] = useState('')
+
+  if (editing) {
+    return (
+      <div className={s.listEdit}>
+        <textarea
+          autoFocus
+          className={s.inlineArea}
+          value={text}
+          placeholder={ph}
+          onChange={e => setText(e.target.value)}
+        />
+        <div className={s.listEditActions}>
+          <button
+            type="button"
+            className={`${s.pencil} ${s.pencilOk}`}
+            onClick={() => { onChange(linhas(text)); setEditing(false) }}
+          >✓ Pronto</button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className={s.listView}>
+      {children}
+      <button
+        type="button"
+        className={`${s.pencil} ${s.pencilFloat}`}
+        onClick={() => { setText((value || []).join('\n')); setEditing(true) }}
+        title="Editar esta lista"
+      >✎ Editar</button>
+    </div>
+  )
+}
+
+/* ─────────────── EDITOR (cara da página de detalhes) ─────────────── */
+
+function Editor({ trip, upd }) {
+  return (
+    <div className="pageFade">
+      <section className={t.hero} style={{ backgroundImage: `url('${trip.imagem}')` }}>
+        <div className={s.heroEditWrap}>
+          Foto de capa:&nbsp;
+          <EditText v={trip.imagem} set={x => upd('imagem', x)} ph="Cole o link (URL) da foto" />
+        </div>
+
+        <div className={`wrap ${t.heroContent}`}>
+          <button
+            type="button"
+            className={`${t.badge}${trip.esgotado ? ' ' + t.esgotado : ''} ${s.badgeBtn}`}
+            onClick={() => upd('esgotado', !trip.esgotado)}
+            title="Alternar entre Vagas abertas e Esgotado"
+          >
+            {trip.esgotado ? 'Esgotado' : 'Vagas abertas'} ✎
+          </button>
+          <h1><EditText v={trip.titulo} set={x => upd('titulo', x)} ph="Título da viagem" /></h1>
+          <div className={t.meta}>
+            <EditText v={trip.data} set={x => upd('data', x)} ph="Datas" />
+            {' · '}
+            <EditText v={trip.local} set={x => upd('local', x)} ph="Local" />
+          </div>
+        </div>
+      </section>
+
+      <div className={t.layout}>
+        <div className={t.main}>
+          <p className={t.lead}>
+            <EditText v={trip.detalhes} set={x => upd('detalhes', x)} ph="Descrição completa da viagem…" area />
+          </p>
+
+          <div className={t.block}>
+            <h2><span className={t.dot} />Fotos da viagem</h2>
+            <EditList value={trip.galeria} onChange={x => upd('galeria', x)} ph="Cole um link (URL) de foto por linha">
+              {trip.galeria?.length ? (
+                <div className={t.galeria}>
+                  {trip.galeria.map((img, i) => (
+                    <div key={img} className={`${t.gItem}${i === 0 ? ' ' + t.feat : ''}`}>
+                      <img src={img} alt={trip.titulo} loading="lazy" decoding="async" />
+                    </div>
+                  ))}
+                </div>
+              ) : <p className={s.ph}>Nenhuma foto ainda.</p>}
+            </EditList>
+          </div>
+
+          <div className={t.pair}>
+            <div className={t.block}>
+              <h2><span className={t.dot} />O que está incluso</h2>
+              <EditList value={trip.inclusos} onChange={x => upd('inclusos', x)} ph="Um item por linha">
+                {trip.inclusos?.length ? (
+                  <ul className={t.inclusos}>
+                    {trip.inclusos.map(item => (
+                      <li key={item}><span className={t.ck}>✓</span><span>{item}</span></li>
+                    ))}
+                  </ul>
+                ) : <p className={s.ph}>Nada cadastrado ainda.</p>}
+              </EditList>
+            </div>
+
+            <div className={t.block}>
+              <h2><span className={t.dot} />Roteiro dia a dia</h2>
+              <EditList value={trip.roteiro} onChange={x => upd('roteiro', x)} ph="Um dia por linha. Ex: Dia 1 — Chegada">
+                {trip.roteiro?.length ? (
+                  <ul className={t.roteiro}>
+                    {trip.roteiro.map(linha => {
+                      const partes = linha.split('—')
+                      return (
+                        <li key={linha}>
+                          {partes.length > 1
+                            ? <><b>{partes[0].trim()}</b> — {partes.slice(1).join('—').trim()}</>
+                            : linha}
+                        </li>
+                      )
+                    })}
+                  </ul>
+                ) : <p className={s.ph}>Nada cadastrado ainda.</p>}
+              </EditList>
+            </div>
+          </div>
+
+          <div className={t.block}>
+            <h2><span className={t.dot} />Onde fica</h2>
+            <p className={t.loc}>📍 <EditText v={trip.local} set={x => upd('local', x)} ph="Cidade e estado" /></p>
+            {trip.local && (
+              <iframe
+                title={`Mapa de ${trip.local}`}
+                className={t.mapFrame}
+                loading="lazy"
+                src={`https://www.google.com/maps?q=${encodeURIComponent(trip.local)}&output=embed`}
+              />
+            )}
+          </div>
+        </div>
+
+        <aside className={t.side}>
+          <div className={t.cardPrice}>
+            <small>A partir de</small>
+            <div className={t.val}>R$ <EditText v={trip.preco} set={x => upd('preco', x)} ph="0.000" /></div>
+            <div className={t.per}>por pessoa</div>
+            <ul className={t.facts}>
+              <li><span>Datas</span><b><EditText v={trip.data} set={x => upd('data', x)} ph="A definir" /></b></li>
+              <li><span>Vagas</span><b><EditText v={trip.vagas} set={x => upd('vagas', x)} ph="Consultar" /></b></li>
+              <li><span>Destino</span><b><EditText v={trip.local} set={x => upd('local', x)} ph="—" /></b></li>
+            </ul>
+
+            <div className={s.summaryBox}>
+              <small>Resumo no cartão (página inicial)</small>
+              <EditText v={trip.descricao} set={x => upd('descricao', x)} ph="Uma frase chamativa sobre a viagem." area />
+            </div>
+
+            <span className={s.fakeWa}>Tenho interesse (WhatsApp)</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+  )
+}
+
+/* ─────────────── PAINEL PRINCIPAL ─────────────── */
+
+function AdminPanel({ viagens, salvarTudo, onLogout }) {
+  const [draft, setDraft] = useState(viagens)
+  const [dirty, setDirty] = useState(false)
+  const [editIndex, setEditIndex] = useState(null)
+  const [saving, setSaving] = useState(false)
   const [toastMsg, setToastMsg] = useState('')
   const [toastVisible, setToastVisible] = useState(false)
   const toastTimer = useRef(null)
-  const formRef = useRef(null)
+
+  // Enquanto não houver alterações pendentes, mantém o rascunho sincronizado
+  // com o que veio do servidor.
+  useEffect(() => {
+    if (!dirty) setDraft(viagens)
+  }, [viagens, dirty])
 
   const toast = useCallback((msg) => {
     setToastMsg(msg)
     setToastVisible(true)
     clearTimeout(toastTimer.current)
-    toastTimer.current = setTimeout(() => setToastVisible(false), 2400)
+    toastTimer.current = setTimeout(() => setToastVisible(false), 2800)
   }, [])
 
-  function setField(key, value) {
-    setForm(f => ({ ...f, [key]: value }))
+  function upd(key, val) {
+    setDraft(d => d.map((v, i) => (i === editIndex ? { ...v, [key]: val } : v)))
+    setDirty(true)
+  }
+
+  function remover(i, e) {
+    e?.stopPropagation()
+    const alvo = draft[i]
+    if (!window.confirm(`Excluir a viagem "${alvo?.titulo || ''}"?\n\nLembre de clicar em "Salvar alterações" depois para confirmar.`)) return
+    setDraft(d => d.filter((_, j) => j !== i))
+    setDirty(true)
+    toast('Viagem removida — clique em Salvar alterações para confirmar')
+  }
+
+  function nova() {
+    setDraft(d => [{ ...NOVA_VIAGEM }, ...d])
+    setDirty(true)
+    setEditIndex(0)
   }
 
   async function salvar() {
-    if (!form.titulo.trim()) { toast('Dê um título à viagem'); return }
-    const obj = {
-      titulo: form.titulo.trim(),
-      data: form.data.trim(),
-      descricao: form.descricao.trim(),
-      preco: form.preco.trim(),
-      vagas: form.vagas.trim(),
-      imagem: form.imagem.trim() || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1200&q=80',
-      local: form.local.trim(),
-      detalhes: form.detalhes.trim(),
-      inclusos: linhas(form.inclusos),
-      roteiro: linhas(form.roteiro),
-      galeria: linhas(form.galeria),
-      esgotado: form.esgotado,
-    }
+    setSaving(true)
     try {
-      if (editSlug) {
-        await updateViagem(editSlug, obj)
-        toast('Viagem atualizada ✓')
-      } else {
-        await addViagem(obj)
-        toast('Viagem adicionada ✓')
-      }
-      limpar()
+      await salvarTudo(draft)
+      setDirty(false)
+      toast('Alterações salvas e publicadas ✓')
     } catch (err) {
       toast(err.message || 'Erro ao salvar')
+    } finally {
+      setSaving(false)
     }
   }
 
-  function editar(viagem) {
-    setForm({
-      titulo: viagem.titulo || '',
-      data: viagem.data || '',
-      descricao: viagem.descricao || '',
-      preco: viagem.preco || '',
-      vagas: viagem.vagas || '',
-      imagem: viagem.imagem || '',
-      local: viagem.local || '',
-      detalhes: viagem.detalhes || '',
-      inclusos: (viagem.inclusos || []).join('\n'),
-      roteiro: (viagem.roteiro || []).join('\n'),
-      galeria: (viagem.galeria || []).join('\n'),
-      esgotado: !!viagem.esgotado,
-    })
-    setEditSlug(slug(viagem.titulo))
-    formRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }
-
-  async function remover(viagem) {
-    if (!window.confirm(`Remover a viagem "${viagem.titulo}"?`)) return
-    try {
-      await deleteViagem(slug(viagem.titulo))
-      toast('Viagem removida')
-    } catch (err) {
-      toast(err.message || 'Erro ao remover')
-    }
-  }
-
-  function limpar() {
-    setForm(EMPTY_FORM)
-    setEditSlug(null)
-  }
-
-  async function handleRestaurar() {
-    if (!window.confirm('Isso volta para as viagens de exemplo e apaga as suas alterações. Continuar?')) return
-    try {
-      await restaurar()
-      toast('Exemplos restaurados')
-    } catch (err) {
-      toast(err.message || 'Erro ao restaurar')
-    }
-  }
-
-  function baixarJSON() {
-    download('viagens-backup.json', JSON.stringify(viagens, null, 2))
-    toast('Backup baixado')
-  }
+  const trip = editIndex !== null ? draft[editIndex] : null
 
   return (
     <div className={s.page}>
@@ -212,192 +387,74 @@ function AdminPanel({ viagens, addViagem, updateViagem, deleteViagem, restaurar,
           <span className={s.tag}>Painel de viagens</span>
         </div>
         <div className={s.topActions}>
-          <Link to="/" className={s.viewLink}>Ver o site →</Link>
-          <button className={s.viewLink} onClick={onLogout}>Sair</button>
+          {trip && (
+            <button type="button" className={s.viewLink} onClick={() => setEditIndex(null)}>← Voltar aos cards</button>
+          )}
+          <Link to="/" className={s.viewLink} target="_blank">Ver o site →</Link>
+          <button type="button" className={s.saveTop} onClick={salvar} disabled={!dirty || saving}>
+            {saving ? 'Salvando…' : 'Salvar alterações'}
+            {dirty && !saving && <span className={s.dirtyDot} aria-hidden="true" />}
+          </button>
+          <button type="button" className={s.viewLink} onClick={onLogout}>Sair</button>
         </div>
       </div>
 
-      <div className={s.wrap}>
-        <div className={s.intro}>
-          <span className={s.introIcon} aria-hidden="true">👋</span>
-          <div>
-            <b>Bem-vindo(a) ao seu painel.</b> Aqui você cria, edita e remove as viagens que aparecem no site —
-            sem precisar mexer em código nem chamar ninguém. É só preencher os campos do lado <b>esquerdo</b> e clicar
-            em <b>Salvar</b>. As viagens já cadastradas ficam à <b>direita</b>.
-          </div>
-        </div>
-
-        <div className={s.layout}>
-          {/* FORM */}
-          <div className={s.panel} ref={formRef}>
-            <div className={s.panelHead}>
-              <span className={`${s.panelBadge} ${editSlug ? s.panelBadgeEdit : ''}`} aria-hidden="true">
-                {editSlug ? '✎' : '+'}
-              </span>
-              <div>
-                <h2>{editSlug ? 'Editando uma viagem' : 'Criar uma nova viagem'}</h2>
-                <p className={s.sub}>
-                  {editSlug
-                    ? 'Altere o que precisar e clique em Salvar lá embaixo.'
-                    : 'Preencha de cima para baixo. Leva poucos minutos.'}
-                </p>
-              </div>
+      {trip ? (
+        <Editor trip={trip} upd={upd} />
+      ) : (
+        <div className={s.cardsWrap}>
+          <div className={s.cardsBar}>
+            <div>
+              <h2>Próximas viagens</h2>
+              <p>Clique em uma viagem para editá-la, ou use a lixeira para excluir. As mudanças só vão para o ar quando você clicar em <b>Salvar alterações</b>.</p>
             </div>
-
-            {/* PASSO 1 — Obrigatório */}
-            <div className={s.section}>
-              <div className={s.sectionHead}>
-                <span className={s.stepNum}>1</span>
-                <div>
-                  <h3 className={s.sectionTitle}>Informações principais</h3>
-                  <p className={s.sectionDesc}>
-                    Esses campos são <b className={s.req}>obrigatórios</b> — são o mínimo para a viagem aparecer no site.
-                  </p>
-                </div>
-              </div>
-
-              <label className={s.formLabel}>Título da viagem <span className={s.tagReq}>obrigatório</span></label>
-              <input className={s.input} value={form.titulo} onChange={e => setField('titulo', e.target.value)} placeholder="Ex: Praia & Sol — Nordeste" />
-
-              <label className={s.formLabel}>Datas <span className={s.tagReq}>obrigatório</span></label>
-              <input className={s.input} value={form.data} onChange={e => setField('data', e.target.value)} placeholder="Ex: 15 a 22 de Setembro" />
-
-              <label className={s.formLabel}>Resumo curto <span className={s.tagReq}>obrigatório</span></label>
-              <textarea className={s.textarea} value={form.descricao} onChange={e => setField('descricao', e.target.value)} placeholder="Uma frase chamativa sobre a viagem." />
-              <p className={s.hint}>Aparece no cartão da viagem, na página inicial.</p>
-
-              <div className={s.row}>
-                <div>
-                  <label className={s.formLabel}>Preço a partir de (R$) <span className={s.tagReq}>obrigatório</span></label>
-                  <input className={s.input} value={form.preco} onChange={e => setField('preco', e.target.value)} placeholder="Ex: 2.490" />
-                </div>
-                <div>
-                  <label className={s.formLabel}>Vagas <span className={s.tagReq}>obrigatório</span></label>
-                  <input className={s.input} value={form.vagas} onChange={e => setField('vagas', e.target.value)} placeholder="Ex: 8 vagas" />
-                </div>
-              </div>
-
-              <label className={s.formLabel}>Foto principal <span className={s.tagReq}>obrigatório</span></label>
-              <input className={s.input} value={form.imagem} onChange={e => setField('imagem', e.target.value)} placeholder="Cole aqui o link (URL) de uma foto" />
-              <p className={s.hint}>Copie o endereço de uma imagem da internet e cole aqui. É a foto de capa da viagem.</p>
-            </div>
-
-            {/* PASSO 2 — Opcional */}
-            <div className={s.section}>
-              <div className={s.sectionHead}>
-                <span className={s.stepNum}>2</span>
-                <div>
-                  <h3 className={s.sectionTitle}>Detalhes da viagem</h3>
-                  <p className={s.sectionDesc}>
-                    Tudo aqui é <b className={s.opt}>opcional</b>. Quanto mais você preencher, <b>mais bonita e completa</b> fica a página da viagem.
-                  </p>
-                </div>
-              </div>
-
-              <label className={s.formLabel}>Localização (para o mapa)</label>
-              <input className={s.input} value={form.local} onChange={e => setField('local', e.target.value)} placeholder="Ex: Maragogi, Alagoas, Brasil" />
-              <p className={s.hint}>Cidade e estado já bastam.</p>
-
-              <label className={s.formLabel}>Descrição completa</label>
-              <textarea className={s.textarea} value={form.detalhes} onChange={e => setField('detalhes', e.target.value)} placeholder="Conte com calma como é a viagem..." />
-
-              <label className={s.formLabel}>O que está incluso</label>
-              <textarea className={s.textarea} value={form.inclusos} onChange={e => setField('inclusos', e.target.value)} placeholder={'Um item por linha:\nPassagem aérea\nHospedagem com café'} />
-              <p className={s.hint}>Escreva <b>um item por linha</b> (aperte Enter para pular para o próximo).</p>
-
-              <label className={s.formLabel}>Roteiro dia a dia</label>
-              <textarea className={s.textarea} value={form.roteiro} onChange={e => setField('roteiro', e.target.value)} placeholder={'Um dia por linha:\nDia 1 — Chegada e check-in\nDia 2 — Passeio de barco'} />
-              <p className={s.hint}>Um dia por linha. Use o travessão (—) entre o dia e o que acontece.</p>
-
-              <label className={s.formLabel}>Galeria de fotos</label>
-              <textarea className={s.textarea} value={form.galeria} onChange={e => setField('galeria', e.target.value)} placeholder="Cole um link (URL) de imagem por linha" />
-              <p className={s.hint}>Um link de foto por linha.</p>
-
-              <div className={s.checkRow}>
-                <input type="checkbox" id="esgotado" checked={form.esgotado} onChange={e => setField('esgotado', e.target.checked)} />
-                <label htmlFor="esgotado">Marcar esta viagem como <b>esgotada</b> (sem vagas)</label>
-              </div>
-            </div>
-
-            <div className={s.saveBar}>
-              <button className={s.btnSolid} onClick={salvar}>
-                {editSlug ? '✓ Salvar alterações' : '✓ Salvar e publicar viagem'}
-              </button>
-              <button className={s.btnGhost} onClick={limpar}>
-                {editSlug ? 'Cancelar edição' : 'Limpar campos'}
-              </button>
-            </div>
+            <button type="button" className={s.btnSolid} onClick={nova}>+ Nova viagem</button>
           </div>
 
-          {/* LISTA */}
-          <div className={s.panel}>
-            <div className={s.panelHead}>
-              <span className={`${s.panelBadge} ${s.panelBadgeList}`} aria-hidden="true">≡</span>
-              <div>
-                <h2>Viagens no site</h2>
-                <p className={s.sub}>
-                  {viagens.length === 0
-                    ? 'Nenhuma viagem cadastrada ainda.'
-                    : `${viagens.length} viagem${viagens.length > 1 ? 's' : ''} publicada${viagens.length > 1 ? 's' : ''} no momento.`}
-                </p>
-              </div>
-            </div>
-
-            <div className={s.list}>
-              {viagens.length === 0 ? (
-                <div className={s.empty}>
-                  Nenhuma viagem ainda.<br />Crie a primeira preenchendo o formulário ao lado.
-                </div>
-              ) : (
-                viagens.map(v => (
-                  <div key={v.titulo} className={s.item}>
-                    <div className={s.thumb} style={{ backgroundImage: `url('${v.imagem || ''}')` }} />
-                    <div className={s.info}>
-                      <h3>{v.titulo || '(sem título)'}</h3>
-                      <span>{v.data || ''}{v.vagas ? ` · ${v.vagas}` : ''}{v.local ? ` · ${v.local}` : ''}</span>
-                      <span className={s.price}>R$ {v.preco || '—'}</span>
-                      <span className={`${s.pill} ${v.esgotado ? s.pillNo : s.pillOk}`}>
-                        {v.esgotado ? 'Esgotado' : 'Vagas abertas'}
-                      </span>
-                    </div>
-                    <div className={s.itemActions}>
-                      <Link
-                        to={`/viagem/${slug(v.titulo)}`}
-                        target="_blank"
-                        className={s.actbtn}
-                        title="Abrir a página desta viagem no site"
-                      ><span aria-hidden="true">↗</span> Ver</Link>
-                      <button className={s.actbtn} title="Alterar os dados desta viagem" onClick={() => editar(v)}>
-                        <span aria-hidden="true">✎</span> Editar
-                      </button>
-                      <button className={`${s.actbtn} ${s.actbtnDanger}`} title="Apagar esta viagem do site" onClick={() => remover(v)}>
-                        <span aria-hidden="true">🗑</span> Remover
-                      </button>
+          <div className={g.grid}>
+            {draft.map((v, i) => (
+              <div key={i} className={s.cardWrap}>
+                <button
+                  type="button"
+                  className={s.trash}
+                  title="Excluir esta viagem"
+                  onClick={e => remover(i, e)}
+                >🗑</button>
+                <div className={c.card} onClick={() => setEditIndex(i)} role="button" tabIndex={0}
+                  onKeyDown={e => { if (e.key === 'Enter') setEditIndex(i) }}>
+                  <div className={c.img}>
+                    <div className={c.imgBg} style={{ backgroundImage: `url('${v.imagem}')` }} />
+                    <span className={`${c.badge}${v.esgotado ? ' ' + c.esgotado : ''}`}>
+                      {v.esgotado ? 'Esgotado' : 'Vagas abertas'}
+                    </span>
+                  </div>
+                  <div className={c.body}>
+                    <h3>{v.titulo || '(sem título)'}</h3>
+                    <div className={c.date}>{v.data}</div>
+                    <p className={c.desc}>{v.descricao}</p>
+                    <div className={c.foot}>
+                      <div className={c.price}>
+                        <small>A partir de</small>
+                        <b>R$ {v.preco || '—'}</b>
+                        <div className={c.vagas}>{v.vagas}</div>
+                      </div>
+                      <span className={c.btn}>Editar ✎</span>
                     </div>
                   </div>
-                ))
-              )}
-            </div>
-
-            <div className={s.pubBox}>
-              <b>✓ Tudo é publicado automaticamente.</b> Toda viagem que você salva, edita ou remove
-              já fica no ar para todo mundo na hora — não precisa fazer mais nada.
-            </div>
-
-            <div className={s.tools}>
-              <p className={s.toolsTitle}>Ferramentas extras</p>
-              <div className={s.btns}>
-                <button className={s.btnGhost} onClick={baixarJSON}>⤓ Baixar cópia de segurança</button>
-                <button className={s.btnDanger} onClick={handleRestaurar}>Restaurar viagens de exemplo</button>
+                </div>
               </div>
-              <p className={s.hint} style={{ marginTop: 10 }}>
-                A <b>cópia de segurança</b> é opcional — guarda um arquivo com todas as viagens no seu computador.
-                <br /><b>Restaurar exemplos</b> apaga tudo e volta às viagens de demonstração (cuidado!).
-              </p>
+            ))}
+
+            <div className={s.addCard} onClick={nova} role="button" tabIndex={0}
+              onKeyDown={e => { if (e.key === 'Enter') nova() }}>
+              <div className={s.addInner}>
+                <span className={s.addPlus}>+</span>
+                <span>Adicionar nova viagem</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       <div className={`${s.toast}${toastVisible ? ' ' + s.visible : ''}`}>{toastMsg}</div>
     </div>
