@@ -19,6 +19,10 @@ const NOVA_VIAGEM = {
   roteiro: [],
   galeria: [],
   esgotado: false,
+  capaPosX: 50,
+  capaPosY: 50,
+  capaZoom: 1,
+  capaCor: '',
 }
 
 function linhas(v) {
@@ -211,14 +215,57 @@ function EditList({ value, onChange, ph, children }) {
 function Editor({ trip, upd, onError }) {
   return (
     <div className="pageFade">
-      <section className={t.hero} style={{ backgroundImage: trip.imagem ? `url('${trip.imagem}')` : 'none' }}>
+      <section
+        className={t.hero}
+        style={{
+          '--capa-img': trip.imagem ? `url('${trip.imagem}')` : 'none',
+          '--capa-pos': `${trip.capaPosX ?? 50}% ${trip.capaPosY ?? 50}%`,
+          '--capa-zoom': trip.capaZoom || 1,
+          ...(trip.capaCor ? { '--capa-cor': trip.capaCor } : {}),
+        }}
+      >
         <div className={s.heroEditWrap}>
-          Foto de capa:&nbsp;
-          <ImageUpload
-            label={trip.imagem ? 'Trocar foto de capa' : 'Enviar foto de capa'}
-            onUploaded={url => upd('imagem', url)}
-            onError={onError}
-          />
+          <div className={s.heroEditRow}>
+            Foto de capa:&nbsp;
+            <ImageUpload
+              label={trip.imagem ? 'Trocar foto de capa' : 'Enviar foto de capa'}
+              onUploaded={url => upd('imagem', url)}
+              onError={onError}
+            />
+          </div>
+
+          {trip.imagem && (
+            <div className={s.capaCtrls}>
+              <label className={s.capaCtrl}>
+                <span>Horizontal</span>
+                <input type="range" min="0" max="100" value={trip.capaPosX ?? 50}
+                  onChange={e => upd('capaPosX', Number(e.target.value))} />
+              </label>
+              <label className={s.capaCtrl}>
+                <span>Vertical</span>
+                <input type="range" min="0" max="100" value={trip.capaPosY ?? 50}
+                  onChange={e => upd('capaPosY', Number(e.target.value))} />
+              </label>
+              <label className={s.capaCtrl}>
+                <span>Zoom</span>
+                <input type="range" min="1" max="2.5" step="0.05" value={trip.capaZoom || 1}
+                  onChange={e => upd('capaZoom', Number(e.target.value))} />
+              </label>
+              <label className={`${s.capaCtrl} ${s.capaColor}`}>
+                <span>Cor do texto</span>
+                <input type="color" value={trip.capaCor || '#f4f1ea'}
+                  onChange={e => upd('capaCor', e.target.value)} />
+              </label>
+              <button
+                type="button"
+                className={s.capaReset}
+                onClick={() => {
+                  upd('capaPosX', 50); upd('capaPosY', 50); upd('capaZoom', 1); upd('capaCor', '')
+                }}
+                title="Voltar ao enquadramento e cor padrão"
+              >Resetar</button>
+            </div>
+          )}
         </div>
 
         <div className={`wrap ${t.heroContent}`}>
@@ -460,7 +507,11 @@ function AdminPanel({ viagens, salvarTudo, onLogout }) {
                 <div className={c.card} onClick={() => setEditIndex(i)} role="button" tabIndex={0}
                   onKeyDown={e => { if (e.key === 'Enter') setEditIndex(i) }}>
                   <div className={c.img}>
-                    <div className={c.imgBg} style={{ backgroundImage: `url('${v.imagem}')` }} />
+                    <div className={c.imgBg} style={{
+                      backgroundImage: `url('${v.imagem}')`,
+                      backgroundPosition: `${v.capaPosX ?? 50}% ${v.capaPosY ?? 50}%`,
+                      '--capa-zoom': v.capaZoom || 1,
+                    }} />
                     <span className={`${c.badge}${v.esgotado ? ' ' + c.esgotado : ''}`}>
                       {v.esgotado ? 'Esgotado' : 'Vagas abertas'}
                     </span>

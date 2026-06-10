@@ -882,16 +882,81 @@
   top: 14px;
   left: 14px;
   z-index: 2;
-  max-width: min(86%, 560px);
+  max-width: min(92%, 620px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(8, 22, 44, 0.82);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  backdrop-filter: blur(4px);
+}
+
+.heroEditRow {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  background: rgba(8, 22, 44, 0.78);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 8px 12px;
-  font-size: 0.82rem;
+  gap: 6px;
+}
+
+/* Ajustes de enquadramento, zoom e cor do texto da capa */
+.capaCtrls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.capaCtrl {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.capaCtrl span {
+  text-transform: uppercase;
   color: var(--muted);
+}
+
+.capaCtrl input[type='range'] {
+  width: 120px;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+
+.capaColor input[type='color'] {
+  width: 44px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+}
+
+.capaReset {
+  align-self: flex-end;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  border-radius: 30px;
+  padding: 6px 14px;
+  font-size: 0.74rem;
+  cursor: pointer;
+  font-family: 'Jost', sans-serif;
+  transition: 0.2s;
+}
+
+.capaReset:hover {
+  border-color: var(--gold);
+  color: var(--gold-soft);
 }
 
 /* Caixa do resumo do cartão dentro do editor */

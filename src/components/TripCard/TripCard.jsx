@@ -19,7 +19,11 @@ export default function TripCard({ viagem }) {
       <div className={s.img}>
         <div
           className={s.imgBg}
-          style={{ backgroundImage: `url('${viagem.imagem}')` }}
+          style={{
+            backgroundImage: `url('${viagem.imagem}')`,
+            backgroundPosition: `${viagem.capaPosX ?? 50}% ${viagem.capaPosY ?? 50}%`,
+            '--capa-zoom': viagem.capaZoom || 1,
+          }}
         />
         <span className={`${s.badge}${viagem.esgotado ? ' ' + s.esgotado : ''}`}>
           {viagem.esgotado ? 'Esgotado' : 'Vagas abertas'}

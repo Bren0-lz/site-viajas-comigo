@@ -3,17 +3,32 @@
   height: 55vh;
   height: 55svh;
   min-height: 380px;
-  background-size: cover;
-  background-position: center;
+  overflow: hidden;
+  background: var(--panel);
   display: flex;
   align-items: flex-end;
   cursor: pointer;
+}
+
+/* Camada da foto: o zoom (scale) e o posicionamento ficam aqui, para não
+   afetar o conteúdo (título, badge) que vive acima. */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: var(--capa-img, none);
+  background-size: cover;
+  background-position: var(--capa-pos, center);
+  transform: scale(var(--capa-zoom, 1));
+  transform-origin: center;
 }
 
 .hero::after {
   content: '';
   position: absolute;
   inset: 0;
+  z-index: 0;
   background: linear-gradient(transparent 30%, rgba(10, 33, 64, 0.88));
 }
 
@@ -50,10 +65,11 @@
 .heroContent h1 {
   font-size: clamp(2.2rem, 5vw, 3.4rem);
   margin-bottom: 10px;
+  color: var(--capa-cor, inherit);
 }
 
 .meta {
-  color: var(--muted);
+  color: var(--capa-cor, var(--muted));
   font-size: 0.95rem;
 }
 

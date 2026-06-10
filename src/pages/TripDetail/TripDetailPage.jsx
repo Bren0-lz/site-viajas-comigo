@@ -55,7 +55,12 @@ export default function TripDetailPage({ viagens, loading }) {
       <div className="pageFade">
       <section
         className={s.hero}
-        style={{ backgroundImage: `url('${viagem.imagem}')` }}
+        style={{
+          '--capa-img': `url('${viagem.imagem}')`,
+          '--capa-pos': `${viagem.capaPosX ?? 50}% ${viagem.capaPosY ?? 50}%`,
+          '--capa-zoom': viagem.capaZoom || 1,
+          ...(viagem.capaCor ? { '--capa-cor': viagem.capaCor } : {}),
+        }}
         onClick={() => setLbIndex(0)}
         aria-label="Ver foto"
       >
