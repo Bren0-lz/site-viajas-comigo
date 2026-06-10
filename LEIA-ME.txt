@@ -32,7 +32,9 @@ COMO A TIA GERENCIA AS VIAGENS (sem código)
    — e menos mensagens os clientes precisam mandar.
    - "Localização": cidade e estado bastam (é o que vai no mapa e no Street View).
    - "O que está incluso" e "Roteiro": um item por linha.
-   - "Galeria": uma URL de imagem por linha (são essas que ficam em destaque).
+   - "Galeria" e "Foto de capa": clique em "Enviar foto do computador" e
+     escolha as imagens direto do seu computador ou celular — não precisa
+     mais colar link nenhum.
 2. Clica em "Salvar viagem".
 3. Para publicar: clica em "Baixar arquivo do site" — gera um novo
    "dados-viagens.js". Basta trocar o "dados-viagens.js" do site por esse.
@@ -76,5 +78,6 @@ PARA COLOCAR NO AR (de graça)
 
 DICA SOBRE AS FOTOS
 -------------------
-As imagens de exemplo vêm da internet (Unsplash). Troque pelos links das
-fotos reais (ou peça pra eu trocar por fotos do Instagram dela).
+As imagens de exemplo vêm da internet (Unsplash). No painel, use o botão
+"Enviar foto do computador" para trocar por fotos reais — elas são enviadas
+e otimizadas automaticamente (não precisa redimensionar antes).

@@ -1,0 +1,28 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--gold);
+  border-radius: 30px;
+  padding: 10px 18px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  background: var(--gold);
+  color: #fdf7ea;
+  font-family: 'Jost', sans-serif;
+  transition: 0.2s;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--gold-soft);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.hidden {
+  display: none;
+}

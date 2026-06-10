@@ -4,6 +4,7 @@ import s from './AdminPage.module.css'
 import c from '../../components/TripCard/TripCard.module.css'
 import g from '../Home/HomePage.module.css'
 import t from '../TripDetail/TripDetailPage.module.css'
+import ImageUpload from '../../components/ImageUpload/ImageUpload.jsx'
 
 const NOVA_VIAGEM = {
   titulo: 'Nova viagem',
@@ -11,7 +12,7 @@ const NOVA_VIAGEM = {
   descricao: '',
   preco: '',
   vagas: '',
-  imagem: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1200&q=80',
+  imagem: '',
   local: '',
   detalhes: '',
   inclusos: [],
@@ -198,13 +199,17 @@ function EditList({ value, onChange, ph, children }) {
 
 /* ─────────────── EDITOR (cara da página de detalhes) ─────────────── */
 
-function Editor({ trip, upd }) {
+function Editor({ trip, upd, onError }) {
   return (
     <div className="pageFade">
-      <section className={t.hero} style={{ backgroundImage: `url('${trip.imagem}')` }}>
+      <section className={t.hero} style={{ backgroundImage: trip.imagem ? `url('${trip.imagem}')` : 'none' }}>
         <div className={s.heroEditWrap}>
           Foto de capa:&nbsp;
-          <EditText v={trip.imagem} set={x => upd('imagem', x)} ph="Cole o link (URL) da foto" />
+          <ImageUpload
+            label={trip.imagem ? '📷 Trocar foto de capa' : '📷 Enviar foto de capa'}
+            onUploaded={url => upd('imagem', url)}
+            onError={onError}
+          />
         </div>
 
         <div className={`wrap ${t.heroContent}`}>
@@ -233,17 +238,29 @@ function Editor({ trip, upd }) {
 
           <div className={t.block}>
             <h2><span className={t.dot} />Fotos da viagem</h2>
-            <EditList value={trip.galeria} onChange={x => upd('galeria', x)} ph="Cole um link (URL) de foto por linha">
-              {trip.galeria?.length ? (
-                <div className={t.galeria}>
-                  {trip.galeria.map((img, i) => (
-                    <div key={img} className={`${t.gItem}${i === 0 ? ' ' + t.feat : ''}`}>
-                      <img src={img} alt={trip.titulo} loading="lazy" decoding="async" />
-                    </div>
-                  ))}
-                </div>
-              ) : <p className={s.ph}>Nenhuma foto ainda.</p>}
-            </EditList>
+            <div className={s.galeriaUpload}>
+              <ImageUpload
+                multiple
+                label="📷 Adicionar fotos"
+                onUploaded={url => upd('galeria', [...(trip.galeria || []), url])}
+                onError={onError}
+              />
+            </div>
+            {trip.galeria?.length ? (
+              <div className={t.galeria}>
+                {trip.galeria.map((img, i) => (
+                  <div key={img} className={`${t.gItem}${i === 0 ? ' ' + t.feat : ''} ${s.gItemEdit}`}>
+                    <img src={img} alt={trip.titulo} loading="lazy" decoding="async" />
+                    <button
+                      type="button"
+                      className={s.gRemove}
+                      title="Remover esta foto"
+                      onClick={() => upd('galeria', trip.galeria.filter((_, j) => j !== i))}
+                    >×</button>
+                  </div>
+                ))}
+              </div>
+            ) : <p className={s.ph}>Nenhuma foto ainda.</p>}
           </div>
 
           <div className={t.pair}>
@@ -400,7 +417,7 @@ function AdminPanel({ viagens, salvarTudo, onLogout }) {
       </div>
 
       {trip ? (
-        <Editor trip={trip} upd={upd} />
+        <Editor trip={trip} upd={upd} onError={toast} />
       ) : (
         <div className={s.cardsWrap}>
           <div className={s.cardsBar}>

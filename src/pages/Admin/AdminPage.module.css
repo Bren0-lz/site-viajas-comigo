@@ -1,3 +1,36 @@
+/* ─── Upload de fotos da galeria ─── */
+.galeriaUpload {
+  margin-bottom: 14px;
+}
+
+/* Cada miniatura da galeria vira um contêiner posicionado para o botão de remover. */
+.gItemEdit {
+  position: relative;
+}
+
+.gRemove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+
+.gRemove:hover {
+  background: #d96a6a;
+}
+
 .page {
   min-height: 100vh;
   background: var(--black);
