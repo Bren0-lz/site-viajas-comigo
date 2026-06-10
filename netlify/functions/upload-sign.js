@@ -9,9 +9,11 @@ const json = (statusCode, body, headers = {}) => ({
 
 // Pasta no Cloudinary onde as fotos das viagens ficam guardadas.
 const FOLDER = 'viajas-comigo'
-// Otimização aplicada no momento do upload: limita a largura a 1920px e deixa
-// o Cloudinary escolher a melhor qualidade (essencial para fotos pesadas de celular).
-const TRANSFORMATION = 'c_limit,w_1920,q_auto'
+// Transformação aplicada no momento do upload (no arquivo "master" guardado):
+// apenas limita a largura a 1920px, sem cortar — controla o tamanho do original
+// sem travar qualidade nem formato. A otimização de qualidade e formato (WebP/AVIF)
+// é feita na ENTREGA, por navegador, montando a URL no front (ver uploadImagem.js).
+const TRANSFORMATION = 'c_limit,w_1920'
 
 // Assina os parâmetros do upload do jeito que o Cloudinary espera:
 // ordena alfabeticamente como "chave=valor&chave=valor", concatena o api_secret

@@ -110,19 +110,20 @@
 
 .brand {
   display: flex;
-  align-items: baseline;
-  gap: 7px;
-  font-family: 'Great Vibes', cursive;
-  font-size: 1.9rem;
+  align-items: center;
+  gap: 8px;
   line-height: 1;
 }
 
-.brandV {
-  color: var(--bronze);
+.brandLink {
+  display: flex;
+  align-items: center;
 }
 
-.brandC {
-  color: var(--sand);
+.brandImg {
+  display: block;
+  height: 64px;
+  width: auto;
 }
 
 .tag {

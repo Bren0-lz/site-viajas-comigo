@@ -1,26 +1,61 @@
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  border: 1px solid var(--gold);
+  gap: 9px;
+  border: 1px solid rgba(242, 221, 182, 0.55);
   border-radius: 30px;
-  padding: 10px 18px;
+  padding: 11px 20px;
   font-size: 0.9rem;
   font-weight: 500;
+  letter-spacing: 0.01em;
   cursor: pointer;
-  background: var(--gold);
+  background: linear-gradient(135deg, var(--gold), var(--bronze));
   color: #fdf7ea;
   font-family: 'Jost', sans-serif;
-  transition: 0.2s;
+  box-shadow: 0 6px 18px rgba(140, 107, 66, 0.28);
+  transition:
+    transform 0.2s cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
 }
 
 .btn:hover:not(:disabled) {
-  background: var(--gold-soft);
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+  box-shadow: 0 10px 24px rgba(140, 107, 66, 0.36);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(140, 107, 66, 0.3);
 }
 
 .btn:disabled {
-  opacity: 0.6;
+  opacity: 0.75;
   cursor: progress;
+  box-shadow: none;
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+.spinner {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+  border: 2px solid rgba(253, 247, 234, 0.35);
+  border-top-color: #fdf7ea;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .hidden {

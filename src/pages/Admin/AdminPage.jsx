@@ -59,9 +59,18 @@ function LoginScreen({ onSuccess }) {
   return (
     <div className={s.loginPage}>
       <form className={s.loginCard} onSubmit={entrar}>
-        <div className={s.brand}>
-          <span className={s.brandV}>Viajas</span>
-          <span className={s.brandC}>Comigo</span>
+        <div className={s.brand} style={{ justifyContent: 'center' }}>
+          <picture>
+            <source srcSet="/logo-light.webp" type="image/webp" />
+            <img
+              src="/logo-light.png"
+              alt="Viajas Comigo"
+              className={s.brandImg}
+              width="569"
+              height="328"
+              decoding="async"
+            />
+          </picture>
         </div>
         <p className={s.loginTitle}>Painel de viagens</p>
         <p className={s.loginSub}>Digite a senha para acessar.</p>
@@ -206,7 +215,7 @@ function Editor({ trip, upd, onError }) {
         <div className={s.heroEditWrap}>
           Foto de capa:&nbsp;
           <ImageUpload
-            label={trip.imagem ? '📷 Trocar foto de capa' : '📷 Enviar foto de capa'}
+            label={trip.imagem ? 'Trocar foto de capa' : 'Enviar foto de capa'}
             onUploaded={url => upd('imagem', url)}
             onError={onError}
           />
@@ -241,7 +250,7 @@ function Editor({ trip, upd, onError }) {
             <div className={s.galeriaUpload}>
               <ImageUpload
                 multiple
-                label="📷 Adicionar fotos"
+                label="Adicionar fotos"
                 onUploaded={url => upd('galeria', [...(trip.galeria || []), url])}
                 onError={onError}
               />
@@ -399,8 +408,19 @@ function AdminPanel({ viagens, salvarTudo, onLogout }) {
     <div className={s.page}>
       <div className={s.topbar}>
         <div className={s.brand}>
-          <span className={s.brandV}>Viajas</span>
-          <span className={s.brandC}>Comigo</span>
+          <Link to="/" className={s.brandLink} aria-label="Viajas Comigo">
+            <picture>
+              <source srcSet="/logo-light.webp" type="image/webp" />
+              <img
+                src="/logo-light.png"
+                alt="Viajas Comigo"
+                className={s.brandImg}
+                width="569"
+                height="328"
+                decoding="async"
+              />
+            </picture>
+          </Link>
           <span className={s.tag}>Painel de viagens</span>
         </div>
         <div className={s.topActions}>
