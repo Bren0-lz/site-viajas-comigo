@@ -882,17 +882,16 @@
   top: 14px;
   left: 14px;
   z-index: 2;
-  max-width: min(92%, 620px);
+  max-width: min(86%, 560px);
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  background: rgba(8, 22, 44, 0.82);
+  align-items: center;
+  flex-wrap: wrap;
+  background: rgba(8, 22, 44, 0.78);
   border: 1px solid var(--line);
   border-radius: 10px;
-  padding: 10px 12px;
+  padding: 8px 12px;
   font-size: 0.82rem;
   color: var(--muted);
-  backdrop-filter: blur(4px);
 }
 
 .heroEditRow {
@@ -902,14 +901,33 @@
   gap: 6px;
 }
 
+/* Barra de ajustes da capa — fica abaixo da foto para não tapar a visualização */
+.capaBar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 16px 22px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+}
+
+.capaBarTitle {
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  font-weight: 500;
+}
+
 /* Ajustes de enquadramento, zoom e cor do texto da capa */
 .capaCtrls {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  gap: 12px;
-  padding-top: 10px;
-  border-top: 1px solid var(--line);
+  gap: 16px;
 }
 
 .capaCtrl {

@@ -233,39 +233,6 @@ function Editor({ trip, upd, onError }) {
               onError={onError}
             />
           </div>
-
-          {trip.imagem && (
-            <div className={s.capaCtrls}>
-              <label className={s.capaCtrl}>
-                <span>Horizontal</span>
-                <input type="range" min="0" max="100" value={trip.capaPosX ?? 50}
-                  onChange={e => upd('capaPosX', Number(e.target.value))} />
-              </label>
-              <label className={s.capaCtrl}>
-                <span>Vertical</span>
-                <input type="range" min="0" max="100" value={trip.capaPosY ?? 50}
-                  onChange={e => upd('capaPosY', Number(e.target.value))} />
-              </label>
-              <label className={s.capaCtrl}>
-                <span>Zoom</span>
-                <input type="range" min="1" max="2.5" step="0.05" value={trip.capaZoom || 1}
-                  onChange={e => upd('capaZoom', Number(e.target.value))} />
-              </label>
-              <label className={`${s.capaCtrl} ${s.capaColor}`}>
-                <span>Cor do texto</span>
-                <input type="color" value={trip.capaCor || '#f4f1ea'}
-                  onChange={e => upd('capaCor', e.target.value)} />
-              </label>
-              <button
-                type="button"
-                className={s.capaReset}
-                onClick={() => {
-                  upd('capaPosX', 50); upd('capaPosY', 50); upd('capaZoom', 1); upd('capaCor', '')
-                }}
-                title="Voltar ao enquadramento e cor padrão"
-              >Resetar</button>
-            </div>
-          )}
         </div>
 
         <div className={`wrap ${t.heroContent}`}>
@@ -285,6 +252,42 @@ function Editor({ trip, upd, onError }) {
           </div>
         </div>
       </section>
+
+      {trip.imagem && (
+        <div className={s.capaBar}>
+          <span className={s.capaBarTitle}>Ajustar capa</span>
+          <div className={s.capaCtrls}>
+            <label className={s.capaCtrl}>
+              <span>Horizontal</span>
+              <input type="range" min="0" max="100" value={trip.capaPosX ?? 50}
+                onChange={e => upd('capaPosX', Number(e.target.value))} />
+            </label>
+            <label className={s.capaCtrl}>
+              <span>Vertical</span>
+              <input type="range" min="0" max="100" value={trip.capaPosY ?? 50}
+                onChange={e => upd('capaPosY', Number(e.target.value))} />
+            </label>
+            <label className={s.capaCtrl}>
+              <span>Zoom</span>
+              <input type="range" min="1" max="2.5" step="0.05" value={trip.capaZoom || 1}
+                onChange={e => upd('capaZoom', Number(e.target.value))} />
+            </label>
+            <label className={`${s.capaCtrl} ${s.capaColor}`}>
+              <span>Cor do texto</span>
+              <input type="color" value={trip.capaCor || '#f4f1ea'}
+                onChange={e => upd('capaCor', e.target.value)} />
+            </label>
+            <button
+              type="button"
+              className={s.capaReset}
+              onClick={() => {
+                upd('capaPosX', 50); upd('capaPosY', 50); upd('capaZoom', 1); upd('capaCor', '')
+              }}
+              title="Voltar ao enquadramento e cor padrão"
+            >Resetar</button>
+          </div>
+        </div>
+      )}
 
       <div className={t.layout}>
         <div className={t.main}>
