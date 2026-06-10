@@ -1,4 +1,8 @@
 :root {
+  /* Impede que o "tema escuro automático" de alguns navegadores (Chrome Android,
+     Samsung Internet, Brave) escureça a paleta creme e descaracterize o site. */
+  color-scheme: light;
+
   /* Paleta da marca Viajas Comigo */
   --navy: #0a2140;        /* marinho — escuro principal */
   --slate: #2e4159;       /* azul-ardósia — escuro secundário */

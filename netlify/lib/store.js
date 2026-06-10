@@ -14,6 +14,18 @@ function client() {
   return new Redis({ url, token })
 }
 
+// Igual ao client(), mas retorna null em vez de lançar erro quando o Redis não
+// está configurado. Usado pelo rate limiting do login, que deve "falhar aberto"
+// (permitir o login) caso o armazenamento esteja indisponível, em vez de travar
+// o acesso ao painel.
+export function clientOpcional() {
+  try {
+    return client()
+  } catch {
+    return null
+  }
+}
+
 export async function getViagens() {
   const redis = client()
   const data = await redis.get(KEY)

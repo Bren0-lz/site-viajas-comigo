@@ -44,7 +44,7 @@ export default function Footer() {
         </div>
 
         <div className={s.copy}>
-          © {new Date().getFullYear()} Viajas Comigo · Todos os direitos reservados · CADASTUR 00.000.000/0000-00
+          © {new Date().getFullYear()} Viajas Comigo · Todos os direitos reservados
         </div>
       </div>
     </footer>
