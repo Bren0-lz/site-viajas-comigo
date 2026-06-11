@@ -21,19 +21,21 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section id="como" className={s.light}>
+    <section id="como" className={`${s.light} grain`}>
       <div className="wrap">
-        <Reveal className={s.sectionHead}>
-          <p className="eyebrow">Simples assim</p>
-          <h2>Como funciona uma viagem em grupo</h2>
+        <Reveal className={s.sectionHead} variant="fade">
+          <p className="eyebrow">Nº 01 — Simples assim</p>
+          <h2>Como funciona uma viagem <em>em grupo</em></h2>
           <p>Você não precisa entender de logística, roteiro ou reserva. A gente cuida de tudo — você só escolhe o destino e arruma a mala.</p>
         </Reveal>
         <div className={s.steps}>
-          {steps.map((step, i) => (
-            <Reveal key={step.num} className={s.step} delay={i * 0.1}>
+          {steps.map(step => (
+            <Reveal key={step.num} className={s.step} variant="fade">
               <div className={s.stepNum}>{step.num}</div>
-              <h3>{step.title}</h3>
-              <p>{step.desc}</p>
+              <div>
+                <h3>{step.title}</h3>
+                <p>{step.desc}</p>
+              </div>
             </Reveal>
           ))}
         </div>

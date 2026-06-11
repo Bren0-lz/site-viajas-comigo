@@ -70,11 +70,11 @@ export default function TripDetailPage({ viagens, loading }) {
           </div>
           <h1>{viagem.titulo}</h1>
           <div className={s.meta}>
-            {viagem.data}{viagem.local ? ` · ${viagem.local}` : ''}
+            {[viagem.data, viagem.local, viagem.vagas].filter(Boolean).join(' · ')}
           </div>
         </div>
         {allImages.length > 1 && (
-          <span className={s.photoCount}>📷 {allImages.length} fotos · toque para ampliar</span>
+          <span className={s.photoCount}>{allImages.length} fotos — toque para ampliar</span>
         )}
       </section>
 
@@ -86,7 +86,7 @@ export default function TripDetailPage({ viagens, loading }) {
 
           {viagem.galeria?.length > 0 && (
             <Reveal className={s.block}>
-              <h2><span className={s.dot} />Fotos da viagem</h2>
+              <h2>Fotos da viagem</h2>
               <div className={s.galeria}>
                 {viagem.galeria.map((img, i) => (
                   <div
@@ -105,7 +105,7 @@ export default function TripDetailPage({ viagens, loading }) {
             <div className={s.pair}>
               {viagem.inclusos?.length > 0 && (
                 <Reveal className={s.block}>
-                  <h2><span className={s.dot} />O que está incluso</h2>
+                  <h2>O que está incluso</h2>
                   <ul className={s.inclusos}>
                     {viagem.inclusos.map(item => (
                       <li key={item}>
@@ -119,7 +119,7 @@ export default function TripDetailPage({ viagens, loading }) {
 
               {viagem.roteiro?.length > 0 && (
                 <Reveal className={s.block}>
-                  <h2><span className={s.dot} />Roteiro dia a dia</h2>
+                  <h2>Roteiro dia a dia</h2>
                   <ul className={s.roteiro}>
                     {viagem.roteiro.map(linha => {
                       const partes = linha.split('—')
@@ -140,8 +140,8 @@ export default function TripDetailPage({ viagens, loading }) {
 
           {viagem.local && (
             <Reveal className={s.block}>
-              <h2><span className={s.dot} />Onde fica</h2>
-              <p className={s.loc}>📍 {viagem.local}</p>
+              <h2>Onde fica</h2>
+              <p className={s.loc}>{viagem.local}</p>
               <iframe
                 title={`Mapa de ${viagem.local}`}
                 className={s.mapFrame}

@@ -19,12 +19,13 @@ export default function Footer() {
   return (
     <footer className={s.footer}>
       <div className="wrap">
+        <div className={s.brand}>
+          <span className={s.brandV}>Viajas</span>
+          <span className={s.brandC}>Comigo</span>
+        </div>
+
         <div className={s.grid}>
           <div className={s.col}>
-            <div className={s.brand}>
-              <span className={s.brandV}>Viajas</span>
-              <span className={s.brandC}>Comigo</span>
-            </div>
             <p>Viagens em grupo organizadas do começo ao fim. A gente monta o pacote, junta a galera e vai todo mundo junto.</p>
           </div>
 
@@ -44,7 +45,8 @@ export default function Footer() {
         </div>
 
         <div className={s.copy}>
-          © {new Date().getFullYear()} Viajas Comigo · Todos os direitos reservados
+          <span>© {new Date().getFullYear()} Viajas Comigo · Todos os direitos reservados</span>
+          <span className={s.copyRight}>Brasil &amp; mundo</span>
         </div>
       </div>
     </footer>

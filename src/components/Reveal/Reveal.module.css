@@ -22,9 +22,35 @@
   transform: translateX(26px);
 }
 
+/* revelação em cortina lateral — para fotos, feel de impresso.
+   A cortina é um ::after que desliza para fora; não usamos clip-path no
+   próprio elemento porque o Chrome zera a área do IntersectionObserver
+   de um alvo totalmente recortado e o reveal nunca dispararia. */
+.wipe {
+  opacity: 1;
+  transform: none;
+  position: relative;
+}
+
+.wipe::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: var(--wipe-bg, var(--cream-bg));
+  transform: scaleX(1);
+  transform-origin: right center;
+  transition: transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1);
+  pointer-events: none;
+}
+
 .visible {
   opacity: 1;
   transform: none;
+}
+
+.wipe.visible::after {
+  transform: scaleX(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -32,5 +58,9 @@
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  .wipe::after {
+    display: none;
   }
 }

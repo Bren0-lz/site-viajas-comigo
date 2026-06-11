@@ -1,25 +1,31 @@
+/* Expediente de revista: assinatura grande, colunas em small caps,
+   copyright entre dois fios. */
 .footer {
+  position: relative;
   background: #061730;
   border-top: 1px solid var(--line);
-  padding: 54px 0 30px;
+  padding: 64px 0 34px;
 }
 
-.grid {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 30px;
-  margin-bottom: 34px;
+/* fio duplo de impresso no topo */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--line);
 }
 
 .brand {
   display: flex;
   align-items: baseline;
-  gap: 8px;
+  gap: 12px;
   font-family: 'Great Vibes', cursive;
-  font-size: 2.1rem;
+  font-size: clamp(2.6rem, 5vw, 3.8rem);
   line-height: 1;
-  margin-bottom: 12px;
+  margin-bottom: 44px;
 }
 
 .brandV {
@@ -30,6 +36,14 @@
   color: var(--sand);
 }
 
+.grid {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-bottom: 44px;
+}
+
 .col p {
   color: var(--muted);
   font-size: 0.9rem;
@@ -37,8 +51,8 @@
 }
 
 .col h4 {
-  font-size: 0.78rem;
-  letter-spacing: 0.2em;
+  font-size: 0.74rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--gold);
   margin-bottom: 14px;
@@ -60,9 +74,20 @@
 }
 
 .copy {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 24px;
   border-top: 1px solid var(--line);
-  padding-top: 22px;
-  text-align: center;
+  border-bottom: 1px solid var(--line);
+  padding: 14px 2px;
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+}
+
+.copyRight {
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
 }

@@ -1,8 +1,20 @@
+/* Keyframe local — o Vite localiza nomes de animação em CSS Modules */
+@keyframes heroRise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .hero {
   position: relative;
-  height: 55vh;
-  height: 55svh;
-  min-height: 380px;
+  height: 58vh;
+  height: 58svh;
+  min-height: 400px;
   overflow: hidden;
   background: var(--panel);
   display: flex;
@@ -11,7 +23,7 @@
 }
 
 /* Camada da foto: o zoom (scale) e o posicionamento ficam aqui, para não
-   afetar o conteúdo (título, badge) que vive acima. */
+   afetar o conteúdo (título, carimbo) que vive acima. */
 .hero::before {
   content: '';
   position: absolute;
@@ -29,13 +41,16 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: linear-gradient(transparent 30%, rgba(10, 33, 64, 0.88));
+  background:
+    var(--grain),
+    linear-gradient(transparent 28%, rgba(8, 22, 44, 0.9));
+  background-blend-mode: overlay, normal;
 }
 
 .heroContent {
   position: relative;
   z-index: 1;
-  padding-bottom: 40px;
+  padding-bottom: 42px;
 }
 
 .heroContent > * {
@@ -45,52 +60,63 @@
 .heroContent > :nth-child(2) { animation-delay: 0.24s; }
 .heroContent > :nth-child(3) { animation-delay: 0.36s; }
 
+/* carimbo — mesmo desenho do card */
 .badge {
   display: inline-block;
-  background: rgba(10, 33, 64, 0.85);
+  background: rgba(10, 33, 64, 0.55);
   color: var(--sand);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  padding: 6px 12px;
-  border-radius: 30px;
-  border: 1px solid var(--line);
-  margin-bottom: 14px;
+  padding: 6px 12px 5px;
+  border: 1px solid rgba(242, 221, 182, 0.65);
+  transform: rotate(-5deg);
+  transform-origin: left bottom;
+  margin-bottom: 16px;
 }
 
 .badge.esgotado {
-  color: #e08a8a;
+  color: #e8a0a0;
+  border-color: rgba(232, 160, 160, 0.6);
 }
 
 .heroContent h1 {
-  font-size: clamp(2.2rem, 5vw, 3.4rem);
-  margin-bottom: 10px;
+  font-size: clamp(2.4rem, 6vw, 4.4rem);
+  margin-bottom: 14px;
   color: var(--capa-cor, inherit);
 }
 
+/* linha de ficha — entre fios, como crédito de matéria */
 .meta {
-  color: var(--capa-cor, var(--muted));
-  font-size: 0.95rem;
+  display: inline-block;
+  color: var(--capa-cor, var(--sand));
+  font-size: 0.76rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border-top: 1px solid rgba(242, 221, 182, 0.4);
+  border-bottom: 1px solid rgba(242, 221, 182, 0.4);
+  padding: 7px 2px;
 }
 
 .photoCount {
   position: absolute;
-  bottom: 16px;
+  bottom: 18px;
   right: 22px;
   z-index: 1;
-  background: rgba(10, 33, 64, 0.72);
   color: var(--muted);
-  font-size: 0.78rem;
-  padding: 6px 12px;
-  border-radius: 20px;
-  border: 1px solid var(--line);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 4px;
 }
 
 .layout {
   display: grid;
   grid-template-columns: 1fr 340px;
-  gap: 40px;
-  padding: 48px 22px 80px;
+  gap: 56px;
+  padding: 56px 22px 90px;
   max-width: 1140px;
   margin: 0 auto;
   align-items: start;
@@ -99,29 +125,40 @@
 .main {
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: 52px;
 }
 
 .lead {
-  font-size: 1.08rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem;
   color: #d8d4c9;
-  line-height: 1.75;
+  line-height: 1.6;
 }
 
+/* primeira letra grande — abertura de matéria */
+.lead::first-letter {
+  font-size: 3.4em;
+  font-weight: 600;
+  line-height: 0.8;
+  float: left;
+  margin: 6px 12px 0 0;
+  color: var(--gold-soft);
+}
+
+/* título de bloco com fio que se estende */
 .block h2 {
-  font-size: 1.7rem;
-  margin-bottom: 20px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 20px;
+  font-size: 1.8rem;
+  margin-bottom: 24px;
 }
 
-.dot {
-  width: 8px;
-  height: 8px;
-  background: var(--gold);
-  border-radius: 50%;
-  display: inline-block;
+.block h2::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
 }
 
 /* incluso + roteiro lado a lado (colapsa em coluna única quando estreito) */
@@ -137,136 +174,156 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 10px;
 }
 
 .inclusos li {
   display: flex;
-  gap: 12px;
+  gap: 14px;
   align-items: flex-start;
   color: #d8d4c9;
   font-size: 0.97rem;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(140, 107, 66, 0.16);
+}
+
+.inclusos li:last-child {
+  border-bottom: 0;
 }
 
 .ck {
   color: var(--gold);
-  font-weight: 600;
-  flex: 0 0 20px;
+  font-weight: 400;
+  flex: 0 0 18px;
 }
 
-/* ROTEIRO */
+/* ROTEIRO — dias como entradas de diário, sem timeline de bolinhas */
 .roteiro {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0;
-  border-left: 2px solid var(--line);
-  padding-left: 24px;
 }
 
 .roteiro li {
-  position: relative;
-  padding: 10px 0;
+  display: grid;
+  grid-template-columns: 86px 1fr;
+  gap: 16px;
+  padding: 12px 0;
+  border-top: 1px solid rgba(140, 107, 66, 0.16);
   color: #d8d4c9;
   font-size: 0.97rem;
 }
 
-.roteiro li::before {
-  content: '';
-  position: absolute;
-  left: -29px;
-  top: 17px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--gold);
-  opacity: 0.6;
+.roteiro li:first-child {
+  border-top: 0;
 }
 
 .roteiro b {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   color: var(--gold-soft);
+  padding-top: 4px;
 }
 
-/* GALERIA */
+/* GALERIA — colagem editorial: cortes retos, ritmo de alturas */
 .galeria {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 18px;
 }
 
 .gItem {
-  border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
-  aspect-ratio: 4/3;
+  aspect-ratio: 4 / 3;
+}
+
+.gItem:nth-child(3n) {
+  aspect-ratio: 3 / 4;
 }
 
 .gItem img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: 0.3s;
+  filter: grayscale(0.35) contrast(1.04);
+  transition: filter 0.5s ease, transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 .gItem:hover img {
   transform: scale(1.04);
+  filter: none;
 }
 
 .gItem.feat {
   grid-column: span 2;
   grid-row: span 1;
-  aspect-ratio: 16/9;
+  aspect-ratio: 16 / 9;
 }
 
 /* MAPA */
 .loc {
-  color: var(--muted);
-  font-size: 0.9rem;
-  margin-bottom: 14px;
+  color: var(--gold-soft);
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
 }
 
 .mapFrame {
   width: 100%;
   height: 340px;
-  border-radius: 12px;
   border: 1px solid var(--line);
+  filter: grayscale(0.4);
 }
 
-/* SIDEBAR */
+/* SIDEBAR — ficha técnica, sem caixa */
 .side {
   position: sticky;
   top: calc(var(--header-h) + 12px);
 }
 
 .cardPrice {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 28px 24px;
+  border-top: 2px solid var(--bronze);
+  padding: 22px 0 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  position: relative;
+}
+
+/* segundo fio fino logo abaixo do grosso — detalhe de impresso */
+.cardPrice::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--line);
 }
 
 .cardPrice small {
   color: var(--muted);
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
 }
 
 .val {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 2.4rem;
+  font-size: 3rem;
   font-weight: 600;
   color: var(--cream);
-  line-height: 1.1;
+  line-height: 1.05;
 }
 
 .per {
   color: var(--muted);
   font-size: 0.82rem;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .facts {
@@ -274,7 +331,7 @@
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   padding: 16px 0;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -288,6 +345,10 @@
 
 .facts li span {
   color: var(--muted);
+  font-size: 0.74rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding-top: 2px;
 }
 
 .facts li b {
@@ -304,18 +365,19 @@
   background: var(--bronze);
   color: #fdf7ea;
   border: 1px solid var(--bronze);
-  padding: 14px;
-  border-radius: 40px;
+  padding: 15px;
+  border-radius: 2px;
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: 0.25s;
+  transition: background 0.3s ease, color 0.3s ease;
   text-decoration: none;
 }
 
 .btnWa:hover {
-  background: var(--gold-soft);
-  transform: translateY(-2px);
+  background: var(--bronze-soft);
 }
 
 .btnInsta {
@@ -326,25 +388,29 @@
   background: transparent;
   color: var(--gold);
   border: 1px solid var(--gold);
-  padding: 12px;
-  border-radius: 40px;
+  padding: 13px;
+  border-radius: 2px;
   font-weight: 500;
-  font-size: 0.88rem;
+  font-size: 0.76rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: 0.25s;
+  transition: background 0.3s ease, color 0.3s ease;
   margin-top: 10px;
   text-decoration: none;
 }
 
 .btnInsta:hover {
-  background: rgba(140, 107, 66, 0.12);
+  background: rgba(140, 107, 66, 0.14);
 }
 
 .reassure {
   text-align: center;
   color: var(--muted);
-  font-size: 0.78rem;
-  margin-top: 12px;
+  margin-top: 14px;
+  font-style: italic;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.95rem;
 }
 
 /* NOT FOUND */
@@ -370,7 +436,7 @@
 @media (max-width: 768px) {
   .layout {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 40px;
     padding: 36px 18px 64px;
   }
 
@@ -379,11 +445,20 @@
   }
 
   .main {
-    gap: 36px;
+    gap: 40px;
+  }
+
+  .lead {
+    font-size: 1.18rem;
   }
 
   .galeria {
     grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .gItem:nth-child(3n) {
+    aspect-ratio: 4 / 3;
   }
 
   .gItem.feat {
@@ -395,7 +470,11 @@
   }
 
   .block h2 {
-    font-size: 1.45rem;
+    font-size: 1.5rem;
+  }
+
+  .roteiro li {
+    grid-template-columns: 72px 1fr;
   }
 }
 
@@ -406,15 +485,15 @@
 
   .gItem.feat {
     grid-column: span 1;
-    aspect-ratio: 4/3;
+    aspect-ratio: 4 / 3;
   }
 
   .heroContent {
-    padding-bottom: 28px;
+    padding-bottom: 30px;
   }
 
   .photoCount {
     right: 14px;
-    font-size: 0.72rem;
+    font-size: 0.66rem;
   }
 }

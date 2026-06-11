@@ -16,7 +16,7 @@ export default function TripCard({ viagem }) {
 
   return (
     <Link to={to} onClick={handleClick} className={s.card}>
-      <div className={s.img}>
+      <div className={`${s.img} duo${viagem.esgotado ? ' ' + s.soldOut : ''}`}>
         <div
           className={s.imgBg}
           style={{
@@ -32,15 +32,18 @@ export default function TripCard({ viagem }) {
 
       <div className={s.body}>
         <h3>{viagem.titulo}</h3>
-        <div className={s.date}>{viagem.data}</div>
+        <div className={s.meta}>
+          {viagem.data}
+          {viagem.vagas ? <span className={s.metaSep}>·</span> : null}
+          {viagem.vagas}
+        </div>
         <p className={s.desc}>{viagem.descricao}</p>
         <div className={s.foot}>
           <div className={s.price}>
             <small>A partir de</small>
             <b>R$ {viagem.preco}</b>
-            <div className={s.vagas}>{viagem.vagas}</div>
           </div>
-          <span className={s.btn}>Ver detalhes →</span>
+          <span className={s.link}>Ver roteiro</span>
         </div>
       </div>
     </Link>
