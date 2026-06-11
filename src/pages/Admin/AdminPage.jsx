@@ -535,14 +535,6 @@ function AdminPanel({ viagens, salvarTudo, onLogout }) {
                 </div>
               </div>
             ))}
-
-            <div className={s.addCard} onClick={nova} role="button" tabIndex={0}
-              onKeyDown={e => { if (e.key === 'Enter') nova() }}>
-              <div className={s.addInner}>
-                <span className={s.addPlus}>+</span>
-                <span>Adicionar nova viagem</span>
-              </div>
-            </div>
           </div>
         </div>
       )}

@@ -728,37 +728,6 @@
   transform: scale(1.06);
 }
 
-.addCard {
-  border: 1.5px dashed var(--line);
-  border-radius: 18px;
-  min-height: 220px;
-  display: grid;
-  place-items: center;
-  background: rgba(255, 255, 255, 0.015);
-  color: var(--muted);
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.addCard:hover {
-  border-color: var(--gold);
-  color: var(--gold-soft);
-}
-
-.addInner {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  font-size: 0.98rem;
-}
-
-.addPlus {
-  font-size: 2.6rem;
-  line-height: 1;
-  color: var(--gold);
-}
-
 /* ── Edição inline (lápis por campo) ── */
 .editable {
   display: inline-flex;
