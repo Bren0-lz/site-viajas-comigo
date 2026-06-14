@@ -1,11 +1,16 @@
+/* A logo nova é colorida com fundo transparente e wordmark marinho, então o
+   header é sempre claro (creme fosco) para mantê-la legível — inclusive sobre o
+   hero escuro. Rolar só intensifica a sombra. */
 .header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 50;
-  background: transparent;
-  border-bottom: 1px solid transparent;
+  background: rgba(254, 248, 236, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(7, 200, 207, 0.18);
   transition:
     background 0.4s ease,
     border-color 0.4s ease,
@@ -13,11 +18,9 @@
 }
 
 .header.scrolled {
-  background: rgba(248, 243, 234, 0.75);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(226, 214, 189, 0.6);
-  box-shadow: 0 6px 22px rgba(10, 33, 64, 0.1);
+  background: rgba(254, 248, 236, 0.92);
+  border-bottom: 1px solid rgba(7, 200, 207, 0.3);
+  box-shadow: 0 6px 22px rgba(1, 22, 75, 0.12);
 }
 
 .nav {
@@ -45,17 +48,17 @@
   align-items: center;
 }
 
-/* Estado padrão = topo, sobre o hero escuro: textos claros */
+/* Header sempre claro → textos escuros */
 .links a {
   position: relative;
   font-size: 1.04rem;
   letter-spacing: 0.015em;
-  color: rgba(244, 241, 234, 0.82);
+  color: var(--muted-l);
   transition: color 0.25s ease;
 }
 
 .links a:hover {
-  color: #fff;
+  color: var(--navy);
 }
 
 /* Underline animado (exceto o botão CTA) */
@@ -65,8 +68,8 @@
   left: 0;
   bottom: -6px;
   width: 100%;
-  height: 1.5px;
-  background: var(--sand);
+  height: 2px;
+  background: var(--turquoise);
   transform: scaleX(0);
   transform-origin: left center;
   transition: transform 0.32s cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -74,10 +77,6 @@
 
 .links a:not(.cta):hover::after {
   transform: scaleX(1);
-}
-
-.header.scrolled .links a:not(.cta)::after {
-  background: var(--bronze);
 }
 
 .cta {
@@ -92,35 +91,26 @@
   transform: translateY(-1px);
 }
 
+/* CTA = pílula laranja preenchida (cor do "comigo") — destaque na faixa creme */
 .cta {
   font-size: 0.95rem !important;
   letter-spacing: 0.02em;
-  color: var(--sand) !important;
-  border: 1px solid rgba(242, 221, 182, 0.5);
+  color: #fff !important;
+  background: var(--orange);
+  border: 1px solid var(--orange);
   padding: 13px 26px;
   border-radius: 32px;
 }
 
 .cta:hover {
-  background: rgba(242, 221, 182, 0.12);
+  background: var(--orange-soft);
+  border-color: var(--orange-soft);
+  box-shadow: 0 8px 20px -10px rgba(251, 113, 6, 0.7);
 }
 
-/* Estado rolado = faixa creme: textos escuros */
-.header.scrolled .links a {
-  color: var(--muted-l);
-}
-
-.header.scrolled .links a:hover {
-  color: var(--navy);
-}
-
-.header.scrolled .cta {
-  color: var(--bronze) !important;
-  border-color: var(--bronze);
-}
-
-.header.scrolled .cta:hover {
-  background: rgba(140, 107, 66, 0.1);
+/* o CTA preenchido não recebe o sublinhado turquesa */
+.cta::after {
+  display: none;
 }
 
 .burger {
@@ -135,12 +125,8 @@
 .burger span {
   width: 24px;
   height: 2px;
-  background: var(--cream);
-  display: block;
-}
-
-.header.scrolled .burger span {
   background: var(--navy);
+  display: block;
 }
 
 @media (max-width: 768px) {

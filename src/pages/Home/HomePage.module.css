@@ -8,11 +8,11 @@
   background:
     linear-gradient(
       102deg,
-      rgba(8, 24, 48, 0.95) 0%,
-      rgba(10, 33, 64, 0.78) 42%,
-      rgba(10, 33, 64, 0.5) 100%
+      rgba(1, 22, 75, 0.9) 0%,
+      rgba(6, 34, 77, 0.62) 45%,
+      rgba(7, 200, 207, 0.22) 100%
     ),
-    linear-gradient(rgba(10, 33, 64, 0.25), rgba(8, 22, 44, 0.7)),
+    linear-gradient(rgba(1, 22, 75, 0.12), rgba(1, 18, 58, 0.55)),
     url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1600&q=80') center / cover fixed;
 }
 
@@ -231,7 +231,7 @@ section {
   min-height: 480px;
   border-radius: 4px;
   background:
-    linear-gradient(155deg, rgba(10, 33, 64, 0.32), rgba(140, 107, 66, 0.34)),
+    linear-gradient(155deg, rgba(1, 22, 75, 0.3), rgba(7, 200, 207, 0.34)),
     url('https://images.unsplash.com/photo-1530789253388-582c481c54b0?auto=format&fit=crop&w=900&q=80') center / cover;
   border: 1px solid var(--line);
 }
@@ -282,7 +282,7 @@ section {
 .cta {
   text-align: center;
   background:
-    linear-gradient(rgba(10, 33, 64, 0.82), rgba(10, 33, 64, 0.94)),
+    linear-gradient(rgba(1, 22, 75, 0.8), rgba(1, 22, 75, 0.92)),
     url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80') center / cover;
 }
 

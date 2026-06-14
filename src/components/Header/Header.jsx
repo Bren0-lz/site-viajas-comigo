@@ -30,16 +30,13 @@ export default function Header() {
       <div className={`wrap ${s.nav}`}>
         <Link to="/" className={s.brand} aria-label="Viajas Comigo">
           <picture>
-            <source
-              srcSet={scrolled ? '/logo-header.webp' : '/logo-light.webp'}
-              type="image/webp"
-            />
+            <source srcSet="/logo-light.webp" type="image/webp" />
             <img
-              src={scrolled ? '/logo-header.png' : '/logo-light.png'}
+              src="/logo-light.png"
               alt="Viajas Comigo"
               className={s.brandImg}
-              width="569"
-              height="328"
+              width="511"
+              height="400"
               decoding="async"
               fetchPriority="high"
             />

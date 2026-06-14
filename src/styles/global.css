@@ -3,29 +3,38 @@
      Samsung Internet, Brave) escureça a paleta creme e descaracterize o site. */
   color-scheme: light;
 
-  /* Paleta da marca Viajas Comigo */
-  --navy: #0a2140;        /* marinho — escuro principal */
-  --slate: #2e4159;       /* azul-ardósia — escuro secundário */
-  --bronze: #8c6b42;      /* bronze — acento / CTA */
-  --bronze-soft: #a9854f; /* bronze claro — hover */
-  --sand: #f2ddb6;        /* creme/areia — acento quente */
-  --cream-bg: #f7f1e4;    /* fundo das seções claras */
-  --gray: #d9d9d9;        /* cinza claro — bordas / superfícies claras */
-  --ink: #14233b;         /* texto escuro sobre seções claras */
-  --muted-l: #5a6377;     /* texto secundário sobre claro */
+  /* ===== Paleta da marca Viajas Comigo — extraída da nova logo tropical ===== */
+  --navy: #01164b;        /* marinho — "Viajas", texto / escuro principal */
+  --slate: #0c2657;       /* marinho secundário — faixas escuras */
+  --orange: #fb7106;      /* laranja — "comigo" / acento principal (CTA) */
+  --orange-soft: #ff8c3a; /* laranja claro — hover */
+  --sun: #fcb207;         /* amarelo-sol */
+  --turquoise: #07c8cf;   /* turquesa — o mar da logo */
+  --sky: #90e5fd;         /* azul-céu */
+  --green: #2f8f1a;       /* verde — palmeiras */
+  --pink: #e8388f;        /* magenta — coração / final do "comigo" */
+  --sand: #f8efd0;        /* areia — acento quente */
+  --cream-bg: #fef8ec;    /* fundo das seções claras */
+  --gray: #ece3cf;        /* bordas / superfícies claras (quentes) */
+  --ink: #06224d;         /* texto escuro sobre seções claras */
+  --muted-l: #4a5a72;     /* texto secundário sobre claro */
+
+  /* Acento/CTA — antes "bronze", reapontado para o laranja da logo */
+  --bronze: var(--orange);
+  --bronze-soft: var(--orange-soft);
 
   /* Aliases legados, reapontados para a nova paleta */
   --black: var(--navy);
   --black-soft: var(--slate);
-  --panel: #243352;
-  --gold: var(--bronze);
-  --gold-soft: var(--sand);
-  --cream: #f4f1ea;       /* quase-branco — texto corrido sobre escuro */
-  --muted: #b9bccb;       /* texto secundário sobre escuro */
-  --line: rgba(140, 107, 66, 0.3);
+  --panel: #14315f;       /* card sobre faixa marinho — um tom mais claro */
+  --gold: var(--orange);
+  --gold-soft: var(--sun);
+  --cream: #fdf6e9;       /* quase-branco — texto corrido sobre escuro */
+  --muted: #aeb8cc;       /* texto secundário sobre escuro */
+  --line: rgba(7, 200, 207, 0.28); /* fios — turquesa suave */
 
   /* Altura do header fixo (usada no menu mobile e no scroll-margin das seções) */
-  --header-h: 100px;
+  --header-h: 96px;
 }
 
 @media (max-width: 768px) {
@@ -147,7 +156,7 @@ a {
 .btn-solid:hover {
   background: var(--bronze-soft);
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px -10px rgba(140, 107, 66, 0.7);
+  box-shadow: 0 10px 24px -10px rgba(251, 113, 6, 0.7);
 }
 
 .btn-ghost {
@@ -156,7 +165,7 @@ a {
 }
 
 .btn-ghost:hover {
-  background: rgba(140, 107, 66, 0.12);
+  background: rgba(251, 113, 6, 0.12);
   transform: translateY(-2px);
 }
 

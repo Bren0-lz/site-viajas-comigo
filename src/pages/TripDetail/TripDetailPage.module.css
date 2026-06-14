@@ -29,7 +29,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: linear-gradient(transparent 30%, rgba(10, 33, 64, 0.88));
+  background: linear-gradient(transparent 30%, rgba(1, 22, 75, 0.88));
 }
 
 .heroContent {
@@ -47,7 +47,7 @@
 
 .badge {
   display: inline-block;
-  background: rgba(10, 33, 64, 0.85);
+  background: rgba(1, 22, 75, 0.85);
   color: var(--sand);
   font-size: 0.72rem;
   letter-spacing: 0.12em;
@@ -78,7 +78,7 @@
   bottom: 16px;
   right: 22px;
   z-index: 1;
-  background: rgba(10, 33, 64, 0.72);
+  background: rgba(1, 22, 75, 0.72);
   color: var(--muted);
   font-size: 0.78rem;
   padding: 6px 12px;
@@ -337,7 +337,7 @@
 }
 
 .btnInsta:hover {
-  background: rgba(140, 107, 66, 0.12);
+  background: rgba(251, 113, 6, 0.12);
 }
 
 .reassure {
