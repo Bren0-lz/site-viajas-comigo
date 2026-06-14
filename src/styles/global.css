@@ -13,11 +13,16 @@
   --sky: #90e5fd;         /* azul-céu */
   --green: #2f8f1a;       /* verde — palmeiras */
   --pink: #e8388f;        /* magenta — coração / final do "comigo" */
-  --sand: #f8efd0;        /* areia — acento quente */
-  --cream-bg: #fef8ec;    /* fundo das seções claras */
-  --gray: #ece3cf;        /* bordas / superfícies claras (quentes) */
-  --ink: #06224d;         /* texto escuro sobre seções claras */
+  --sand: #f7e7be;        /* areia — fundo quente da faixa de viagens */
+  --sand-soft: #fcf3da;   /* areia clara — superfícies suaves */
+  --cream-bg: #fff8ea;    /* fundo claro padrão do site */
+  --gray: #e8dcc2;        /* bordas / superfícies claras (quentes) */
+  --ink: #06224d;         /* texto escuro principal sobre claro */
   --muted-l: #4a5a72;     /* texto secundário sobre claro */
+
+  /* Gradiente de destaque — o "comigo" da logo (laranja → rosa) */
+  --grad-hot: linear-gradient(95deg, var(--orange), var(--pink));
+  --grad-cool: linear-gradient(120deg, var(--turquoise), var(--sky));
 
   /* Acento/CTA — antes "bronze", reapontado para o laranja da logo */
   --bronze: var(--orange);
@@ -26,12 +31,12 @@
   /* Aliases legados, reapontados para a nova paleta */
   --black: var(--navy);
   --black-soft: var(--slate);
-  --panel: #14315f;       /* card sobre faixa marinho — um tom mais claro */
+  --panel: #ffffff;       /* cards agora sobre fundo claro → brancos */
   --gold: var(--orange);
   --gold-soft: var(--sun);
-  --cream: #fdf6e9;       /* quase-branco — texto corrido sobre escuro */
-  --muted: #aeb8cc;       /* texto secundário sobre escuro */
-  --line: rgba(7, 200, 207, 0.28); /* fios — turquesa suave */
+  --cream: #fdf6e9;       /* quase-branco — texto sobre superfícies escuras */
+  --muted: #5a6377;       /* texto secundário (legível sobre claro) */
+  --line: rgba(7, 200, 207, 0.4); /* fios — turquesa */
 
   /* Altura do header fixo (usada no menu mobile e no scroll-margin das seções) */
   --header-h: 96px;
@@ -62,8 +67,8 @@ html {
 }
 
 body {
-  background: var(--black);
-  color: var(--cream);
+  background: var(--cream-bg);
+  color: var(--ink);
   font-family: 'Jost', system-ui, sans-serif;
   font-weight: 300;
   line-height: 1.6;
@@ -114,12 +119,21 @@ a {
   color: var(--gold);
 }
 
+/* Texto em gradiente laranja→rosa (o "comigo" da logo) — para palavras de destaque */
+.gradText {
+  background: var(--grad-hot);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--orange); /* fallback */
+}
+
 .eyebrow {
   font-size: 0.74rem;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: var(--gold);
-  font-weight: 500;
+  color: var(--turquoise);
+  font-weight: 600;
   margin-bottom: 14px;
 }
 
@@ -149,19 +163,22 @@ a {
 }
 
 .btn-solid {
-  background: var(--bronze);
-  color: #fdf7ea;
+  background: var(--grad-hot);
+  background-size: 140% 140%;
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 8px 20px -12px rgba(232, 56, 143, 0.8);
 }
 
 .btn-solid:hover {
-  background: var(--bronze-soft);
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px -10px rgba(251, 113, 6, 0.7);
+  background-position: 100% 50%;
+  box-shadow: 0 14px 28px -12px rgba(232, 56, 143, 0.85);
 }
 
 .btn-ghost {
   background: transparent;
-  color: var(--bronze);
+  color: var(--orange);
 }
 
 .btn-ghost:hover {

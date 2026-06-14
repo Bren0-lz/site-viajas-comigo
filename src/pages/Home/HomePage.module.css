@@ -8,11 +8,11 @@
   background:
     linear-gradient(
       102deg,
-      rgba(1, 22, 75, 0.9) 0%,
-      rgba(6, 34, 77, 0.62) 45%,
-      rgba(7, 200, 207, 0.22) 100%
+      rgba(1, 22, 75, 0.84) 0%,
+      rgba(7, 130, 160, 0.45) 55%,
+      rgba(144, 229, 253, 0.28) 100%
     ),
-    linear-gradient(rgba(1, 22, 75, 0.12), rgba(1, 18, 58, 0.55)),
+    linear-gradient(rgba(1, 22, 75, 0.06), rgba(1, 18, 58, 0.45)),
     url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1600&q=80') center / cover fixed;
 }
 
@@ -40,9 +40,10 @@
 
 .heroAccent {
   display: block;
-  width: 56px;
-  height: 2px;
-  background: var(--bronze);
+  width: 64px;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--grad-hot);
   margin: 0 0 26px;
   transform-origin: left center;
   animation: accentGrow 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) both;
@@ -53,11 +54,16 @@
   font-size: clamp(2.1rem, 8vw, 5.2rem);
   letter-spacing: -0.01em;
   margin-bottom: 22px;
+  color: #fff;
 }
 
 .heroInner h1 em {
   font-style: italic;
-  color: var(--gold);
+  background: var(--grad-hot);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--orange);
 }
 
 .heroInner > p {
@@ -79,7 +85,7 @@
   bottom: 26px;
   left: 50%;
   transform: translateX(-50%);
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.82);
   font-size: 0.75rem;
   letter-spacing: 0.25em;
   text-transform: uppercase;
@@ -148,13 +154,17 @@ section {
 .stepNum {
   display: block;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 3.2rem;
-  font-weight: 600;
-  color: var(--gold);
-  opacity: 0.4;
+  font-size: 3.4rem;
+  font-weight: 700;
+  color: var(--turquoise);
   line-height: 1;
   margin-bottom: 12px;
 }
+
+/* números 01 / 02 / 03 em cores rotativas da paleta */
+.step:nth-child(1) .stepNum { color: var(--turquoise); }
+.step:nth-child(2) .stepNum { color: var(--orange); }
+.step:nth-child(3) .stepNum { color: var(--pink); }
 
 .step h3 {
   font-size: 1.5rem;
@@ -167,10 +177,17 @@ section {
   max-width: 30ch;
 }
 
-/* DESTINOS — seção mais arejada, quebra o ritmo uniforme */
+/* DESTINOS — faixa areia quente, cards brancos coloridos por cima */
 .destinos {
-  background: var(--black-soft);
+  background:
+    radial-gradient(140% 90% at 85% -10%, rgba(144, 229, 253, 0.45), transparent 60%),
+    var(--sand);
+  color: var(--ink);
   padding: 120px 0;
+}
+
+.destinos .eyebrow {
+  color: var(--orange);
 }
 
 .grid {
@@ -182,10 +199,11 @@ section {
 .empty {
   grid-column: 1 / -1;
   text-align: center;
-  color: var(--muted);
+  color: var(--muted-l);
   padding: 40px;
-  border: 1px dashed var(--line);
+  border: 1px dashed var(--turquoise);
   border-radius: 16px;
+  background: rgba(255, 255, 255, 0.5);
 }
 
 /* POR QUE — lista editorial com fios, layout assimétrico, foto integrada */
@@ -194,6 +212,10 @@ section {
   grid-template-columns: 1fr 0.82fr;
   gap: 72px;
   align-items: stretch;
+}
+
+.whyGrid .eyebrow {
+  color: var(--green);
 }
 
 .whyTitle {
@@ -205,11 +227,17 @@ section {
   list-style: none;
 }
 
-/* cada vantagem é uma linha separada por um fio fino — feel de índice/revista */
+/* cada vantagem é uma linha separada por um fio colorido — feel de índice/revista */
 .whyList li {
-  padding: 22px 0;
-  border-top: 1px solid var(--line);
+  padding: 22px 0 22px 18px;
+  border-top: 1px solid var(--gray);
+  border-left: 3px solid var(--turquoise);
 }
+
+.whyList li:nth-child(1) { border-left-color: var(--turquoise); }
+.whyList li:nth-child(2) { border-left-color: var(--orange); }
+.whyList li:nth-child(3) { border-left-color: var(--sun); }
+.whyList li:nth-child(4) { border-left-color: var(--pink); }
 
 .whyList li:last-child {
   padding-bottom: 0;
@@ -236,9 +264,16 @@ section {
   border: 1px solid var(--line);
 }
 
-/* DEPOIMENTOS */
+/* DEPOIMENTOS — faixa clara com toque de céu, cards brancos */
 .depo {
-  background: var(--black-soft);
+  background:
+    radial-gradient(120% 80% at 10% 0%, rgba(7, 200, 207, 0.14), transparent 55%),
+    var(--cream-bg);
+  color: var(--ink);
+}
+
+.depo .eyebrow {
+  color: var(--pink);
 }
 
 .depoGrid {
@@ -249,20 +284,25 @@ section {
 
 .quote {
   background: var(--panel);
-  border: 1px solid var(--line);
+  border: 1px solid var(--gray);
+  border-top: 3px solid var(--turquoise);
   border-radius: 16px;
   padding: 30px;
+  box-shadow: 0 14px 30px -24px rgba(1, 22, 75, 0.5);
 }
 
+.quote:nth-child(2) { border-top-color: var(--orange); }
+.quote:nth-child(3) { border-top-color: var(--pink); }
+
 .stars {
-  color: var(--gold);
+  color: var(--sun);
   letter-spacing: 3px;
   margin-bottom: 14px;
 }
 
 .quote p {
   font-size: 1rem;
-  color: #d8d4c9;
+  color: var(--muted-l);
   font-style: italic;
   margin-bottom: 18px;
 }
@@ -273,29 +313,56 @@ section {
 }
 
 .who b {
-  color: var(--cream);
-  font-weight: 500;
+  color: var(--ink);
+  font-weight: 600;
   font-style: normal;
 }
 
-/* CTA */
+/* CTA — faixa em gradiente vivo laranja→rosa (com toque de sol) sobre foto */
 .cta {
   text-align: center;
   background:
-    linear-gradient(rgba(1, 22, 75, 0.8), rgba(1, 22, 75, 0.92)),
+    linear-gradient(120deg, rgba(252, 178, 7, 0.92) 0%, rgba(251, 113, 6, 0.94) 40%, rgba(232, 56, 143, 0.94) 100%),
     url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80') center / cover;
+}
+
+.cta .eyebrow {
+  color: #fff;
+  opacity: 0.92;
 }
 
 .cta h2 {
   font-size: clamp(2.2rem, 5vw, 3.4rem);
   max-width: 680px;
   margin: 0 auto 18px;
+  color: #fff;
 }
 
 .cta > div > p {
-  color: #d8d4c9;
+  color: rgba(255, 255, 255, 0.92);
   max-width: 520px;
   margin: 0 auto 30px;
+}
+
+/* botões sobre a faixa colorida: branco sólido + ghost branco */
+.cta :global(.btn-solid) {
+  background: #fff;
+  color: var(--orange);
+  box-shadow: 0 8px 22px -10px rgba(1, 22, 75, 0.5);
+}
+
+.cta :global(.btn-solid):hover {
+  background: #fff;
+  color: var(--pink);
+}
+
+.cta :global(.btn-ghost) {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.cta :global(.btn-ghost):hover {
+  background: rgba(255, 255, 255, 0.16);
 }
 
 /* RESPONSIVE */

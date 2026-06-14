@@ -47,29 +47,31 @@
 
 .badge {
   display: inline-block;
-  background: rgba(1, 22, 75, 0.85);
-  color: var(--sand);
+  background: var(--turquoise);
+  color: #00363a;
   font-size: 0.72rem;
+  font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   padding: 6px 12px;
   border-radius: 30px;
-  border: 1px solid var(--line);
+  border: 0;
   margin-bottom: 14px;
 }
 
 .badge.esgotado {
-  color: #e08a8a;
+  background: var(--pink);
+  color: #fff;
 }
 
 .heroContent h1 {
   font-size: clamp(2.2rem, 5vw, 3.4rem);
   margin-bottom: 10px;
-  color: var(--capa-cor, inherit);
+  color: var(--capa-cor, #fff);
 }
 
 .meta {
-  color: var(--capa-cor, var(--muted));
+  color: var(--capa-cor, rgba(255, 255, 255, 0.88));
   font-size: 0.95rem;
 }
 
@@ -79,11 +81,11 @@
   right: 22px;
   z-index: 1;
   background: rgba(1, 22, 75, 0.72);
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.88);
   font-size: 0.78rem;
   padding: 6px 12px;
   border-radius: 20px;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .layout {
@@ -104,7 +106,7 @@
 
 .lead {
   font-size: 1.08rem;
-  color: #d8d4c9;
+  color: var(--ink);
   line-height: 1.75;
 }
 
@@ -117,9 +119,9 @@
 }
 
 .dot {
-  width: 8px;
-  height: 8px;
-  background: var(--gold);
+  width: 10px;
+  height: 10px;
+  background: var(--turquoise);
   border-radius: 50%;
   display: inline-block;
 }
@@ -144,13 +146,13 @@
   display: flex;
   gap: 12px;
   align-items: flex-start;
-  color: #d8d4c9;
+  color: var(--muted-l);
   font-size: 0.97rem;
 }
 
 .ck {
-  color: var(--gold);
-  font-weight: 600;
+  color: var(--green);
+  font-weight: 700;
   flex: 0 0 20px;
 }
 
@@ -160,14 +162,14 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  border-left: 2px solid var(--line);
+  border-left: 2px solid var(--turquoise);
   padding-left: 24px;
 }
 
 .roteiro li {
   position: relative;
   padding: 10px 0;
-  color: #d8d4c9;
+  color: var(--muted-l);
   font-size: 0.97rem;
 }
 
@@ -179,12 +181,11 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--gold);
-  opacity: 0.6;
+  background: var(--orange);
 }
 
 .roteiro b {
-  color: var(--gold-soft);
+  color: var(--ink);
 }
 
 /* GALERIA */
@@ -229,7 +230,7 @@
   width: 100%;
   height: 340px;
   border-radius: 12px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--gray);
 }
 
 /* SIDEBAR */
@@ -240,12 +241,14 @@
 
 .cardPrice {
   background: var(--panel);
-  border: 1px solid var(--line);
+  border: 1px solid var(--gray);
+  border-top: 4px solid var(--turquoise);
   border-radius: 18px;
   padding: 28px 24px;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  box-shadow: 0 18px 40px -28px rgba(1, 22, 75, 0.6);
 }
 
 .cardPrice small {
@@ -258,8 +261,8 @@
 .val {
   font-family: 'Cormorant Garamond', serif;
   font-size: 2.4rem;
-  font-weight: 600;
-  color: var(--cream);
+  font-weight: 700;
+  color: var(--ink);
   line-height: 1.1;
 }
 
@@ -271,8 +274,8 @@
 
 .facts {
   list-style: none;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+  border-top: 1px solid var(--gray);
+  border-bottom: 1px solid var(--gray);
   padding: 16px 0;
   margin-bottom: 20px;
   display: flex;
@@ -291,8 +294,8 @@
 }
 
 .facts li b {
-  color: var(--cream);
-  font-weight: 500;
+  color: var(--ink);
+  font-weight: 600;
 }
 
 .btnWa {
@@ -301,21 +304,22 @@
   justify-content: center;
   gap: 8px;
   width: 100%;
-  background: var(--bronze);
-  color: #fdf7ea;
-  border: 1px solid var(--bronze);
+  background: var(--grad-hot);
+  color: #fff;
+  border: 1px solid transparent;
   padding: 14px;
   border-radius: 40px;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
   transition: 0.25s;
   text-decoration: none;
+  box-shadow: 0 10px 24px -12px rgba(232, 56, 143, 0.8);
 }
 
 .btnWa:hover {
-  background: var(--gold-soft);
   transform: translateY(-2px);
+  box-shadow: 0 16px 30px -12px rgba(232, 56, 143, 0.85);
 }
 
 .btnInsta {

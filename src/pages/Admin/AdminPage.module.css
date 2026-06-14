@@ -31,6 +31,21 @@
   background: #d96a6a;
 }
 
+/* O painel /admin é ferramenta interna e mantém o tema ESCURO. Como o site público
+   passou a ser claro, aqui reapontamos localmente os tokens de superfície/ texto para
+   os valores escuros — assim os componentes reaproveitados (TripCard, cartão de preço,
+   etc.) renderizam corretamente dentro do admin sem reescrever cada regra. */
+.page,
+.loginPage {
+  color: var(--cream);
+  --panel: #14315f;       /* cards escuros no admin */
+  --muted: #aeb8cc;       /* secundário claro sobre escuro */
+  --muted-l: #c4ccda;     /* secundário claro (componentes reaproveitados) */
+  --ink: #fdf6e9;         /* texto principal claro sobre escuro */
+  --gray: rgba(255, 255, 255, 0.14); /* bordas sobre escuro */
+  --cream-bg: var(--slate);          /* fundos "claros" reaproveitados → escuros */
+}
+
 .page {
   min-height: 100vh;
   background: var(--black);
@@ -162,7 +177,7 @@
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  background: linear-gradient(135deg, rgba(140, 107, 66, 0.16), var(--panel));
+  background: linear-gradient(135deg, rgba(251, 113, 6, 0.16), var(--panel));
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 20px 24px;
@@ -225,13 +240,13 @@
   place-items: center;
   font-size: 1.5rem;
   font-weight: 600;
-  background: rgba(140, 107, 66, 0.18);
+  background: rgba(251, 113, 6, 0.18);
   border: 1px solid var(--line);
   color: var(--gold-soft);
 }
 
 .panelBadgeEdit {
-  background: rgba(242, 221, 182, 0.16);
+  background: rgba(7, 200, 207, 0.16);
 }
 
 .panelBadgeList {
@@ -510,7 +525,7 @@
   padding: 7px 13px;
   border-radius: 8px;
   border: 1px solid var(--line);
-  background: rgba(140, 107, 66, 0.1);
+  background: rgba(251, 113, 6, 0.1);
   color: var(--cream);
   cursor: pointer;
   font-size: 0.82rem;
@@ -523,7 +538,7 @@
 .actbtn:hover {
   border-color: var(--gold);
   color: var(--gold-soft);
-  background: rgba(140, 107, 66, 0.2);
+  background: rgba(251, 113, 6, 0.2);
 }
 
 .actbtnDanger:hover {
@@ -593,7 +608,7 @@
 }
 
 .pubBox code {
-  background: rgba(140, 107, 66, 0.14);
+  background: rgba(251, 113, 6, 0.14);
   padding: 2px 6px;
   border-radius: 4px;
   font-size: 0.82rem;
@@ -711,7 +726,7 @@
   height: 38px;
   border-radius: 50%;
   border: 1px solid rgba(217, 106, 106, 0.5);
-  background: rgba(10, 33, 64, 0.82);
+  background: rgba(1, 22, 75, 0.82);
   color: #ec9a9a;
   font-size: 1rem;
   cursor: pointer;
@@ -761,7 +776,7 @@
   height: 30px;
   border-radius: 50%;
   border: 1px solid var(--gold);
-  background: rgba(140, 107, 66, 0.16);
+  background: rgba(251, 113, 6, 0.16);
   color: var(--gold-soft);
   font-size: 0.82rem;
   cursor: pointer;

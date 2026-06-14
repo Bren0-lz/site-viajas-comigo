@@ -2,17 +2,17 @@
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  border: 1px solid rgba(242, 221, 182, 0.55);
+  border: 1px solid transparent;
   border-radius: 30px;
   padding: 11px 20px;
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.01em;
   cursor: pointer;
-  background: linear-gradient(135deg, var(--gold), var(--bronze));
-  color: #fdf7ea;
+  background: var(--grad-hot);
+  color: #fff;
   font-family: 'Jost', sans-serif;
-  box-shadow: 0 6px 18px rgba(140, 107, 66, 0.28);
+  box-shadow: 0 6px 18px rgba(232, 56, 143, 0.3);
   transition:
     transform 0.2s cubic-bezier(0.22, 0.61, 0.36, 1),
     box-shadow 0.2s ease,
@@ -22,12 +22,12 @@
 .btn:hover:not(:disabled) {
   transform: translateY(-1px);
   filter: brightness(1.06);
-  box-shadow: 0 10px 24px rgba(140, 107, 66, 0.36);
+  box-shadow: 0 10px 24px rgba(232, 56, 143, 0.4);
 }
 
 .btn:active:not(:disabled) {
   transform: translateY(0);
-  box-shadow: 0 4px 12px rgba(140, 107, 66, 0.3);
+  box-shadow: 0 4px 12px rgba(232, 56, 143, 0.34);
 }
 
 .btn:disabled {

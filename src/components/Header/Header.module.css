@@ -91,21 +91,19 @@
   transform: translateY(-1px);
 }
 
-/* CTA = pílula laranja preenchida (cor do "comigo") — destaque na faixa creme */
+/* CTA = pílula em gradiente laranja→rosa (o "comigo" da logo) */
 .cta {
   font-size: 0.95rem !important;
   letter-spacing: 0.02em;
   color: #fff !important;
-  background: var(--orange);
-  border: 1px solid var(--orange);
+  background: var(--grad-hot);
+  border: 1px solid transparent;
   padding: 13px 26px;
   border-radius: 32px;
 }
 
 .cta:hover {
-  background: var(--orange-soft);
-  border-color: var(--orange-soft);
-  box-shadow: 0 8px 20px -10px rgba(251, 113, 6, 0.7);
+  box-shadow: 0 10px 22px -10px rgba(232, 56, 143, 0.75);
 }
 
 /* o CTA preenchido não recebe o sublinhado turquesa */
