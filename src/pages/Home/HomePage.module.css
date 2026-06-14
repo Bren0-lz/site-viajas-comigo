@@ -7,12 +7,11 @@
   align-items: center;
   background:
     linear-gradient(
-      102deg,
-      rgba(7, 200, 207, 0.7) 0%,
-      rgba(86, 214, 230, 0.55) 52%,
-      rgba(144, 229, 253, 0.48) 100%
+      120deg,
+      rgba(252, 178, 7, 0.92) 0%,
+      rgba(251, 113, 6, 0.93) 42%,
+      rgba(232, 56, 143, 0.93) 100%
     ),
-    linear-gradient(rgba(255, 255, 255, 0.28), rgba(144, 229, 253, 0.1)),
     url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1600&q=80') center / cover fixed;
 }
 
@@ -28,9 +27,31 @@
   padding-top: var(--header-h);
 }
 
-/* sobre a faixa turquesa o eyebrow turquesa sumiria → marinho */
+/* faixa quente laranja→rosa → textos brancos */
 .hero :global(.eyebrow) {
-  color: var(--navy);
+  color: #fff;
+  opacity: 0.92;
+}
+
+/* botões sobre a faixa colorida: branco sólido + ghost branco */
+.hero :global(.btn-solid) {
+  background: #fff;
+  color: var(--orange);
+  box-shadow: 0 8px 22px -10px rgba(1, 22, 75, 0.4);
+}
+
+.hero :global(.btn-solid):hover {
+  background: #fff;
+  color: var(--pink);
+}
+
+.hero :global(.btn-ghost) {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.hero :global(.btn-ghost):hover {
+  background: rgba(255, 255, 255, 0.16);
 }
 
 /* Entrada encadeada no load */
@@ -48,7 +69,7 @@
   width: 64px;
   height: 4px;
   border-radius: 4px;
-  background: var(--grad-hot);
+  background: rgba(255, 255, 255, 0.85);
   margin: 0 0 26px;
   transform-origin: left center;
   animation: accentGrow 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) both;
@@ -59,21 +80,17 @@
   font-size: clamp(2.1rem, 8vw, 5.2rem);
   letter-spacing: -0.01em;
   margin-bottom: 22px;
-  color: var(--navy);
+  color: #fff;
 }
 
 .heroInner h1 em {
   font-style: italic;
-  background: var(--grad-hot);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: var(--orange);
+  color: #fff;
 }
 
 .heroInner > p {
   font-size: 1.18rem;
-  color: var(--ink);
+  color: rgba(255, 255, 255, 0.92);
   max-width: 560px;
   margin-bottom: 34px;
   font-weight: 400;
@@ -90,7 +107,7 @@
   bottom: 26px;
   left: 50%;
   transform: translateX(-50%);
-  color: var(--navy);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 0.75rem;
   letter-spacing: 0.25em;
   text-transform: uppercase;
