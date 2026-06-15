@@ -44,7 +44,6 @@ export default function Header() {
         </Link>
 
         <nav className={`${s.links}${menuOpen ? ' ' + s.open : ''}`}>
-          <a onClick={() => navTo('como')} href="#como">Como funciona</a>
           <a onClick={() => navTo('viagens')} href="#viagens">Próximas viagens</a>
           <a onClick={() => navTo('porque')} href="#porque">Por que em grupo</a>
           {/* <a onClick={() => navTo('depoimentos')} href="#depoimentos">Depoimentos</a> */}

@@ -12,13 +12,13 @@ export default function HeroSection() {
         <p className="eyebrow">Viagens em grupo • Brasil e mundo</p>
         <span className={s.heroAccent} />
         <h1>A gente monta o pacote.<br />Você só <em>embarca</em>.</h1>
-        <p>Na Viajas Comigo a gente organiza tudo, junta a galera e viaja todo mundo junto. Sem stress de planejar — só a parte boa da viagem.</p>
+        <p>Viagens em grupo com tudo organizado. Veja as próximas datas abaixo.</p>
         <div className={s.heroActions}>
           <a onClick={() => scrollTo('viagens')} href="#viagens" className="btn btn-solid">Ver próximas viagens</a>
           <a href={waLink()} target="_blank" rel="noopener" className="btn btn-ghost">Quero participar</a>
         </div>
       </div>
-      <span className={s.scrollCue}>role para descobrir ↓</span>
+      <span className={s.scrollCue}>viagens abertas ↓</span>
     </section>
   )
 }

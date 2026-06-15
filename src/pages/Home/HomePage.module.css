@@ -1,8 +1,8 @@
 /* HERO */
 .hero {
   position: relative;
-  min-height: 100vh;
-  min-height: 100svh;
+  min-height: 74vh;
+  min-height: 74svh;
   display: flex;
   align-items: center;
   background:
@@ -143,73 +143,81 @@ section {
 }
 
 .light h2,
-.light h3,
-.light .whyTitle {
+.light h3 {
   color: var(--ink);
 }
 
 .light .sectionHead p,
-.light .step p,
-.light .whyList p {
+.light .whyStripItem p {
   color: var(--muted-l);
 }
 
-.light .whyPhoto {
-  border-color: var(--gray);
+/* WHY STRIP — faixa enxuta de vantagens, abaixo das viagens */
+.whyStripHead {
+  max-width: 640px;
+  margin: 0 auto 44px;
+  text-align: center;
 }
 
-/* STEPS — fluxo editorial, sem caixas, em escada */
-.steps {
+.whyStripHead h2 {
+  margin-bottom: 0;
+}
+
+.whyStrip {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 48px 44px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
 }
 
-/* desnível vertical (escada) só no layout de 3 colunas */
-.step:nth-child(2) { margin-top: 36px; }
-.step:nth-child(3) { margin-top: 72px; }
-
-.step {
-  padding: 0 16px 0 0;
+.whyStripItem {
+  padding: 20px 0 0;
+  border-top: 3px solid var(--turquoise);
 }
 
-.stepNum {
-  display: block;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 3.4rem;
-  font-weight: 700;
-  color: var(--turquoise);
-  line-height: 1;
-  margin-bottom: 12px;
+.whyStripItem:nth-child(1) { border-top-color: var(--turquoise); }
+.whyStripItem:nth-child(2) { border-top-color: var(--orange); }
+.whyStripItem:nth-child(3) { border-top-color: var(--sun); }
+.whyStripItem:nth-child(4) { border-top-color: var(--pink); }
+
+.whyStripItem h3 {
+  font-size: 1.3rem;
+  margin-bottom: 6px;
 }
 
-/* números 01 / 02 / 03 em cores rotativas da paleta */
-.step:nth-child(1) .stepNum { color: var(--turquoise); }
-.step:nth-child(2) .stepNum { color: var(--orange); }
-.step:nth-child(3) .stepNum { color: var(--pink); }
-
-.step h3 {
-  font-size: 1.5rem;
-  margin: 0 0 8px;
+.whyStripItem p {
+  color: var(--muted-l);
+  font-size: 0.93rem;
+  max-width: 32ch;
 }
 
-.step p {
-  color: var(--muted);
-  font-size: 0.97rem;
-  max-width: 30ch;
-}
-
-/* DESTINOS — faixa areia quente, cards brancos coloridos por cima */
+/* DESTINOS — o coração do site: faixa areia quente com washes de mar e sol */
 .destinos {
+  position: relative;
   background:
-    radial-gradient(140% 90% at 85% -10%, rgba(144, 229, 253, 0.45), transparent 60%),
+    radial-gradient(120% 80% at 88% -10%, rgba(7, 200, 207, 0.4), transparent 58%),
+    radial-gradient(110% 80% at 0% 110%, rgba(252, 178, 7, 0.32), transparent 55%),
     var(--sand);
   color: var(--ink);
-  padding: 120px 0;
+  padding: 128px 0;
 }
 
 .destinos :global(.eyebrow) {
   color: var(--orange);
+}
+
+/* cabeçalho da seção de viagens: centralizado e maior, pra puxar o olho */
+.destinosHead {
+  max-width: 720px;
+  margin: 0 auto 60px;
+  text-align: center;
+}
+
+.destinosHead h2 {
+  font-size: clamp(2.4rem, 6vw, 3.8rem);
+}
+
+.destinosHead p {
+  margin: 0 auto;
 }
 
 .grid {
@@ -226,64 +234,6 @@ section {
   border: 1px dashed var(--turquoise);
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.5);
-}
-
-/* POR QUE — lista editorial com fios, layout assimétrico, foto integrada */
-.whyGrid {
-  display: grid;
-  grid-template-columns: 1fr 0.82fr;
-  gap: 72px;
-  align-items: stretch;
-}
-
-.whyGrid :global(.eyebrow) {
-  color: var(--green);
-}
-
-.whyTitle {
-  font-size: clamp(2rem, 4.5vw, 3rem);
-  margin-bottom: 8px;
-}
-
-.whyList {
-  list-style: none;
-}
-
-/* cada vantagem é uma linha separada por um fio colorido — feel de índice/revista */
-.whyList li {
-  padding: 22px 0 22px 18px;
-  border-top: 1px solid var(--gray);
-  border-left: 3px solid var(--turquoise);
-}
-
-.whyList li:nth-child(1) { border-left-color: var(--turquoise); }
-.whyList li:nth-child(2) { border-left-color: var(--orange); }
-.whyList li:nth-child(3) { border-left-color: var(--sun); }
-.whyList li:nth-child(4) { border-left-color: var(--pink); }
-
-.whyList li:last-child {
-  padding-bottom: 0;
-}
-
-.whyList h3 {
-  font-size: 1.4rem;
-  margin-bottom: 5px;
-}
-
-.whyList p {
-  color: var(--muted);
-  font-size: 0.95rem;
-  max-width: 48ch;
-}
-
-/* foto: corte fotográfico (raio pequeno) + wash navy→bronze pra casar com a paleta */
-.whyPhoto {
-  min-height: 480px;
-  border-radius: 4px;
-  background:
-    linear-gradient(155deg, rgba(1, 22, 75, 0.3), rgba(7, 200, 207, 0.34)),
-    url('https://images.unsplash.com/photo-1530789253388-582c481c54b0?auto=format&fit=crop&w=900&q=80') center / cover;
-  border: 1px solid var(--line);
 }
 
 /* DEPOIMENTOS — faixa clara com toque de céu, cards brancos */
@@ -389,29 +339,14 @@ section {
 
 /* RESPONSIVE */
 @media (max-width: 1024px) {
-  .steps,
   .grid,
+  .whyStrip,
   .depoGrid {
     grid-template-columns: 1fr 1fr;
   }
 
   .destinos {
     padding: 96px 0;
-  }
-
-  /* escada não faz sentido fora das 3 colunas */
-  .step:nth-child(2),
-  .step:nth-child(3) {
-    margin-top: 0;
-  }
-
-  .whyGrid {
-    grid-template-columns: 1fr;
-    gap: 36px;
-  }
-
-  .whyPhoto {
-    min-height: 300px;
   }
 }
 
@@ -436,8 +371,8 @@ section {
 }
 
 @media (max-width: 480px) {
-  .steps,
   .grid,
+  .whyStrip,
   .depoGrid {
     grid-template-columns: 1fr;
     gap: 18px;
@@ -446,10 +381,6 @@ section {
   section,
   .destinos {
     padding: 48px 0;
-  }
-
-  .step {
-    padding: 26px 22px;
   }
 
   .heroActions {

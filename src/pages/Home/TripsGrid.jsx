@@ -6,10 +6,10 @@ export default function TripsGrid({ viagens }) {
   return (
     <section className={s.destinos} id="viagens">
       <div className="wrap">
-        <Reveal className={s.sectionHead}>
+        <Reveal className={`${s.sectionHead} ${s.destinosHead}`}>
           <p className="eyebrow">Agenda aberta</p>
           <h2>Próximas viagens</h2>
-          <p>Toque em uma viagem para ver o roteiro completo, o que está incluso, fotos e a localização no mapa.</p>
+          <p>Escolha um destino e toque para ver o roteiro completo, o que está incluso, fotos e o mapa.</p>
         </Reveal>
         <div className={s.grid}>
           {viagens.length === 0 ? (
