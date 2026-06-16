@@ -9,6 +9,8 @@ export default function HeroSection() {
   return (
     <section className={s.hero} id="topo">
       <div className={`wrap ${s.heroInner}`}>
+        {/* abre espaço no topo para a logo "voadora" (overlay) pousar/decolar */}
+        <div className={s.brandLead} aria-hidden="true" />
         <p className="eyebrow">Viagens em grupo • Brasil e mundo</p>
         <span className={s.heroAccent} />
         <h1>A gente monta o pacote.<br />Você só <em>embarca</em>.</h1>

@@ -42,6 +42,49 @@
   width: auto;
 }
 
+/* Placeholder invisível: reserva no layout o espaço da logo pequena enquanto a
+   logo voadora (overlay fixed) pousa exatamente sobre ele. */
+.brandSlot {
+  display: block;
+  height: 84px;
+  aspect-ratio: 511 / 400;
+}
+
+/* Logo "voadora": nasce grande e centralizada no topo do Hero e, conforme o
+   scroll, encolhe/desliza até o slot da navbar. O transform é calculado por
+   frame no Header.jsx (ancorada em top:0/left:0, origin top-left). */
+.brandFly {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: block;
+  width: max-content;
+  z-index: 60;
+  height: clamp(120px, 24vh, 280px);
+  transform-origin: top left;
+  will-change: transform;
+  cursor: pointer;
+}
+
+/* Véu escuro suave atrás da logo enquanto ela está grande sobre o hero vivo —
+   melhora a legibilidade do "comigo". Some (--scrim → 0) ao pousar na navbar. */
+.brandFly::before {
+  content: '';
+  position: absolute;
+  inset: -12% -8%;
+  background: radial-gradient(ellipse at center, rgba(1, 22, 75, 0.5), transparent 70%);
+  opacity: var(--scrim, 1);
+  transition: opacity 0.1s linear;
+  z-index: -1;
+}
+
+.brandFlyImg {
+  display: block;
+  height: 100%;
+  width: auto;
+  position: relative;
+}
+
 .links {
   display: flex;
   gap: 38px;
@@ -130,6 +173,14 @@
 @media (max-width: 768px) {
   .brandImg {
     height: 56px;
+  }
+
+  .brandSlot {
+    height: 56px;
+  }
+
+  .brandFly {
+    height: clamp(90px, 18vh, 180px);
   }
 
   .links {

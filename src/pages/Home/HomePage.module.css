@@ -58,11 +58,25 @@
 .heroInner > * {
   animation: heroRise 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
-.heroInner > :nth-child(1) { animation-delay: 0.1s; }
-.heroInner > :nth-child(2) { animation-delay: 0.22s; }
-.heroInner > :nth-child(3) { animation-delay: 0.34s; }
-.heroInner > :nth-child(4) { animation-delay: 0.46s; }
-.heroInner > :nth-child(5) { animation-delay: 0.58s; }
+/* o 1º filho é o espaçador da logo (.brandLead); a cascata começa no eyebrow */
+.heroInner > :nth-child(2) { animation-delay: 0.1s; }
+.heroInner > :nth-child(3) { animation-delay: 0.22s; }
+.heroInner > :nth-child(4) { animation-delay: 0.34s; }
+.heroInner > :nth-child(5) { animation-delay: 0.46s; }
+.heroInner > :nth-child(6) { animation-delay: 0.58s; }
+
+/* Reserva o lugar visual da logo grande no topo do hero (a logo em si é um
+   overlay fixed gerido pelo Header). Em movimento reduzido a logo é estática
+   na navbar, então o espaçador some. */
+.brandLead {
+  height: clamp(140px, 26vh, 260px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brandLead {
+    display: none;
+  }
+}
 
 .heroAccent {
   display: block;
@@ -362,6 +376,10 @@ section {
 
   .heroInner > p {
     font-size: 1.06rem;
+  }
+
+  .brandLead {
+    height: clamp(100px, 20vh, 180px);
   }
 
   /* atrapalha em telas curtas e pode sobrepor conteúdo */
