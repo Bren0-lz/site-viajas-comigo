@@ -8,9 +8,10 @@ export default function HeroSection() {
 
   return (
     <section className={s.hero} id="topo">
+      {/* faixa branca full-width: lar da logo grande (a logo em si é um overlay
+          fixed gerido pelo Header). Reserva o topo e empurra o conteúdo pra baixo. */}
+      <div id="brand-lead" className={s.brandLead} aria-hidden="true" />
       <div className={`wrap ${s.heroInner}`}>
-        {/* abre espaço no topo para a logo "voadora" (overlay) pousar/decolar */}
-        <div className={s.brandLead} aria-hidden="true" />
         <p className="eyebrow">Viagens em grupo • Brasil e mundo</p>
         <span className={s.heroAccent} />
         <h1>A gente monta o pacote.<br />Você só <em>embarca</em>.</h1>

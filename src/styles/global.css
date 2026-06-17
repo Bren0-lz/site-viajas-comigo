@@ -39,12 +39,12 @@
   --line: rgba(7, 200, 207, 0.4); /* fios — turquesa */
 
   /* Altura do header fixo (usada no menu mobile e no scroll-margin das seções) */
-  --header-h: 96px;
+  --header-h: 124px;
 }
 
 @media (max-width: 768px) {
   :root {
-    --header-h: 72px;
+    --header-h: 92px;
   }
 }
 

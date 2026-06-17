@@ -1,10 +1,11 @@
 /* HERO */
 .hero {
   position: relative;
-  min-height: 74vh;
-  min-height: 74svh;
+  min-height: 90vh;
+  min-height: 90svh;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
   background:
     linear-gradient(
       120deg,
@@ -23,8 +24,11 @@
 }
 
 .heroInner {
+  width: 100%;
   max-width: 680px;
-  padding-top: var(--header-h);
+  /* a faixa branca já reserva o topo; aqui só um respiro antes do conteúdo */
+  padding-top: clamp(20px, 5vh, 56px);
+  padding-bottom: clamp(40px, 8vh, 90px);
 }
 
 /* faixa quente laranja→rosa → textos brancos */
@@ -58,18 +62,19 @@
 .heroInner > * {
   animation: heroRise 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
-/* o 1º filho é o espaçador da logo (.brandLead); a cascata começa no eyebrow */
-.heroInner > :nth-child(2) { animation-delay: 0.1s; }
-.heroInner > :nth-child(3) { animation-delay: 0.22s; }
-.heroInner > :nth-child(4) { animation-delay: 0.34s; }
-.heroInner > :nth-child(5) { animation-delay: 0.46s; }
-.heroInner > :nth-child(6) { animation-delay: 0.58s; }
+.heroInner > :nth-child(1) { animation-delay: 0.1s; }
+.heroInner > :nth-child(2) { animation-delay: 0.22s; }
+.heroInner > :nth-child(3) { animation-delay: 0.34s; }
+.heroInner > :nth-child(4) { animation-delay: 0.46s; }
+.heroInner > :nth-child(5) { animation-delay: 0.58s; }
 
-/* Reserva o lugar visual da logo grande no topo do hero (a logo em si é um
-   overlay fixed gerido pelo Header). Em movimento reduzido a logo é estática
-   na navbar, então o espaçador some. */
+/* Faixa branca full-width no topo do hero: o "lar" da logo grande (a logo é um
+   overlay fixed gerido pelo Header). Reserva o topo e empurra o conteúdo pra
+   baixo. Em movimento reduzido a logo fica estática na navbar e a faixa some. */
 .brandLead {
-  height: clamp(140px, 26vh, 260px);
+  width: 100%;
+  height: clamp(220px, 34vh, 360px);
+  background: #fff;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -379,7 +384,7 @@ section {
   }
 
   .brandLead {
-    height: clamp(100px, 20vh, 180px);
+    height: clamp(150px, 26vh, 230px);
   }
 
   /* atrapalha em telas curtas e pode sobrepor conteúdo */

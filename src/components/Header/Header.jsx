@@ -2,8 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import s from './Header.module.css'
 
-const MORPH_DISTANCE = 220 // px de scroll até a logo pousar na navbar
-const HERO_TOP_VH = 0.16   // posição vertical inicial da logo (fração do viewport)
+const MORPH_DISTANCE = 260 // px de scroll até a logo pousar na navbar
 
 const clamp = (n, min, max) => Math.min(Math.max(n, min), max)
 const lerp = (a, b, t) => a + (b - a) * t
@@ -41,8 +40,8 @@ export default function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Posiciona a logo voadora a cada frame, interpolando entre o topo do Hero
-  // (grande, centralizada) e o slot real da marca na navbar (medido).
+  // Posiciona a logo voadora a cada frame, interpolando entre o centro da faixa
+  // branca no topo (grande) e o slot real da marca na navbar (encolhida).
   useLayoutEffect(() => {
     if (!morphAtivo) return
 
@@ -51,9 +50,11 @@ export default function Header() {
       raf = 0
       const slot = slotRef.current
       const fly = flyRef.current
-      if (!slot || !fly) return
+      const leadEl = document.getElementById('brand-lead')
+      if (!slot || !fly || !leadEl) return
 
       const t = slot.getBoundingClientRect()
+      const lead = leadEl.getBoundingClientRect()
       const baseH = fly.offsetHeight // altura grande inicial (definida no CSS)
       const baseW = fly.offsetWidth
       if (!t.height || !baseH) return
@@ -62,15 +63,14 @@ export default function Header() {
 
       // p=0 → escala 1 (tamanho grande do CSS); p=1 → encolhe até a altura do slot
       const escala = lerp(1, t.height / baseH, p)
-      const centerX = lerp(window.innerWidth / 2, t.left + t.width / 2, p)
-      const topY = lerp(window.innerHeight * HERO_TOP_VH, t.top, p)
+      // centro alvo: centro da faixa branca (p=0) → centro do slot (p=1)
+      const cx = lerp(lead.left + lead.width / 2, t.left + t.width / 2, p)
+      const cy = lerp(lead.top + lead.height / 2, t.top + t.height / 2, p)
 
-      // a logo é ancorada em top:0/left:0 (origin top-left); só o transform a move
-      const tx = centerX - (baseW * escala) / 2
-      const ty = topY
+      // logo ancorada em top:0/left:0 (origin top-left); centralizada no alvo
+      const tx = cx - (baseW * escala) / 2
+      const ty = cy - (baseH * escala) / 2
       fly.style.transform = `translate(${tx}px, ${ty}px) scale(${escala})`
-      // o scrim (véu escuro atrás da logo) só existe enquanto ela está grande
-      fly.style.setProperty('--scrim', String(1 - p))
     }
 
     const onScrollOrResize = () => {
@@ -101,7 +101,7 @@ export default function Header() {
 
   return (
     <>
-    <header className={`${s.header}${scrolled ? ' ' + s.scrolled : ''}`}>
+    <header className={`${s.header}${scrolled ? ' ' + s.scrolled : ''}${morphAtivo && !scrolled ? ' ' + s.overHero : ''}`}>
       <div className={`wrap ${s.nav}`}>
         <Link to="/" className={s.brand} aria-label="Viajas Comigo">
           {morphAtivo ? (
