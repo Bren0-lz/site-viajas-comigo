@@ -1,6 +1,10 @@
+import { useState } from 'react'
 import { waLink } from '../../utils/waLink.js'
 import { FeaturedCard } from '../../components/TripCard/TripCard.jsx'
 import s from './HomePage.module.css'
+
+// Cenas turísticas do Brasil que rodam em sequência no fundo do hero
+const HERO_CLIPS = ['/hero-1.mp4', '/hero-2.mp4', '/hero-3.mp4']
 
 function scrollTo(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -19,15 +23,24 @@ function Stats({ light }) {
 }
 
 export default function HeroSection({ variant, featured }) {
+  const [clip, setClip] = useState(0)
+
   if (variant === 'B') {
     return (
       <section className={s.heroB} id="topo">
-        <span className={`${s.blob} ${s.blobB1}`} />
-        <span className={`${s.blob} ${s.blobB2}`} />
+        <video
+          key={clip}
+          className={s.heroVideo}
+          autoPlay
+          muted
+          playsInline
+          preload="auto"
+          onEnded={() => setClip(c => (c + 1) % HERO_CLIPS.length)}
+        >
+          <source src={HERO_CLIPS[clip]} type="video/mp4" />
+        </video>
+        <span className={s.heroOverlay} />
         <div className={s.heroBInner}>
-          <div className={s.logoBox}>
-            <img src="/logo.webp" alt="Viajas Comigo" className={s.logoImg} />
-          </div>
           <span className={s.badgeB}><i className="ph ph-airplane-tilt" />Agência de viagens em grupo</span>
           <h1 className={s.heroBTitle}>
             O próximo destino do grupo já tem <span className="gradText">data marcada.</span>
