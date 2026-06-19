@@ -3,48 +3,49 @@
      Samsung Internet, Brave) escureça a paleta creme e descaracterize o site. */
   color-scheme: light;
 
-  /* ===== Paleta da marca Viajas Comigo — extraída da nova logo tropical ===== */
-  --navy: #01164b;        /* marinho — "Viajas", texto / escuro principal */
-  --slate: #0c2657;       /* marinho secundário — faixas escuras */
-  --orange: #fb7106;      /* laranja — "comigo" / acento principal (CTA) */
-  --orange-soft: #ff8c3a; /* laranja claro — hover */
-  --sun: #fcb207;         /* amarelo-sol */
-  --turquoise: #07c8cf;   /* turquesa — o mar da logo */
-  --sky: #90e5fd;         /* azul-céu */
-  --green: #2f8f1a;       /* verde — palmeiras */
-  --pink: #e8388f;        /* magenta — coração / final do "comigo" */
-  --sand: #f7e7be;        /* areia — fundo quente da faixa de viagens */
-  --sand-soft: #fcf3da;   /* areia clara — superfícies suaves */
-  --cream-bg: #fff8ea;    /* fundo claro padrão do site */
-  --gray: #e8dcc2;        /* bordas / superfícies claras (quentes) */
-  --ink: #06224d;         /* texto escuro principal sobre claro */
-  --muted-l: #4a5a72;     /* texto secundário sobre claro */
+  /* ===== Paleta da marca Viajas Comigo — novo design (designNovo/) ===== */
+  --navy: #0B2E63;        /* marinho — texto / escuro principal */
+  --slate: #08234D;       /* marinho secundário — faixas escuras / footer */
+  --orange: #FF7A45;      /* laranja — acento principal (CTA) */
+  --orange-soft: #FF8A3D; /* laranja claro — hover */
+  --sun: #FFC233;         /* amarelo-sol — início do gradiente quente */
+  --turquoise: #19B6CE;   /* turquesa — o mar */
+  --sky: #19C5DE;         /* azul-céu / ciano do hero B */
+  --green: #1FB257;       /* verde — status "vagas abertas" */
+  --whats: #25D366;       /* verde WhatsApp */
+  --pink: #E5277E;        /* magenta — final do gradiente quente */
+  --sand: #FFFBF4;        /* areia — fundo quente da faixa de viagens */
+  --sand-soft: #FAFCFE;   /* superfícies suaves */
+  --cream-bg: #FFFBF4;    /* fundo claro padrão do site */
+  --gray: rgba(11, 46, 99, 0.08); /* bordas / fios sobre claro */
+  --ink: #0B2E63;         /* texto escuro principal sobre claro */
+  --muted-l: #5A6B85;     /* texto secundário sobre claro */
 
-  /* Gradiente de destaque — o "comigo" da logo (laranja → rosa) */
-  --grad-hot: linear-gradient(95deg, var(--orange), var(--pink));
-  --grad-cool: linear-gradient(120deg, var(--turquoise), var(--sky));
+  /* Gradiente de destaque — laranja → rosa (acento da marca) */
+  --grad-hot: linear-gradient(120deg, #FFC233, #FF7A45 60%, #E5277E);
+  --grad-cool: linear-gradient(150deg, #08234D 0%, #0F3A78 48%, #19B6CE 120%);
 
-  /* Acento/CTA — antes "bronze", reapontado para o laranja da logo */
+  /* Acento/CTA */
   --bronze: var(--orange);
   --bronze-soft: var(--orange-soft);
 
   /* Aliases legados, reapontados para a nova paleta */
   --black: var(--navy);
   --black-soft: var(--slate);
-  --panel: #ffffff;       /* cards agora sobre fundo claro → brancos */
+  --panel: #ffffff;       /* cards sobre fundo claro → brancos */
   --gold: var(--orange);
   --gold-soft: var(--sun);
-  --cream: #fdf6e9;       /* quase-branco — texto sobre superfícies escuras */
-  --muted: #5a6377;       /* texto secundário (legível sobre claro) */
-  --line: rgba(7, 200, 207, 0.4); /* fios — turquesa */
+  --cream: #FFFBF4;       /* quase-branco — texto sobre superfícies escuras */
+  --muted: #7A8BA8;       /* texto secundário (legível sobre claro) */
+  --line: rgba(11, 46, 99, 0.1); /* fios */
 
   /* Altura do header fixo (usada no menu mobile e no scroll-margin das seções) */
-  --header-h: 124px;
+  --header-h: 76px;
 }
 
 @media (max-width: 768px) {
   :root {
-    --header-h: 92px;
+    --header-h: 64px;
   }
 }
 
@@ -69,8 +70,8 @@ html {
 body {
   background: var(--cream-bg);
   color: var(--ink);
-  font-family: 'Jost', system-ui, sans-serif;
-  font-weight: 300;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-weight: 400;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
@@ -92,9 +93,10 @@ iframe {
 }
 
 h1, h2, h3 {
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 600;
-  line-height: 1.1;
+  font-family: 'DM Serif Display', 'Plus Jakarta Sans', serif;
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
 }
 
 a {
@@ -129,11 +131,11 @@ a {
 }
 
 .eyebrow {
-  font-size: 0.74rem;
-  letter-spacing: 0.32em;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--turquoise);
-  font-weight: 600;
+  color: var(--orange);
+  font-weight: 700;
   margin-bottom: 14px;
 }
 
@@ -142,19 +144,15 @@ a {
   align-items: center;
   justify-content: center;
   gap: 9px;
-  min-height: 44px;
-  padding: 14px 26px;
-  border-radius: 40px;
-  font-weight: 500;
-  font-size: 0.95rem;
-  letter-spacing: 0.02em;
+  min-height: 48px;
+  padding: 15px 28px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
   cursor: pointer;
-  border: 1px solid var(--gold);
-  transition: 0.25s ease;
-  font-family: 'Jost', system-ui, sans-serif;
-}
-
-.btn {
+  border: 1px solid rgba(11, 46, 99, 0.14);
+  font-family: inherit;
   transition:
     background 0.25s ease,
     color 0.25s ease,
@@ -164,29 +162,40 @@ a {
 
 .btn-solid {
   background: var(--grad-hot);
-  background-size: 140% 140%;
   color: #fff;
   border-color: transparent;
-  box-shadow: 0 8px 20px -12px rgba(232, 56, 143, 0.8);
+  font-weight: 800;
+  box-shadow: 0 14px 32px rgba(255, 122, 69, 0.4);
 }
 
 .btn-solid:hover {
-  transform: translateY(-2px);
-  background-position: 100% 50%;
-  box-shadow: 0 14px 28px -12px rgba(232, 56, 143, 0.85);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 18px 38px rgba(255, 122, 69, 0.5);
 }
 
 .btn-ghost {
-  background: transparent;
-  color: var(--orange);
+  background: #fff;
+  color: var(--navy);
 }
 
 .btn-ghost:hover {
-  background: rgba(251, 113, 6, 0.12);
+  background: #fff;
   transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(11, 46, 99, 0.12);
 }
 
 /* ===== Motion ===== */
+@keyframes vc-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); }
+  70% { box-shadow: 0 0 0 16px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+
+@keyframes vc-up {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: none; }
+}
+
 @keyframes heroRise {
   from {
     opacity: 0;

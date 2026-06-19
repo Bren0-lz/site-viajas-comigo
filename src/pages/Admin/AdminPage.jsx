@@ -1,9 +1,8 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import s from './AdminPage.module.css'
-import c from '../../components/TripCard/TripCard.module.css'
-import g from '../Home/HomePage.module.css'
 import t from '../TripDetail/TripDetailPage.module.css'
+import { statusMeta } from '../../utils/viagemMeta.js'
 import ImageUpload from '../../components/ImageUpload/ImageUpload.jsx'
 
 const NOVA_VIAGEM = {
@@ -63,18 +62,8 @@ function LoginScreen({ onSuccess }) {
   return (
     <div className={s.loginPage}>
       <form className={s.loginCard} onSubmit={entrar}>
-        <div className={s.brand} style={{ justifyContent: 'center' }}>
-          <picture>
-            <source srcSet="/logo-light.webp" type="image/webp" />
-            <img
-              src="/logo-light.png"
-              alt="Viajas Comigo"
-              className={s.brandImg}
-              width="569"
-              height="328"
-              decoding="async"
-            />
-          </picture>
+        <div className={s.loginLogo}>
+          <img src="/logo.webp" alt="Viajas Comigo" />
         </div>
         <p className={s.loginTitle}>Painel de viagens</p>
         <p className={s.loginSub}>Digite a senha para acessar.</p>
@@ -126,7 +115,6 @@ export default function AdminPage(props) {
 
 /* ─────────────── EDIÇÃO INLINE (lápis por campo) ─────────────── */
 
-// Campo de texto curto/longo: mostra o valor + lápis; ao clicar vira input.
 function EditText({ v, set, ph, area }) {
   const [editing, setEditing] = useState(false)
 
@@ -170,8 +158,6 @@ function EditText({ v, set, ph, area }) {
   )
 }
 
-// Campo de lista (um item por linha): mostra a lista renderizada + lápis;
-// ao editar, abre um campo de texto com um item por linha.
 function EditList({ value, onChange, ph, children }) {
   const [editing, setEditing] = useState(false)
   const [text, setText] = useState('')
@@ -213,45 +199,49 @@ function EditList({ value, onChange, ph, children }) {
 /* ─────────────── EDITOR (cara da página de detalhes) ─────────────── */
 
 function Editor({ trip, upd, onError }) {
+  const st = statusMeta(trip)
   return (
     <div className="pageFade">
-      <section
-        className={t.hero}
-        style={{
-          '--capa-img': trip.imagem ? `url('${trip.imagem}')` : 'none',
-          '--capa-pos': `${trip.capaPosX ?? 50}% ${trip.capaPosY ?? 50}%`,
-          '--capa-zoom': trip.capaZoom || 1,
-          ...(trip.capaCor ? { '--capa-cor': trip.capaCor } : {}),
-        }}
-      >
-        <div className={s.heroEditWrap}>
-          <div className={s.heroEditRow}>
-            Foto de capa:&nbsp;
-            <ImageUpload
-              label={trip.imagem ? 'Trocar foto de capa' : 'Enviar foto de capa'}
-              onUploaded={url => upd('imagem', url)}
-              onError={onError}
-            />
-          </div>
-        </div>
+      <div className={t.heroWrap}>
+        <section
+          className={t.hero}
+          style={{
+            backgroundImage: trip.imagem ? `url('${trip.imagem}')` : undefined,
+            backgroundPosition: `${trip.capaPosX ?? 50}% ${trip.capaPosY ?? 50}%`,
+          }}
+        >
+          <div className={t.heroScrim} />
 
-        <div className={`wrap ${t.heroContent}`}>
-          <button
-            type="button"
-            className={`${t.badge}${trip.esgotado ? ' ' + t.esgotado : ''} ${s.badgeBtn}`}
-            onClick={() => upd('esgotado', !trip.esgotado)}
-            title="Alternar entre Vagas abertas e Esgotado"
-          >
-            {trip.esgotado ? 'Esgotado' : 'Vagas abertas'} ✎
-          </button>
-          <h1><EditText v={trip.titulo} set={x => upd('titulo', x)} ph="Título da viagem" /></h1>
-          <div className={t.meta}>
-            <EditText v={trip.data} set={x => upd('data', x)} ph="Datas" />
-            {' · '}
-            <EditText v={trip.local} set={x => upd('local', x)} ph="Local" />
+          <div className={s.heroEditWrap}>
+            <div className={s.heroEditRow}>
+              Foto de capa:&nbsp;
+              <ImageUpload
+                label={trip.imagem ? 'Trocar foto de capa' : 'Enviar foto de capa'}
+                onUploaded={url => upd('imagem', url)}
+                onError={onError}
+              />
+            </div>
           </div>
-        </div>
-      </section>
+
+          <div className={t.heroContent}>
+            <button
+              type="button"
+              className={`${t.status} ${s.badgeBtn}`}
+              style={{ background: st.bg, color: st.color }}
+              onClick={() => upd('esgotado', !trip.esgotado)}
+              title="Alternar entre Vagas abertas e Esgotado"
+            >
+              <span className={t.dot} style={{ background: st.dot }} />
+              {trip.esgotado ? 'Esgotado' : 'Vagas abertas'} ✎
+            </button>
+            <h1><EditText v={trip.titulo} set={x => upd('titulo', x)} ph="Título da viagem" /></h1>
+            <div className={t.meta}>
+              <span><EditText v={trip.data} set={x => upd('data', x)} ph="Datas" /></span>
+              <span><EditText v={trip.local} set={x => upd('local', x)} ph="Local" /></span>
+            </div>
+          </div>
+        </section>
+      </div>
 
       {trip.imagem && (
         <div className={s.capaBar}>
@@ -267,23 +257,11 @@ function Editor({ trip, upd, onError }) {
               <input type="range" min="0" max="100" value={trip.capaPosY ?? 50}
                 onChange={e => upd('capaPosY', Number(e.target.value))} />
             </label>
-            <label className={s.capaCtrl}>
-              <span>Zoom</span>
-              <input type="range" min="1" max="2.5" step="0.05" value={trip.capaZoom || 1}
-                onChange={e => upd('capaZoom', Number(e.target.value))} />
-            </label>
-            <label className={`${s.capaCtrl} ${s.capaColor}`}>
-              <span>Cor do texto</span>
-              <input type="color" value={trip.capaCor || '#f4f1ea'}
-                onChange={e => upd('capaCor', e.target.value)} />
-            </label>
             <button
               type="button"
               className={s.capaReset}
-              onClick={() => {
-                upd('capaPosX', 50); upd('capaPosY', 50); upd('capaZoom', 1); upd('capaCor', '')
-              }}
-              title="Voltar ao enquadramento e cor padrão"
+              onClick={() => { upd('capaPosX', 50); upd('capaPosY', 50) }}
+              title="Voltar ao enquadramento padrão"
             >Resetar</button>
           </div>
         </div>
@@ -291,12 +269,15 @@ function Editor({ trip, upd, onError }) {
 
       <div className={t.layout}>
         <div className={t.main}>
-          <p className={t.lead}>
-            <EditText v={trip.detalhes} set={x => upd('detalhes', x)} ph="Descrição completa da viagem…" area />
-          </p>
+          <div className={t.block}>
+            <h2>Sobre a viagem</h2>
+            <p className={t.lead}>
+              <EditText v={trip.detalhes} set={x => upd('detalhes', x)} ph="Descrição completa da viagem…" area />
+            </p>
+          </div>
 
           <div className={t.block}>
-            <h2><span className={t.dot} />Fotos da viagem</h2>
+            <h2>Fotos da viagem</h2>
             <div className={s.galeriaUpload}>
               <ImageUpload
                 multiple
@@ -308,7 +289,7 @@ function Editor({ trip, upd, onError }) {
             {trip.galeria?.length ? (
               <div className={t.galeria}>
                 {trip.galeria.map((img, i) => (
-                  <div key={img} className={`${t.gItem}${i === 0 ? ' ' + t.feat : ''} ${s.gItemEdit}`}>
+                  <div key={img} className={`${t.gItem} ${s.gItemEdit}`}>
                     <img src={img} alt={trip.titulo} loading="lazy" decoding="async" />
                     <button
                       type="button"
@@ -322,44 +303,42 @@ function Editor({ trip, upd, onError }) {
             ) : <p className={s.ph}>Nenhuma foto ainda.</p>}
           </div>
 
-          <div className={t.pair}>
-            <div className={t.block}>
-              <h2><span className={t.dot} />O que está incluso</h2>
-              <EditList value={trip.inclusos} onChange={x => upd('inclusos', x)} ph="Um item por linha">
-                {trip.inclusos?.length ? (
-                  <ul className={t.inclusos}>
-                    {trip.inclusos.map(item => (
-                      <li key={item}><span className={t.ck}>✓</span><span>{item}</span></li>
-                    ))}
-                  </ul>
-                ) : <p className={s.ph}>Nada cadastrado ainda.</p>}
-              </EditList>
-            </div>
-
-            <div className={t.block}>
-              <h2><span className={t.dot} />Roteiro dia a dia</h2>
-              <EditList value={trip.roteiro} onChange={x => upd('roteiro', x)} ph="Um dia por linha. Ex: Dia 1 — Chegada">
-                {trip.roteiro?.length ? (
-                  <ul className={t.roteiro}>
-                    {trip.roteiro.map(linha => {
-                      const partes = linha.split('—')
-                      return (
-                        <li key={linha}>
-                          {partes.length > 1
-                            ? <><b>{partes[0].trim()}</b> — {partes.slice(1).join('—').trim()}</>
-                            : linha}
-                        </li>
-                      )
-                    })}
-                  </ul>
-                ) : <p className={s.ph}>Nada cadastrado ainda.</p>}
-              </EditList>
-            </div>
+          <div className={t.block}>
+            <h2>O que está incluído</h2>
+            <EditList value={trip.inclusos} onChange={x => upd('inclusos', x)} ph="Um item por linha">
+              {trip.inclusos?.length ? (
+                <ul className={s.edList}>
+                  {trip.inclusos.map(item => (
+                    <li key={item}><span className={s.edCk}>✓</span><span>{item}</span></li>
+                  ))}
+                </ul>
+              ) : <p className={s.ph}>Nada cadastrado ainda.</p>}
+            </EditList>
           </div>
 
           <div className={t.block}>
-            <h2><span className={t.dot} />Onde fica</h2>
-            <p className={t.loc}>📍 <EditText v={trip.local} set={x => upd('local', x)} ph="Cidade e estado" /></p>
+            <h2>Programação dia a dia</h2>
+            <EditList value={trip.roteiro} onChange={x => upd('roteiro', x)} ph="Um dia por linha. Ex: Dia 1 — Chegada">
+              {trip.roteiro?.length ? (
+                <ul className={s.edList}>
+                  {trip.roteiro.map(linha => {
+                    const partes = linha.split('—')
+                    return (
+                      <li key={linha}>
+                        {partes.length > 1
+                          ? <><b>{partes[0].trim()}</b> — {partes.slice(1).join('—').trim()}</>
+                          : linha}
+                      </li>
+                    )
+                  })}
+                </ul>
+              ) : <p className={s.ph}>Nada cadastrado ainda.</p>}
+            </EditList>
+          </div>
+
+          <div className={t.block}>
+            <h2>Onde fica</h2>
+            <p className={t.loc}><i className="ph ph-map-pin" /><EditText v={trip.local} set={x => upd('local', x)} ph="Cidade e estado" /></p>
             {trip.local && (
               <iframe
                 title={`Mapa de ${trip.local}`}
@@ -373,13 +352,14 @@ function Editor({ trip, upd, onError }) {
 
         <aside className={t.side}>
           <div className={t.cardPrice}>
-            <small>A partir de</small>
-            <div className={t.val}>R$ <EditText v={trip.preco} set={x => upd('preco', x)} ph="0.000" /></div>
-            <div className={t.per}>por pessoa</div>
+            <span className={t.priceLbl}>a partir de</span>
+            <div className={t.priceVal}>R$ <EditText v={trip.preco} set={x => upd('preco', x)} ph="0.000" /></div>
+            <div className={t.priceNote}>por pessoa</div>
+            <div className={t.divider} />
             <ul className={t.facts}>
-              <li><span>Datas</span><b><EditText v={trip.data} set={x => upd('data', x)} ph="A definir" /></b></li>
-              <li><span>Vagas</span><b><EditText v={trip.vagas} set={x => upd('vagas', x)} ph="Consultar" /></b></li>
-              <li><span>Destino</span><b><EditText v={trip.local} set={x => upd('local', x)} ph="—" /></b></li>
+              <li><span><i className="ph ph-calendar-blank" />Datas</span><b><EditText v={trip.data} set={x => upd('data', x)} ph="A definir" /></b></li>
+              <li><span><i className="ph ph-map-pin" />Local</span><b><EditText v={trip.local} set={x => upd('local', x)} ph="—" /></b></li>
+              <li><span><i className="ph ph-users-three" />Vagas</span><b><EditText v={trip.vagas} set={x => upd('vagas', x)} ph="Consultar" /></b></li>
             </ul>
 
             <div className={s.summaryBox}>
@@ -387,7 +367,7 @@ function Editor({ trip, upd, onError }) {
               <EditText v={trip.descricao} set={x => upd('descricao', x)} ph="Uma frase chamativa sobre a viagem." area />
             </div>
 
-            <span className={s.fakeWa}>Tenho interesse (WhatsApp)</span>
+            <span className={s.fakeWa}><i className="ph ph-whatsapp-logo" />Tenho interesse (WhatsApp)</span>
           </div>
         </aside>
       </div>
@@ -406,8 +386,6 @@ function AdminPanel({ viagens, salvarTudo, onLogout }) {
   const [toastVisible, setToastVisible] = useState(false)
   const toastTimer = useRef(null)
 
-  // Enquanto não houver alterações pendentes, mantém o rascunho sincronizado
-  // com o que veio do servidor.
   useEffect(() => {
     if (!dirty) setDraft(viagens)
   }, [viagens, dirty])
@@ -453,23 +431,15 @@ function AdminPanel({ viagens, salvarTudo, onLogout }) {
   }
 
   const trip = editIndex !== null ? draft[editIndex] : null
+  const abertas = draft.filter(v => !v.esgotado).length
+  const esgotadas = draft.filter(v => v.esgotado).length
 
   return (
     <div className={s.page}>
       <div className={s.topbar}>
         <div className={s.brand}>
           <Link to="/" className={s.brandLink} aria-label="Viajas Comigo">
-            <picture>
-              <source srcSet="/logo-light.webp" type="image/webp" />
-              <img
-                src="/logo-light.png"
-                alt="Viajas Comigo"
-                className={s.brandImg}
-                width="569"
-                height="328"
-                decoding="async"
-              />
-            </picture>
+            <img src="/logo.webp" alt="Viajas Comigo" className={s.brandImg} />
           </Link>
           <span className={s.tag}>Painel de viagens</span>
         </div>
@@ -490,15 +460,21 @@ function AdminPanel({ viagens, salvarTudo, onLogout }) {
         <Editor trip={trip} upd={upd} onError={toast} />
       ) : (
         <div className={s.cardsWrap}>
+          <div className={s.stats}>
+            <div className={s.stat}><span className={s.statIcon}><i className="ph ph-airplane-tilt" /></span><div><b>{draft.length}</b><small>viagens cadastradas</small></div></div>
+            <div className={s.stat}><span className={`${s.statIcon} ${s.statOk}`}><i className="ph ph-ticket" /></span><div><b>{abertas}</b><small>com vagas abertas</small></div></div>
+            <div className={s.stat}><span className={`${s.statIcon} ${s.statNo}`}><i className="ph ph-fire" /></span><div><b>{esgotadas}</b><small>esgotadas</small></div></div>
+          </div>
+
           <div className={s.cardsBar}>
             <div>
               <h2>Próximas viagens</h2>
               <p>Clique em uma viagem para editá-la, ou use a lixeira para excluir. As mudanças só vão para o ar quando você clicar em <b>Salvar alterações</b>.</p>
             </div>
-            <button type="button" className={s.btnSolid} onClick={nova}>+ Nova viagem</button>
+            <button type="button" className={s.btnSolid} onClick={nova}><i className="ph ph-plus" />Nova viagem</button>
           </div>
 
-          <div className={g.grid}>
+          <div className={s.cardsGrid}>
             {draft.map((v, i) => (
               <div key={i} className={s.cardWrap}>
                 <button
@@ -506,30 +482,29 @@ function AdminPanel({ viagens, salvarTudo, onLogout }) {
                   className={s.trash}
                   title="Excluir esta viagem"
                   onClick={e => remover(i, e)}
-                >🗑</button>
-                <div className={c.card} onClick={() => setEditIndex(i)} role="button" tabIndex={0}
+                ><i className="ph ph-trash" /></button>
+                <div className={s.adCard} onClick={() => setEditIndex(i)} role="button" tabIndex={0}
                   onKeyDown={e => { if (e.key === 'Enter') setEditIndex(i) }}>
-                  <div className={c.img}>
-                    <div className={c.imgBg} style={{
-                      backgroundImage: `url('${v.imagem}')`,
+                  <div className={s.adMedia}>
+                    <div className={s.adBg} style={{
+                      backgroundImage: v.imagem ? `url('${v.imagem}')` : undefined,
                       backgroundPosition: `${v.capaPosX ?? 50}% ${v.capaPosY ?? 50}%`,
-                      '--capa-zoom': v.capaZoom || 1,
                     }} />
-                    <span className={`${c.badge}${v.esgotado ? ' ' + c.esgotado : ''}`}>
+                    <span className={`${s.adBadge}${v.esgotado ? ' ' + s.adBadgeNo : ''}`}>
                       {v.esgotado ? 'Esgotado' : 'Vagas abertas'}
                     </span>
                   </div>
-                  <div className={c.body}>
+                  <div className={s.adBody}>
                     <h3>{v.titulo || '(sem título)'}</h3>
-                    <div className={c.date}>{v.data}</div>
-                    <p className={c.desc}>{v.descricao}</p>
-                    <div className={c.foot}>
-                      <div className={c.price}>
+                    <div className={s.adDate}>{v.data}</div>
+                    <p className={s.adDesc}>{v.descricao}</p>
+                    <div className={s.adFoot}>
+                      <div className={s.adPrice}>
                         <small>A partir de</small>
                         <b>R$ {v.preco || '—'}</b>
-                        <div className={c.vagas}>{v.vagas}</div>
+                        <div className={s.adVagas}>{v.vagas}</div>
                       </div>
-                      <span className={c.btn}>Editar ✎</span>
+                      <span className={s.adEdit}>Editar ✎</span>
                     </div>
                   </div>
                 </div>

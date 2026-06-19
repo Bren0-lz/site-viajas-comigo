@@ -1,74 +1,92 @@
 .footer {
-  background: var(--navy);
-  color: var(--cream);
-  border-top: 4px solid transparent;
-  border-image: var(--grad-hot) 1;
-  padding: 54px 0 30px;
+  background: #08234D;
+  color: #fff;
+  padding: 48px 5vw 30px;
 }
 
 .grid {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 30px;
-  margin-bottom: 34px;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 40px;
 }
 
-.brand {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  font-family: 'Great Vibes', cursive;
-  font-size: 2.1rem;
-  line-height: 1;
-  margin-bottom: 12px;
+/* Coluna da marca */
+.logoBox {
+  display: inline-block;
+  background: #fff;
+  border-radius: 16px;
+  padding: 10px 16px;
 }
 
-.brandV {
-  background: var(--grad-hot);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: var(--orange);
-}
-
-.brandC {
-  color: var(--sand);
-}
-
-.col p {
-  color: rgba(253, 246, 233, 0.7);
-  font-size: 0.9rem;
-  max-width: 300px;
-}
-
-.col h4 {
-  font-size: 0.78rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--sun);
-  margin-bottom: 14px;
-  font-family: 'Jost', sans-serif;
-  font-weight: 600;
-}
-
-.col a {
+.logoImg {
+  height: 50px;
+  width: auto;
   display: block;
-  color: rgba(253, 246, 233, 0.7);
-  font-size: 0.92rem;
-  margin-bottom: 9px;
-  transition: 0.2s;
+}
+
+.about {
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 14px;
+  line-height: 1.7;
+  max-width: 300px;
+  margin: 16px 0 0;
+}
+
+.waBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 11px 18px;
+  border-radius: 50px;
+  background: var(--whats);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.waBtn i { font-size: 17px; }
+
+/* Colunas de links */
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.colTitle {
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 4px;
+  color: #fff;
+}
+
+.col a,
+.col span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 14px;
   cursor: pointer;
+  transition: color 0.2s ease;
 }
 
 .col a:hover {
-  color: var(--turquoise);
+  color: #fff;
 }
 
 .copy {
+  margin-top: 32px;
+  padding-top: 20px;
   border-top: 1px solid rgba(255, 255, 255, 0.12);
-  padding-top: 22px;
-  text-align: center;
-  color: rgba(253, 246, 233, 0.55);
-  font-size: 0.82rem;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 760px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
 }

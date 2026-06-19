@@ -1,22 +1,62 @@
-import TripCard from '../../components/TripCard/TripCard.jsx'
+import { useState } from 'react'
+import TripCard, { FeaturedCard } from '../../components/TripCard/TripCard.jsx'
 import Reveal from '../../components/Reveal/Reveal.jsx'
+import { slug } from '../../utils/slug.js'
 import s from './HomePage.module.css'
 
-export default function TripsGrid({ viagens }) {
+const CHIPS = [
+  { key: 'todas', label: 'Todas' },
+  { key: 'aberta', label: 'Vagas abertas' },
+  { key: 'esgotada', label: 'Esgotadas' },
+]
+
+function matchFilter(viagem, filter) {
+  if (filter === 'aberta') return !viagem.esgotado
+  if (filter === 'esgotada') return !!viagem.esgotado
+  return true
+}
+
+export default function TripsGrid({ viagens, variant, featured }) {
+  const [filter, setFilter] = useState('todas')
+
+  const featuredSlug = featured ? slug(featured.titulo) : null
+  const list = viagens
+    .filter(v => slug(v.titulo) !== featuredSlug)
+    .filter(v => matchFilter(v, filter))
+
   return (
-    <section className={s.destinos} id="viagens">
+    <section className={s.agenda} id="viagens">
       <div className="wrap">
-        <Reveal className={`${s.sectionHead} ${s.destinosHead}`}>
-          <p className="eyebrow">Agenda aberta</p>
-          <h2>Próximas viagens</h2>
-          <p>Escolha um destino e toque para ver o roteiro completo, o que está incluso, fotos e o mapa.</p>
+        {variant === 'B' && featured && (
+          <Reveal className={s.featuredWideWrap}>
+            <FeaturedCard viagem={featured} layout="wide" />
+          </Reveal>
+        )}
+
+        <Reveal className={s.agendaHead}>
+          <div>
+            <p className="eyebrow">Agenda</p>
+            <h2>{variant === 'B' ? 'Todas as viagens' : 'Próximas viagens programadas'}</h2>
+          </div>
+          <div className={s.chips}>
+            {CHIPS.map(c => (
+              <button
+                key={c.key}
+                className={`${s.chip}${filter === c.key ? ' ' + s.chipOn : ''}`}
+                onClick={() => setFilter(c.key)}
+              >
+                {c.label}
+              </button>
+            ))}
+          </div>
         </Reveal>
+
         <div className={s.grid}>
-          {viagens.length === 0 ? (
-            <div className={s.empty}>Nenhuma viagem cadastrada ainda. Em breve, novidades! ✦</div>
+          {list.length === 0 ? (
+            <div className={s.empty}>Nenhuma viagem nesta seleção ainda. Em breve, novidades! ✦</div>
           ) : (
-            viagens.map((v, i) => (
-              <Reveal key={v.titulo} delay={i * 0.08}>
+            list.map((v, i) => (
+              <Reveal key={slug(v.titulo)} delay={i * 0.08}>
                 <TripCard viagem={v} />
               </Reveal>
             ))

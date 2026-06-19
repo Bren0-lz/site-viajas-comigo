@@ -7,7 +7,15 @@ import Lightbox from '../../components/Lightbox/Lightbox.jsx'
 import Reveal from '../../components/Reveal/Reveal.jsx'
 import { slug } from '../../utils/slug.js'
 import { waLink } from '../../utils/waLink.js'
+import { statusMeta, vagasLabel } from '../../utils/viagemMeta.js'
 import s from './TripDetailPage.module.css'
+
+// "Dia 1 — Chegada e check-in" → { num: '1', title: 'Chegada e check-in' }
+function parseDia(linha, i) {
+  const partes = linha.split('—')
+  const title = partes.length > 1 ? partes.slice(1).join('—').trim() : linha.trim()
+  return { num: String(i + 1), title }
+}
 
 export default function TripDetailPage({ viagens, loading }) {
   const { slug: slugParam } = useParams()
@@ -23,9 +31,7 @@ export default function TripDetailPage({ viagens, loading }) {
     return (
       <>
         <Header />
-        <div className={s.notFound}>
-          <p>Carregando viagem…</p>
-        </div>
+        <div className={s.notFound}><p>Carregando viagem…</p></div>
         <Footer />
       </>
     )
@@ -45,157 +51,155 @@ export default function TripDetailPage({ viagens, loading }) {
     )
   }
 
+  const st = statusMeta(viagem)
   const allImages = [viagem.imagem, ...(viagem.galeria || [])].filter(Boolean)
   const msg = `Olá! Tenho interesse na viagem para ${viagem.titulo} (${viagem.data}). Pode me passar mais detalhes?`
+  const heroBg = {
+    backgroundImage: viagem.imagem ? `url('${viagem.imagem}')` : undefined,
+    backgroundPosition: `${viagem.capaPosX ?? 50}% ${viagem.capaPosY ?? 50}%`,
+  }
 
   return (
     <>
       <Header />
 
       <div className="pageFade">
-      <section
-        className={s.hero}
-        style={{
-          '--capa-img': `url('${viagem.imagem}')`,
-          '--capa-pos': `${viagem.capaPosX ?? 50}% ${viagem.capaPosY ?? 50}%`,
-          '--capa-zoom': viagem.capaZoom || 1,
-          ...(viagem.capaCor ? { '--capa-cor': viagem.capaCor } : {}),
-        }}
-        onClick={() => setLbIndex(0)}
-        aria-label="Ver foto"
-      >
-        <div className={`wrap ${s.heroContent}`}>
-          <div className={`${s.badge}${viagem.esgotado ? ' ' + s.esgotado : ''}`}>
-            {viagem.esgotado ? 'Esgotado' : 'Vagas abertas'}
-          </div>
-          <h1>{viagem.titulo}</h1>
-          <div className={s.meta}>
-            {viagem.data}{viagem.local ? ` · ${viagem.local}` : ''}
-          </div>
-        </div>
-        {allImages.length > 1 && (
-          <span className={s.photoCount}>📷 {allImages.length} fotos · toque para ampliar</span>
-        )}
-      </section>
+        <section className={s.top}>
+          <Link to="/#viagens" className={s.back}><i className="ph ph-arrow-left" />Voltar às viagens</Link>
+        </section>
 
-      <div className={s.layout}>
-        <div className={s.main}>
-          {(viagem.detalhes || viagem.descricao) && (
-            <Reveal as="p" className={s.lead}>{viagem.detalhes || viagem.descricao}</Reveal>
-          )}
-
-          {viagem.galeria?.length > 0 && (
-            <Reveal className={s.block}>
-              <h2><span className={s.dot} />Fotos da viagem</h2>
-              <div className={s.galeria}>
-                {viagem.galeria.map((img, i) => (
-                  <div
-                    key={img}
-                    className={`${s.gItem}${i === 0 ? ' ' + s.feat : ''}`}
-                    onClick={() => setLbIndex(allImages.indexOf(img))}
-                  >
-                    <img src={img} alt={viagem.titulo} loading="lazy" decoding="async" />
-                  </div>
-                ))}
-              </div>
-            </Reveal>
-          )}
-
-          {(viagem.inclusos?.length > 0 || viagem.roteiro?.length > 0) && (
-            <div className={s.pair}>
-              {viagem.inclusos?.length > 0 && (
-                <Reveal className={s.block}>
-                  <h2><span className={s.dot} />O que está incluso</h2>
-                  <ul className={s.inclusos}>
-                    {viagem.inclusos.map(item => (
-                      <li key={item}>
-                        <span className={s.ck}>✓</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </Reveal>
-              )}
-
-              {viagem.roteiro?.length > 0 && (
-                <Reveal className={s.block}>
-                  <h2><span className={s.dot} />Roteiro dia a dia</h2>
-                  <ul className={s.roteiro}>
-                    {viagem.roteiro.map(linha => {
-                      const partes = linha.split('—')
-                      return (
-                        <li key={linha}>
-                          {partes.length > 1
-                            ? <><b>{partes[0].trim()}</b> — {partes.slice(1).join('—').trim()}</>
-                            : linha
-                          }
-                        </li>
-                      )
-                    })}
-                  </ul>
-                </Reveal>
-              )}
-            </div>
-          )}
-
-          {viagem.local && (
-            <Reveal className={s.block}>
-              <h2><span className={s.dot} />Onde fica</h2>
-              <p className={s.loc}>📍 {viagem.local}</p>
-              <iframe
-                title={`Mapa de ${viagem.local}`}
-                className={s.mapFrame}
-                loading="lazy"
-                src={`https://www.google.com/maps?q=${encodeURIComponent(viagem.local)}&output=embed`}
-              />
-            </Reveal>
-          )}
-        </div>
-
-        <aside className={s.side}>
-          <Reveal className={s.cardPrice} variant="fade">
-            <small>A partir de</small>
-            <div className={s.val}>R$ {viagem.preco || '—'}</div>
-            <div className={s.per}>por pessoa</div>
-            <ul className={s.facts}>
-              <li><span>Datas</span><b>{viagem.data || 'A definir'}</b></li>
-              <li><span>Vagas</span><b>{viagem.vagas || 'Consultar'}</b></li>
-              {viagem.local && <li><span>Destino</span><b>{viagem.local}</b></li>}
-            </ul>
-
-            {viagem.esgotado ? (
-              <span className="btn btn-ghost" style={{ width: '100%', justifyContent: 'center', opacity: 0.6, cursor: 'default' }}>
-                Esgotado
+        <section className={s.heroWrap}>
+          <div
+            className={s.hero}
+            style={heroBg}
+            onClick={() => allImages.length && setLbIndex(0)}
+            aria-label="Ver foto"
+          >
+            <div className={s.heroScrim} />
+            <div className={s.heroContent}>
+              <span className={s.status} style={{ background: st.bg, color: st.color }}>
+                <span className={s.dot} style={{ background: st.dot }} />{st.label}
               </span>
-            ) : (
-              <a href={waLink(msg)} target="_blank" rel="noopener" className={s.btnWa}>
-                Tenho interesse (WhatsApp)
-              </a>
+              {viagem.local && <div className={s.region}>{viagem.local}</div>}
+              <h1>{viagem.titulo}</h1>
+              <div className={s.meta}>
+                <span><i className="ph ph-calendar-blank" />{viagem.data || 'Datas a definir'}</span>
+                {viagem.local && <span><i className="ph ph-map-pin" />{viagem.local}</span>}
+              </div>
+            </div>
+            {allImages.length > 1 && (
+              <span className={s.photoCount}><i className="ph ph-images" />{allImages.length} fotos · toque para ampliar</span>
+            )}
+          </div>
+        </section>
+
+        <section className={s.layout}>
+          <div className={s.main}>
+            {(viagem.detalhes || viagem.descricao) && (
+              <Reveal className={s.block}>
+                <h2>Sobre a viagem</h2>
+                <p className={s.lead}>{viagem.detalhes || viagem.descricao}</p>
+              </Reveal>
             )}
 
-            <a
-              href="https://instagram.com/viajascomigo"
-              target="_blank"
-              rel="noopener"
-              className={s.btnInsta}
-            >
-              Ver no Instagram
-            </a>
-            <p className={s.reassure}>Sem compromisso — tire suas dúvidas direto com a gente.</p>
-          </Reveal>
-        </aside>
-      </div>
+            {viagem.inclusos?.length > 0 && (
+              <Reveal className={s.block}>
+                <h2>O que está incluído</h2>
+                <div className={s.inclusos}>
+                  {viagem.inclusos.map(item => (
+                    <div key={item} className={s.incItem}>
+                      <span className={s.ck}><i className="ph ph-check" /></span>{item}
+                    </div>
+                  ))}
+                </div>
+              </Reveal>
+            )}
+
+            {viagem.roteiro?.length > 0 && (
+              <Reveal className={s.block}>
+                <h2>Programação dia a dia</h2>
+                <div className={s.timeline}>
+                  {viagem.roteiro.map((linha, i) => {
+                    const d = parseDia(linha, i)
+                    const last = i === viagem.roteiro.length - 1
+                    return (
+                      <div key={linha} className={s.day}>
+                        <div className={s.dayLine}>
+                          <div className={s.dayNum}>{d.num}</div>
+                          {!last && <div className={s.dayBar} />}
+                        </div>
+                        <div className={s.dayBody}>
+                          <div className={s.dayEyebrow}>Dia {d.num}</div>
+                          <div className={s.dayTitle}>{d.title}</div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </Reveal>
+            )}
+
+            {viagem.galeria?.length > 0 && (
+              <Reveal className={s.block}>
+                <h2>Galeria</h2>
+                <div className={s.galeria}>
+                  {viagem.galeria.map(img => (
+                    <div
+                      key={img}
+                      className={s.gItem}
+                      style={{ backgroundImage: `url('${img}')` }}
+                      onClick={() => setLbIndex(allImages.indexOf(img))}
+                    />
+                  ))}
+                </div>
+              </Reveal>
+            )}
+
+            {viagem.local && (
+              <Reveal className={s.block}>
+                <h2>Onde fica</h2>
+                <p className={s.loc}><i className="ph ph-map-pin" />{viagem.local}</p>
+                <iframe
+                  title={`Mapa de ${viagem.local}`}
+                  className={s.mapFrame}
+                  loading="lazy"
+                  src={`https://www.google.com/maps?q=${encodeURIComponent(viagem.local)}&output=embed`}
+                />
+              </Reveal>
+            )}
+          </div>
+
+          <aside className={s.side}>
+            <Reveal className={s.cardPrice} variant="fade">
+              <span className={s.priceLbl}>a partir de</span>
+              <div className={s.priceVal}>R$ {viagem.preco || '—'}</div>
+              <div className={s.priceNote}>por pessoa · parcelamos em até 12x</div>
+              <div className={s.divider} />
+              <ul className={s.facts}>
+                <li><span><i className="ph ph-calendar-blank" />Datas</span><b>{viagem.data || 'A definir'}</b></li>
+                {viagem.local && <li><span><i className="ph ph-map-pin" />Local</span><b>{viagem.local}</b></li>}
+                <li><span><i className="ph ph-users-three" />Vagas</span><b>{vagasLabel(viagem)}</b></li>
+              </ul>
+
+              {viagem.esgotado ? (
+                <span className={s.btnSoldout}>Esgotado</span>
+              ) : (
+                <a href={waLink(msg)} target="_blank" rel="noopener" className={s.btnReserve}>Reservar minha vaga</a>
+              )}
+              <a href={waLink(msg)} target="_blank" rel="noopener" className={s.btnWa}>
+                <i className="ph ph-whatsapp-logo" />Tirar dúvidas no WhatsApp
+              </a>
+              <div className={s.reassure}><i className="ph ph-shield-check" />Reserva sem compromisso</div>
+            </Reveal>
+          </aside>
+        </section>
       </div>
 
       <Footer />
       <WhatsAppButton />
 
       {lbIndex !== null && (
-        <Lightbox
-          images={allImages}
-          initialIndex={lbIndex}
-          onClose={() => setLbIndex(null)}
-        />
+        <Lightbox images={allImages} initialIndex={lbIndex} onClose={() => setLbIndex(null)} />
       )}
     </>
   )
