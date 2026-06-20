@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
 import { waLink } from '../../utils/waLink.js'
 import { FeaturedCard } from '../../components/TripCard/TripCard.jsx'
 import s from './HomePage.module.css'
 
-// Cenas turísticas do Brasil que rodam em sequência no fundo do hero
-const HERO_CLIPS = ['/hero-1.mp4', '/hero-2.mp4', '/hero-3.mp4']
+// Vídeo de fundo do hero, tocado em loop contínuo
+const HERO_VIDEO = '/hero-1.mp4'
 
 function scrollTo(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -23,37 +22,19 @@ function Stats({ light }) {
 }
 
 export default function HeroSection({ variant, featured }) {
-  const [clip, setClip] = useState(0)
-  const videoRefs = useRef([])
-
-  // Toca o clipe ativo e reinicia do começo; o crossfade por opacidade (CSS)
-  // evita o "flash"/pausa que existia ao remontar o <video> a cada troca.
-  useEffect(() => {
-    if (variant !== 'B') return
-    const v = videoRefs.current[clip]
-    if (v) {
-      v.currentTime = 0
-      v.play().catch(() => {})
-    }
-  }, [clip, variant])
-
   if (variant === 'B') {
     return (
       <section className={s.heroB} id="topo">
-        {HERO_CLIPS.map((src, i) => (
-          <video
-            key={src}
-            ref={el => { videoRefs.current[i] = el }}
-            className={`${s.heroVideo}${i === clip ? ' ' + s.heroVideoOn : ''}`}
-            autoPlay={i === 0}
-            muted
-            playsInline
-            preload="auto"
-            onEnded={() => setClip(c => (c + 1) % HERO_CLIPS.length)}
-          >
-            <source src={src} type="video/mp4" />
-          </video>
-        ))}
+        <video
+          className={`${s.heroVideo} ${s.heroVideoOn}`}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+        >
+          <source src={HERO_VIDEO} type="video/mp4" />
+        </video>
         <span className={s.heroOverlay} />
         <div className={s.heroBInner}>
           <h1 className={s.heroBTitle}>
