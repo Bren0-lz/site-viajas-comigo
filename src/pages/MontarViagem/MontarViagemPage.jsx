@@ -9,6 +9,20 @@ import { buildMensagemViagem } from '../../utils/montarViagem.js'
 import { waLink } from '../../utils/waLink.js'
 import s from './MontarViagemPage.module.css'
 
+// Foto do passeio com fallback: se não há imagem ou ela falha ao carregar
+// (CSP, 404, rede), mostra o gradiente em vez do ícone de imagem quebrada.
+function CardFoto({ imagem }) {
+  const [erro, setErro] = useState(false)
+  if (!imagem || erro) {
+    return <span className={s.cardFoto}><span className={s.cardFotoVazia} aria-hidden="true" /></span>
+  }
+  return (
+    <span className={s.cardFoto}>
+      <img src={imagem} alt="" loading="lazy" onError={() => setErro(true)} />
+    </span>
+  )
+}
+
 // Data de hoje no formato YYYY-MM-DD (horário local), usada como mínimo dos campos.
 function hojeISO() {
   const d = new Date()
@@ -177,11 +191,7 @@ export default function MontarViagemPage() {
                       aria-pressed={ativo}
                       onClick={() => toggleSugestao(nome)}
                     >
-                      <span className={s.cardFoto}>
-                        {imagem
-                          ? <img src={imagem} alt="" loading="lazy" />
-                          : <span className={s.cardFotoVazia} aria-hidden="true" />}
-                      </span>
+                      <CardFoto imagem={imagem} />
                       <span className={s.cardNome}>{nome}</span>
                       <span className={s.cardAdd}>{ativo ? '✓ Adicionado' : '+ Adicionar'}</span>
                     </button>
