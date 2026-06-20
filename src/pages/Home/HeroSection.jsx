@@ -1,7 +1,9 @@
 import { useSeamlessLoop } from '../../hooks/useSeamlessLoop.js'
 import s from './HomePage.module.css'
 
-// Vídeo de fundo do hero, tocado em loop contínuo
+// Vídeo de fundo do hero, tocado em loop contínuo.
+// WebM (VP9) é a fonte preferencial; o MP4 (H.264) é fallback de compatibilidade.
+const HERO_VIDEO_WEBM = '/hero-1.webm'
 const HERO_VIDEO = '/hero-1.mp4'
 // Imagem leve mostrada de imediato (LCP) enquanto o vídeo carrega
 const HERO_POSTER = '/hero-poster.webp'
@@ -25,6 +27,7 @@ export default function HeroSection() {
         poster={HERO_POSTER}
         onTimeUpdate={onTimeUpdate}
       >
+        <source src={HERO_VIDEO_WEBM} type="video/webm" />
         <source src={HERO_VIDEO} type="video/mp4" />
       </video>
       <video
@@ -36,6 +39,7 @@ export default function HeroSection() {
         poster={HERO_POSTER}
         onTimeUpdate={onTimeUpdate}
       >
+        <source src={HERO_VIDEO_WEBM} type="video/webm" />
         <source src={HERO_VIDEO} type="video/mp4" />
       </video>
       <span className={s.heroOverlay} />
