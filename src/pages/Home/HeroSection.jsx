@@ -1,4 +1,3 @@
-import { waLink } from '../../utils/waLink.js'
 import s from './HomePage.module.css'
 
 // Vídeo de fundo do hero, tocado em loop contínuo
@@ -33,9 +32,6 @@ export default function HeroSection() {
         <div className={s.heroActions}>
           <a onClick={() => scrollTo('viagens')} href="#viagens" className="btn btn-solid">
             Ver viagens programadas<i className="ph ph-arrow-down" />
-          </a>
-          <a href={waLink()} target="_blank" rel="noopener" className={s.waPulse}>
-            <i className="ph ph-whatsapp-logo" />Falar com consultor
           </a>
         </div>
       </div>
