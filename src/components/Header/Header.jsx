@@ -10,7 +10,16 @@ export default function Header({ overlay = false }) {
 
   useEffect(() => {
     if (!overlay) return
-    const onScroll = () => setScrolled(window.scrollY > 24)
+    let ticking = false
+    // Coalesce os eventos de scroll num único update por frame (evita jank no mobile)
+    const onScroll = () => {
+      if (ticking) return
+      ticking = true
+      window.requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 24)
+        ticking = false
+      })
+    }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)

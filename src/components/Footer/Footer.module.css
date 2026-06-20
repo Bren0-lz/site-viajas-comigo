@@ -5,6 +5,8 @@
     #08234D;
   color: #fff;
   padding: 56px 5vw 28px;
+  /* não deixa o conteúdo final colado na barra/indicador inferior do iPhone */
+  padding-bottom: calc(28px + env(safe-area-inset-bottom));
 }
 
 /* Fio de acento (gradiente da marca) no topo do rodapé */
@@ -164,6 +166,7 @@
 @media (max-width: 760px) {
   .footer {
     padding: 44px 5vw 26px;
+    padding-bottom: calc(26px + env(safe-area-inset-bottom));
   }
 
   .grid {
@@ -173,4 +176,11 @@
 
   .emblem { height: 48px; }
   .wordmark { font-size: 22px; }
+
+  /* área de toque confortável (>=44px) para os links/contatos no celular */
+  .col a {
+    min-height: 44px;
+  }
+
+  .about { max-width: none; }
 }

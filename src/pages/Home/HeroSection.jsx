@@ -3,6 +3,8 @@ import s from './HomePage.module.css'
 
 // Vídeo de fundo do hero, tocado em loop contínuo
 const HERO_VIDEO = '/hero-1.mp4'
+// Imagem leve mostrada de imediato (LCP) enquanto o vídeo carrega
+const HERO_POSTER = '/hero-poster.webp'
 
 function scrollTo(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -20,6 +22,7 @@ export default function HeroSection() {
         muted
         playsInline
         preload="auto"
+        poster={HERO_POSTER}
         onTimeUpdate={onTimeUpdate}
       >
         <source src={HERO_VIDEO} type="video/mp4" />
@@ -29,7 +32,8 @@ export default function HeroSection() {
         className={`${s.heroVideo} ${active === 1 ? s.heroVideoOn : ''}`}
         muted
         playsInline
-        preload="auto"
+        preload="metadata"
+        poster={HERO_POSTER}
         onTimeUpdate={onTimeUpdate}
       >
         <source src={HERO_VIDEO} type="video/mp4" />

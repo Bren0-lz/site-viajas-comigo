@@ -25,6 +25,10 @@
 .visible {
   opacity: 1;
   transform: none;
+  /* libera a camada de composição depois que a animação termina:
+     com dezenas de Reveals na Home, manter will-change ativo pressiona
+     a memória/GPU do celular sem necessidade */
+  will-change: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {

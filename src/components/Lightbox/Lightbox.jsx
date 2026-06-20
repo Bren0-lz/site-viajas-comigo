@@ -15,7 +15,16 @@ export default function Lightbox({ images, initialIndex = 0, onClose }) {
   const nextIdx = (idx + 1) % n
 
   useEffect(() => {
-    function onResize() { setW(window.innerWidth) }
+    let ticking = false
+    // rAF: um único recálculo de largura por frame ao rotacionar/abrir teclado no celular
+    function onResize() {
+      if (ticking) return
+      ticking = true
+      window.requestAnimationFrame(() => {
+        setW(window.innerWidth)
+        ticking = false
+      })
+    }
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
   }, [])

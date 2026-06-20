@@ -125,6 +125,17 @@ iframe {
   scroll-margin-top: var(--header-h);
 }
 
+/* iOS/Safari dá zoom automático ao focar qualquer campo com fonte < 16px,
+   o que desalinha todo o layout. Forçamos 16px nos campos só no mobile,
+   sem afetar o visual em telas maiores. */
+@media (max-width: 768px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
 h1, h2, h3 {
   font-family: 'DM Serif Display', 'Plus Jakarta Sans', serif;
   font-weight: 400;
@@ -186,6 +197,8 @@ a {
   cursor: pointer;
   border: 1px solid rgba(11, 46, 99, 0.14);
   font-family: inherit;
+  /* remove o atraso de ~300ms do toque e o flash de duplo-tap no mobile */
+  touch-action: manipulation;
   transition:
     background 0.25s ease,
     color 0.25s ease,

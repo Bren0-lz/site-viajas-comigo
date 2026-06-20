@@ -360,3 +360,22 @@
   .whyStrip { grid-template-columns: 1fr; }
   .agendaHead { align-items: flex-start; }
 }
+
+@media (max-width: 480px) {
+  .heroB { padding: calc(var(--header-h) + 20px) 18px 36px; }
+  .heroBText { font-size: 15px; }
+  .heroActions { margin-top: 24px; gap: 10px; }
+  .chip { padding: 9px 15px; font-size: 13px; }
+  .agenda { padding: 28px 18px 48px; }
+  .light { padding: 48px 18px; }
+  .cta { padding: 52px 18px; }
+  .whyStripItem { padding: 22px 20px; }
+}
+
+/* Celular deitado: o hero não deve ocupar a tela inteira e travar a rolagem */
+@media (max-height: 500px) and (orientation: landscape) {
+  .heroB {
+    min-height: auto;
+    padding: calc(var(--header-h) + 18px) 5vw 28px;
+  }
+}

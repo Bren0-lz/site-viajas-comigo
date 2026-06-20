@@ -9,6 +9,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  min-height: 44px;
   padding: 10px 18px;
   border-radius: 50px;
   border: 1px solid rgba(11, 46, 99, 0.14);
@@ -106,8 +107,8 @@
 
 .photoCount {
   position: absolute;
-  top: 18px;
-  right: 18px;
+  top: calc(18px + env(safe-area-inset-top));
+  right: calc(18px + env(safe-area-inset-right));
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -440,4 +441,15 @@
   .galeria { grid-template-columns: 1fr 1fr; }
   .heroContent { padding: 24px 22px; }
   .main { gap: 32px; }
+  .hero { min-height: 300px; border-radius: 22px; }
+  .gItem { height: 130px; }
+  .mapFrame { height: 240px; }
+  .block h2 { font-size: 26px; }
+  .priceVal { font-size: 34px; }
+}
+
+@media (max-width: 400px) {
+  .heroContent { padding: 20px 16px; }
+  .hero { min-height: 260px; }
+  .top { padding-top: 18px; }
 }
