@@ -1,0 +1,53 @@
+.wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.lista {
+  position: absolute;
+  z-index: 50;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  max-height: 280px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(11, 46, 99, 0.14);
+}
+
+.opcao {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.opcaoAtiva {
+  background: var(--sand-soft, rgba(255, 122, 69, 0.1));
+}
+
+.opcaoNome {
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 0.96rem;
+}
+
+.opcaoDesc {
+  font-size: 0.82rem;
+  color: var(--muted-l);
+}
+
+.opcaoVazia {
+  padding: 10px 12px;
+  color: var(--muted-l);
+  font-size: 0.9rem;
+}

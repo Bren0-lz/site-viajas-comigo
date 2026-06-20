@@ -2,12 +2,15 @@ import { describe, it, expect, vi } from 'vitest'
 import { buscarSugestoes, normalizarLocal } from './sugestoes.js'
 
 // Cria um fetch falso que responde em sequência conforme a URL chamada.
-function mockFetchOk({ geo, wiki }) {
+function mockFetchOk({ geo, wiki, img }) {
   return vi.fn((url) => {
     if (url.includes('nominatim')) {
       return Promise.resolve({ ok: true, json: () => Promise.resolve(geo) })
     }
-    if (url.includes('wikipedia')) {
+    if (url.includes('prop=pageimages')) {
+      return Promise.resolve({ ok: true, json: () => Promise.resolve(img ?? { query: { pages: {} } }) })
+    }
+    if (url.includes('geosearch')) {
       return Promise.resolve({ ok: true, json: () => Promise.resolve(wiki) })
     }
     return Promise.reject(new Error('URL inesperada: ' + url))
@@ -37,8 +40,42 @@ describe('buscarSugestoes', () => {
     })
     const r = await buscarSugestoes('Paris', fetchImpl)
     expect(r.local).toBe('paris')
-    expect(r.passeios).toEqual([{ nome: 'Torre Eiffel' }, { nome: 'Museu do Louvre' }])
+    // Sem pageid nos resultados, não há busca de thumbnail (imagem: null).
+    expect(r.passeios).toEqual([
+      { nome: 'Torre Eiffel', imagem: null },
+      { nome: 'Museu do Louvre', imagem: null },
+    ])
     expect(fetchImpl).toHaveBeenCalledTimes(2)
+  })
+
+  it('inclui a thumbnail quando há pageid e a Wikipedia retorna imagem', async () => {
+    const fetchImpl = mockFetchOk({
+      geo: GEO_PARIS,
+      wiki: { query: { geosearch: [
+        { title: 'Torre Eiffel', pageid: 111 },
+        { title: 'Museu do Louvre', pageid: 222 },
+      ] } },
+      img: { query: { pages: {
+        111: { thumbnail: { source: 'https://img/torre.jpg' } },
+        222: {}, // sem thumbnail -> imagem null
+      } } },
+    })
+    const r = await buscarSugestoes('Paris', fetchImpl)
+    expect(r.passeios).toEqual([
+      { nome: 'Torre Eiffel', imagem: 'https://img/torre.jpg' },
+      { nome: 'Museu do Louvre', imagem: null },
+    ])
+    expect(fetchImpl).toHaveBeenCalledTimes(3)
+  })
+
+  it('degrada para imagem null quando a busca de thumbnails falha', async () => {
+    const fetchImpl = vi.fn((url) => {
+      if (url.includes('nominatim')) return Promise.resolve({ ok: true, json: () => Promise.resolve(GEO_PARIS) })
+      if (url.includes('prop=pageimages')) return Promise.resolve({ ok: false })
+      return Promise.resolve({ ok: true, json: () => Promise.resolve({ query: { geosearch: [{ title: 'Torre Eiffel', pageid: 111 }] } }) })
+    })
+    const r = await buscarSugestoes('Paris', fetchImpl)
+    expect(r.passeios).toEqual([{ nome: 'Torre Eiffel', imagem: null }])
   })
 
   it('envia User-Agent ao Nominatim (exigido pela política do OSM)', async () => {
@@ -69,7 +106,10 @@ describe('buscarSugestoes', () => {
       ] } },
     })
     const r = await buscarSugestoes('Paris', fetchImpl)
-    expect(r.passeios).toEqual([{ nome: 'Torre Eiffel' }, { nome: 'Arco do Triunfo' }])
+    expect(r.passeios).toEqual([
+      { nome: 'Torre Eiffel', imagem: null },
+      { nome: 'Arco do Triunfo', imagem: null },
+    ])
   })
 
   it('limita a 10 sugestões', async () => {

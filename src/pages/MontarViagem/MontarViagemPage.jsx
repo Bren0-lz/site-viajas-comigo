@@ -2,22 +2,35 @@ import { useMemo, useState } from 'react'
 import Header from '../../components/Header/Header.jsx'
 import Footer from '../../components/Footer/Footer.jsx'
 import Reveal from '../../components/Reveal/Reveal.jsx'
+import Autocomplete from '../../components/Autocomplete/Autocomplete.jsx'
 import { useSugestoes } from '../../hooks/useSugestoes.js'
+import { useCidades } from '../../hooks/useCidades.js'
 import { buildMensagemViagem } from '../../utils/montarViagem.js'
 import { waLink } from '../../utils/waLink.js'
 import s from './MontarViagemPage.module.css'
+
+// Data de hoje no formato YYYY-MM-DD (horário local), usada como mínimo dos campos.
+function hojeISO() {
+  const d = new Date()
+  const mes = String(d.getMonth() + 1).padStart(2, '0')
+  const dia = String(d.getDate()).padStart(2, '0')
+  return `${d.getFullYear()}-${mes}-${dia}`
+}
 
 export default function MontarViagemPage() {
   const [local, setLocal] = useState('')
   const [dataInicio, setDataInicio] = useState('')
   const [dataFim, setDataFim] = useState('')
-  // Passeios escolhidos a partir das sugestões (toggle de chips).
+  // Passeios escolhidos a partir das sugestões (toggle de cards).
   const [selecionados, setSelecionados] = useState([])
   // Passeios digitados manualmente pelo usuário.
   const [personalizados, setPersonalizados] = useState([])
   const [novoPasseio, setNovoPasseio] = useState('')
 
   const { sugestoes, carregando, erro } = useSugestoes(local)
+  const { cidades, carregando: carregandoCidades } = useCidades(local)
+
+  const hoje = hojeISO()
 
   // União sem duplicar (sugeridos marcados + personalizados), preservando ordem.
   const passeios = useMemo(() => {
@@ -32,6 +45,17 @@ export default function MontarViagemPage() {
     return out
   }, [selecionados, personalizados])
 
+  // Sugestões da região que combinam com o que o usuário digita no campo livre
+  // e que ainda não foram escolhidas — viram o dropdown do autocomplete.
+  const opcoesPasseio = useMemo(() => {
+    const termo = novoPasseio.trim().toLowerCase()
+    if (!termo) return []
+    return sugestoes
+      .filter(({ nome }) => nome.toLowerCase().includes(termo))
+      .filter(({ nome }) => !passeios.some(p => p.toLowerCase() === nome.toLowerCase()))
+      .map(({ nome }) => ({ nome }))
+  }, [novoPasseio, sugestoes, passeios])
+
   const mensagem = useMemo(
     () => buildMensagemViagem({ local, dataInicio, dataFim, passeios }),
     [local, dataInicio, dataFim, passeios]
@@ -45,12 +69,16 @@ export default function MontarViagemPage() {
     )
   }
 
-  function adicionarPasseio() {
-    const nome = novoPasseio.trim()
+  function adicionarPasseioNome(nomeBruto) {
+    const nome = (nomeBruto || '').trim()
     if (!nome) return
     const existe = passeios.some(p => p.toLowerCase() === nome.toLowerCase())
     if (!existe) setPersonalizados(prev => [...prev, nome])
     setNovoPasseio('')
+  }
+
+  function adicionarPasseio() {
+    adicionarPasseioNome(novoPasseio)
   }
 
   function removerPasseio(nome) {
@@ -58,16 +86,23 @@ export default function MontarViagemPage() {
     setPersonalizados(prev => prev.filter(p => p !== nome))
   }
 
-  function onNovoPasseioKeyDown(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      adicionarPasseio()
-    }
+  function onChangeInicio(valor) {
+    setDataInicio(valor)
+    // Se o fim ficou anterior ao novo início, descarta o fim.
+    if (dataFim && valor && dataFim < valor) setDataFim('')
+  }
+
+  function onChangeFim(valor) {
+    const minimo = dataInicio || hoje
+    // Ignora datas anteriores ao início (ou a hoje), cobrindo navegadores que
+    // não respeitam o atributo `min`.
+    if (valor && valor < minimo) return
+    setDataFim(valor)
   }
 
   return (
     <>
-      <Header overlay />
+      <Header />
       <main className={`pageFade ${s.page}`}>
         <Reveal className={`wrap ${s.head}`}>
           <p className="eyebrow">Do seu jeito</p>
@@ -82,14 +117,15 @@ export default function MontarViagemPage() {
           {/* Destino */}
           <div className={s.field}>
             <label htmlFor="mv-local">Para onde você quer ir?</label>
-            <input
+            <Autocomplete
               id="mv-local"
-              type="text"
               className={s.input}
-              placeholder="Ex.: Paris, Gramado, Maragogi..."
+              placeholder="Ex.: Rio de Janeiro, Gramado, Maragogi..."
               value={local}
-              onChange={e => setLocal(e.target.value)}
-              autoComplete="off"
+              onChange={setLocal}
+              opcoes={cidades}
+              onSelecionar={cidade => setLocal(cidade.nome)}
+              carregando={carregandoCidades}
             />
           </div>
 
@@ -101,8 +137,9 @@ export default function MontarViagemPage() {
                 id="mv-inicio"
                 type="date"
                 className={s.input}
+                min={hoje}
                 value={dataInicio}
-                onChange={e => setDataInicio(e.target.value)}
+                onChange={e => onChangeInicio(e.target.value)}
               />
             </div>
             <div className={s.field}>
@@ -111,8 +148,9 @@ export default function MontarViagemPage() {
                 id="mv-fim"
                 type="date"
                 className={s.input}
+                min={dataInicio || hoje}
                 value={dataFim}
-                onChange={e => setDataFim(e.target.value)}
+                onChange={e => onChangeFim(e.target.value)}
               />
             </div>
           </div>
@@ -128,18 +166,24 @@ export default function MontarViagemPage() {
               <p className={s.hint}>Nenhuma sugestão encontrada — adicione os seus passeios abaixo.</p>
             )}
             {sugestoes.length > 0 && (
-              <div className={s.chips}>
-                {sugestoes.map(({ nome }) => {
+              <div className={s.cardsGrid}>
+                {sugestoes.map(({ nome, imagem }) => {
                   const ativo = selecionados.includes(nome)
                   return (
                     <button
                       key={nome}
                       type="button"
-                      className={`${s.chip}${ativo ? ' ' + s.chipOn : ''}`}
+                      className={`${s.cardPasseio}${ativo ? ' ' + s.cardOn : ''}`}
                       aria-pressed={ativo}
                       onClick={() => toggleSugestao(nome)}
                     >
-                      {ativo ? '✓ ' : '+ '}{nome}
+                      <span className={s.cardFoto}>
+                        {imagem
+                          ? <img src={imagem} alt="" loading="lazy" />
+                          : <span className={s.cardFotoVazia} aria-hidden="true" />}
+                      </span>
+                      <span className={s.cardNome}>{nome}</span>
+                      <span className={s.cardAdd}>{ativo ? '✓ Adicionado' : '+ Adicionar'}</span>
                     </button>
                   )
                 })}
@@ -151,20 +195,21 @@ export default function MontarViagemPage() {
           <div className={s.field}>
             <label htmlFor="mv-novo">Adicionar um passeio seu</label>
             <div className={s.addRow}>
-              <input
+              <Autocomplete
                 id="mv-novo"
-                type="text"
                 className={s.input}
-                placeholder="Ex.: Jantar com vista para a Torre Eiffel"
+                placeholder="Ex.: Cristo Redentor, Pão de Açúcar..."
                 value={novoPasseio}
-                onChange={e => setNovoPasseio(e.target.value)}
-                onKeyDown={onNovoPasseioKeyDown}
-                autoComplete="off"
+                onChange={setNovoPasseio}
+                opcoes={opcoesPasseio}
+                onSelecionar={opcao => adicionarPasseioNome(opcao.nome)}
+                onEnterLivre={adicionarPasseio}
               />
               <button type="button" className="btn btn-ghost" onClick={adicionarPasseio}>
                 Adicionar
               </button>
             </div>
+            <p className={s.hint}>Dica: digite o nome do ponto turístico (ex.: "Cristo Redentor"), não uma frase.</p>
           </div>
 
           {/* Resumo dos passeios escolhidos */}

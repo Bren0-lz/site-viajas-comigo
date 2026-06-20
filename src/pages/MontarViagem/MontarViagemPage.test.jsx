@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { screen, waitFor } from '@testing-library/react'
+import { screen, waitFor, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { renderWithRouter } from '../../test/renderWithRouter.jsx'
 import MontarViagemPage from './MontarViagemPage.jsx'
@@ -104,5 +104,46 @@ describe('MontarViagemPage', () => {
     await user.click(screen.getByRole('button', { name: /^Adicionar$/i }))
 
     expect(screen.getByText(/Seus passeios \(1\)/i)).toBeInTheDocument()
+  })
+
+  it('impede datas no passado e fim anterior ao início via atributo min', () => {
+    renderWithRouter(<MontarViagemPage />)
+    const hoje = new Date()
+    const iso = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}-${String(hoje.getDate()).padStart(2, '0')}`
+
+    const inicio = screen.getByLabelText(/Início/i)
+    const fim = screen.getByLabelText(/Fim/i)
+    expect(inicio).toHaveAttribute('min', iso)
+    // Sem início escolhido, o fim também não pode ser anterior a hoje.
+    expect(fim).toHaveAttribute('min', iso)
+  })
+
+  it('limpa a data de fim quando o novo início é posterior a ela', () => {
+    renderWithRouter(<MontarViagemPage />)
+
+    const inicio = screen.getByLabelText(/Início/i)
+    const fim = screen.getByLabelText(/Fim/i)
+
+    fireEvent.change(inicio, { target: { value: '2027-01-10' } })
+    fireEvent.change(fim, { target: { value: '2027-01-15' } })
+    expect(fim).toHaveValue('2027-01-15')
+    // O fim passa a ser mínimo do campo fim.
+    expect(fim).toHaveAttribute('min', '2027-01-10')
+
+    // Move o início para depois do fim: o fim é descartado.
+    fireEvent.change(inicio, { target: { value: '2027-02-01' } })
+    expect(fim).toHaveValue('')
+  })
+
+  it('renderiza a foto do passeio quando a sugestão tem imagem', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(
+      jsonResponse({ passeios: [{ nome: 'Cristo Redentor', imagem: 'https://img/cristo.jpg' }] })
+    ))
+    const user = userEvent.setup()
+    renderWithRouter(<MontarViagemPage />)
+
+    await user.type(screen.getByLabelText(/Para onde você quer ir/i), 'Rio de Janeiro')
+    const card = await screen.findByRole('button', { name: /Cristo Redentor/i }, { timeout: 2000 })
+    expect(card.querySelector('img')).toHaveAttribute('src', 'https://img/cristo.jpg')
   })
 })

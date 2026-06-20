@@ -12,7 +12,8 @@ const TITULOS_IGNORADOS = [/^lista d/i, /^categoria:/i, /wikipédia/i]
 
 /**
  * Busca pontos turísticos famosos de um local usando APIs públicas e gratuitas:
- * Nominatim (geocodificação) + Wikipedia GeoSearch (lugares próximos notáveis).
+ * Nominatim (geocodificação) + Wikipedia GeoSearch (lugares próximos notáveis)
+ * + Wikipedia PageImages (foto de cada lugar).
  *
  * Função pura quanto a estado externo: recebe a implementação de fetch por
  * injeção para ser testável sem rede real. Degrada suave — qualquer falha
@@ -20,7 +21,7 @@ const TITULOS_IGNORADOS = [/^lista d/i, /^categoria:/i, /wikipédia/i]
  *
  * @param {string} local
  * @param {typeof fetch} [fetchImpl]
- * @returns {Promise<{ local: string, passeios: { nome: string }[] }>}
+ * @returns {Promise<{ local: string, passeios: { nome: string, imagem: string | null }[] }>}
  */
 export async function buscarSugestoes(local, fetchImpl = fetch) {
   const termo = normalizarLocal(local)
@@ -52,7 +53,7 @@ export async function buscarSugestoes(local, fetchImpl = fetch) {
   // 3) Mapeia títulos -> passeios, filtrando genéricos/duplicados e o próprio
   //    nome do destino. Limita a 10 sugestões para não poluir a interface.
   const vistos = new Set()
-  const passeios = []
+  const escolhidos = []
   for (const item of itens) {
     const nome = typeof item?.title === 'string' ? item.title.trim() : ''
     if (!nome) continue
@@ -61,9 +62,49 @@ export async function buscarSugestoes(local, fetchImpl = fetch) {
     if (termo.includes(chave) || chave.includes(termo)) continue
     if (TITULOS_IGNORADOS.some(rx => rx.test(nome))) continue
     vistos.add(chave)
-    passeios.push({ nome })
-    if (passeios.length >= 10) break
+    escolhidos.push({ nome, pageid: item.pageid })
+    if (escolhidos.length >= 10) break
   }
 
+  if (!escolhidos.length) return { local: termo, passeios: [] }
+
+  // 4) Busca a thumbnail de cada lugar (uma única chamada com todos os pageids).
+  //    Se falhar, os passeios ficam sem imagem (imagem: null).
+  const thumbs = await buscarThumbnails(escolhidos.map(e => e.pageid), fetchImpl)
+  const passeios = escolhidos.map(({ nome, pageid }) => ({
+    nome,
+    imagem: thumbs[pageid] || null,
+  }))
+
   return { local: termo, passeios }
+}
+
+/**
+ * Busca thumbnails da Wikipedia para um conjunto de pageids.
+ * @param {(number|string)[]} pageids
+ * @param {typeof fetch} fetchImpl
+ * @returns {Promise<Record<string, string>>} mapa pageid -> URL da imagem
+ */
+async function buscarThumbnails(pageids, fetchImpl) {
+  const ids = pageids.filter(Boolean)
+  if (!ids.length) return {}
+  try {
+    const url =
+      'https://pt.wikipedia.org/w/api.php?action=query&prop=pageimages' +
+      '&piprop=thumbnail&pithumbsize=320&format=json&origin=*&pageids=' +
+      encodeURIComponent(ids.join('|'))
+    const res = await fetchImpl(url, { headers: { 'User-Agent': USER_AGENT } })
+    if (!res.ok) return {}
+    const data = await res.json()
+    const pages = data?.query?.pages
+    if (!pages || typeof pages !== 'object') return {}
+    const mapa = {}
+    for (const pid of Object.keys(pages)) {
+      const src = pages[pid]?.thumbnail?.source
+      if (src) mapa[pid] = src
+    }
+    return mapa
+  } catch {
+    return {}
+  }
 }
