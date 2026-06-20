@@ -5,6 +5,7 @@ import Reveal from '../../components/Reveal/Reveal.jsx'
 import Autocomplete from '../../components/Autocomplete/Autocomplete.jsx'
 import { useSugestoes } from '../../hooks/useSugestoes.js'
 import { useCidades } from '../../hooks/useCidades.js'
+import { usePasseioBusca } from '../../hooks/usePasseioBusca.js'
 import { buildMensagemViagem } from '../../utils/montarViagem.js'
 import { waLink } from '../../utils/waLink.js'
 import s from './MontarViagemPage.module.css'
@@ -43,6 +44,8 @@ export default function MontarViagemPage() {
 
   const { sugestoes, carregando, erro } = useSugestoes(local)
   const { cidades, carregando: carregandoCidades } = useCidades(local)
+  // Busca real por nome no campo "adicionar um passeio seu" (usa a cidade como contexto).
+  const { resultados: buscaPasseios, carregando: carregandoPasseios } = usePasseioBusca(novoPasseio, local)
 
   const hoje = hojeISO()
 
@@ -59,16 +62,14 @@ export default function MontarViagemPage() {
     return out
   }, [selecionados, personalizados])
 
-  // Sugestões da região que combinam com o que o usuário digita no campo livre
-  // e que ainda não foram escolhidas — viram o dropdown do autocomplete.
+  // Resultados da busca por nome que ainda não foram escolhidos — viram o
+  // dropdown do autocomplete do campo "adicionar um passeio seu".
   const opcoesPasseio = useMemo(() => {
-    const termo = novoPasseio.trim().toLowerCase()
-    if (!termo) return []
-    return sugestoes
-      .filter(({ nome }) => nome.toLowerCase().includes(termo))
+    if (!novoPasseio.trim()) return []
+    return buscaPasseios
       .filter(({ nome }) => !passeios.some(p => p.toLowerCase() === nome.toLowerCase()))
       .map(({ nome }) => ({ nome }))
-  }, [novoPasseio, sugestoes, passeios])
+  }, [novoPasseio, buscaPasseios, passeios])
 
   const mensagem = useMemo(
     () => buildMensagemViagem({ local, dataInicio, dataFim, passeios }),
@@ -214,6 +215,7 @@ export default function MontarViagemPage() {
                 opcoes={opcoesPasseio}
                 onSelecionar={opcao => adicionarPasseioNome(opcao.nome)}
                 onEnterLivre={adicionarPasseio}
+                carregando={carregandoPasseios}
               />
               <button type="button" className="btn btn-ghost" onClick={adicionarPasseio}>
                 Adicionar

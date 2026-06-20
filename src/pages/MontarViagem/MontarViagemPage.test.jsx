@@ -135,6 +135,23 @@ describe('MontarViagemPage', () => {
     expect(fim).toHaveValue('')
   })
 
+  it('busca passeios por nome no campo livre e adiciona o resultado escolhido', async () => {
+    const user = userEvent.setup()
+    renderWithRouter(<MontarViagemPage />)
+
+    // O mock global responde a /api/passeios com Torre Eiffel e Museu do Louvre.
+    await user.type(screen.getByLabelText(/Adicionar um passeio seu/i), 'Mus')
+    const opcao = await screen.findByRole('option', { name: /Museu do Louvre/i }, { timeout: 2000 })
+    await user.click(opcao)
+
+    expect(screen.getByText(/Seus passeios \(1\)/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Remover Museu do Louvre/i })).toBeInTheDocument()
+    expect(global.fetch).toHaveBeenCalledWith(
+      expect.stringContaining('/api/passeios?q=Mus'),
+      expect.any(Object)
+    )
+  })
+
   it('renderiza a foto do passeio quando a sugestão tem imagem', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(
       jsonResponse({ passeios: [{ nome: 'Cristo Redentor', imagem: 'https://img/cristo.jpg' }] })
