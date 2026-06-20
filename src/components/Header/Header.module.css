@@ -6,6 +6,42 @@
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(11, 46, 99, 0.08);
+  transition: background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+/* Modo overlay: navbar sobrepõe o hero (vídeo passa atrás dela) */
+.overlay {
+  position: fixed;
+  left: 0;
+  right: 0;
+}
+
+/* No topo do hero: "invisível", só um scrim sutil para legibilidade */
+.transparent {
+  background: linear-gradient(180deg, rgba(8, 35, 77, 0.45) 0%, rgba(8, 35, 77, 0) 100%);
+  border-bottom-color: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.transparent .wordV,
+.transparent .links,
+.transparent .links > a {
+  color: #fff;
+}
+
+.transparent .tagline {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.transparent .burger span {
+  background: #fff;
+}
+
+.transparent .adminBtn {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
 }
 
 .inner {
@@ -194,6 +230,18 @@
     padding: 14px 4px;
     border-bottom: 1px solid rgba(11, 46, 99, 0.07);
     opacity: 1;
+  }
+
+  /* O painel mobile aberto tem fundo claro: links voltam ao navy mesmo no modo overlay */
+  .transparent .links,
+  .transparent .links > a {
+    color: var(--navy);
+  }
+
+  .transparent .adminBtn {
+    background: #fff;
+    border-color: rgba(11, 46, 99, 0.16);
+    color: var(--navy);
   }
 
   .mobileActions {

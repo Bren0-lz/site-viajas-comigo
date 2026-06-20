@@ -40,7 +40,7 @@ export default function HomePage({ viagens }) {
 
   return (
     <>
-      <Header />
+      <Header overlay={variant === 'B'} />
       <main className="pageFade">
         <HeroSection variant={variant} featured={featured} />
         <TripsGrid viagens={viagens} variant={variant} featured={featured} />

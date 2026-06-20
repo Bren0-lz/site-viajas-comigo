@@ -1,11 +1,22 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { waLink } from '../../utils/waLink.js'
 import s from './Header.module.css'
 
-export default function Header() {
+export default function Header({ overlay = false }) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!overlay) return
+    const onScroll = () => setScrolled(window.scrollY > 24)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [overlay])
+
+  const navClass = `${s.nav}${overlay ? ' ' + s.overlay : ''}${overlay && !scrolled ? ' ' + s.transparent : ''}`
 
   function navTo(hash) {
     setMenuOpen(false)
@@ -20,7 +31,7 @@ export default function Header() {
   }
 
   return (
-    <header className={s.nav}>
+    <header className={navClass}>
       <div className={s.inner}>
         <Link to="/" className={s.brand} aria-label="Viajas Comigo">
           <img src="/logo-emblem.webp" alt="" className={s.emblem} width="220" height="194" decoding="async" />
