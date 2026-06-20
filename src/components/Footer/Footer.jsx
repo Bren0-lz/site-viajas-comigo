@@ -61,9 +61,7 @@ export default function Footer() {
 
           <div className={s.col}>
             <div className={s.colTitle}>Contato</div>
-            <a href="mailto:contato@viajascomigo.com.br"><i className="ph ph-envelope-simple" />contato@viajascomigo.com.br</a>
             <a href="https://instagram.com/viajascomigo" target="_blank" rel="noopener"><i className="ph ph-instagram-logo" />@viajascomigo</a>
-            <span><i className="ph ph-map-pin" />Brasil</span>
           </div>
         </div>
 
