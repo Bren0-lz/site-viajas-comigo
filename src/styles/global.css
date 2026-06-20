@@ -194,7 +194,9 @@ a {
 }
 
 .btn-solid {
-  background: var(--grad-hot);
+  /* gradiente horizontal próprio: em botão largo o --grad-hot (120deg) comprime
+     o magenta no canto direito e parece bugado */
+  background: linear-gradient(90deg, #FFC233, #FF7A45 55%, #E5277E);
   color: #fff;
   border-color: transparent;
   font-weight: 800;
