@@ -57,6 +57,39 @@
   padding: 0;
 }
 
+/* ===== Barra de rolagem personalizada (paleta da marca) ===== */
+/* Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--orange) transparent;
+}
+
+/* Chrome, Edge, Safari e demais navegadores WebKit/Blink */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(11, 46, 99, 0.06);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--grad-hot);
+  border-radius: 50px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--orange);
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 html,
 body {
   width: 100%;
