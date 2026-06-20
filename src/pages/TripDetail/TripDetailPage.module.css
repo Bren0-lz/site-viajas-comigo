@@ -173,7 +173,9 @@
   background: rgba(37, 211, 102, 0.16);
   color: #1FB257;
   flex-shrink: 0;
-  font-size: 15px;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
 }
 
 /* Timeline */

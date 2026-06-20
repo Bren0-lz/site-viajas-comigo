@@ -127,7 +127,7 @@ export default function TripDetailPage({ viagens, loading }) {
                 <div className={s.inclusos}>
                   {viagem.inclusos.map(item => (
                     <div key={item} className={s.incItem}>
-                      <span className={s.ck}><i className="ph ph-check" /></span>{item}
+                      <span className={s.ck}>✓</span>{item}
                     </div>
                   ))}
                 </div>
