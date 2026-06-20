@@ -41,6 +41,8 @@ export default function MontarViagemPage() {
   // Passeios digitados manualmente pelo usuário.
   const [personalizados, setPersonalizados] = useState([])
   const [novoPasseio, setNovoPasseio] = useState('')
+  // Mapa nome(minúsculo) -> imagem, para mostrar a foto também em "Seus passeios".
+  const [imagens, setImagens] = useState({})
 
   const { sugestoes, carregando, erro } = useSugestoes(local)
   const { cidades, carregando: carregandoCidades } = useCidades(local)
@@ -68,7 +70,7 @@ export default function MontarViagemPage() {
     if (!novoPasseio.trim()) return []
     return buscaPasseios
       .filter(({ nome }) => !passeios.some(p => p.toLowerCase() === nome.toLowerCase()))
-      .map(({ nome }) => ({ nome }))
+      .map(({ nome, imagem }) => ({ nome, imagem }))
   }, [novoPasseio, buscaPasseios, passeios])
 
   const mensagem = useMemo(
@@ -78,15 +80,23 @@ export default function MontarViagemPage() {
 
   const podeEnviar = local.trim().length > 0
 
-  function toggleSugestao(nome) {
+  // Guarda a foto associada ao passeio (quando há), para reusar em "Seus passeios".
+  function registrarImagem(nome, imagem) {
+    if (!imagem) return
+    setImagens(prev => ({ ...prev, [nome.toLowerCase()]: imagem }))
+  }
+
+  function toggleSugestao(nome, imagem) {
+    registrarImagem(nome, imagem)
     setSelecionados(prev =>
       prev.includes(nome) ? prev.filter(p => p !== nome) : [...prev, nome]
     )
   }
 
-  function adicionarPasseioNome(nomeBruto) {
+  function adicionarPasseioNome(nomeBruto, imagem) {
     const nome = (nomeBruto || '').trim()
     if (!nome) return
+    registrarImagem(nome, imagem)
     const existe = passeios.some(p => p.toLowerCase() === nome.toLowerCase())
     if (!existe) setPersonalizados(prev => [...prev, nome])
     setNovoPasseio('')
@@ -190,7 +200,7 @@ export default function MontarViagemPage() {
                       type="button"
                       className={`${s.cardPasseio}${ativo ? ' ' + s.cardOn : ''}`}
                       aria-pressed={ativo}
-                      onClick={() => toggleSugestao(nome)}
+                      onClick={() => toggleSugestao(nome, imagem)}
                     >
                       <CardFoto imagem={imagem} />
                       <span className={s.cardNome}>{nome}</span>
@@ -213,7 +223,7 @@ export default function MontarViagemPage() {
                 value={novoPasseio}
                 onChange={setNovoPasseio}
                 opcoes={opcoesPasseio}
-                onSelecionar={opcao => adicionarPasseioNome(opcao.nome)}
+                onSelecionar={opcao => adicionarPasseioNome(opcao.nome, opcao.imagem)}
                 onEnterLivre={adicionarPasseio}
                 carregando={carregandoPasseios}
               />
@@ -228,21 +238,22 @@ export default function MontarViagemPage() {
           {passeios.length > 0 && (
             <div className={s.field}>
               <label>Seus passeios ({passeios.length})</label>
-              <ul className={s.lista}>
+              <div className={s.cardsGrid}>
                 {passeios.map(nome => (
-                  <li key={nome} className={s.itemPasseio}>
-                    <span>{nome}</span>
+                  <div key={nome} className={s.cardSel}>
+                    <CardFoto imagem={imagens[nome.toLowerCase()]} />
+                    <span className={s.cardNome}>{nome}</span>
                     <button
                       type="button"
-                      className={s.remover}
+                      className={s.cardRemover}
                       aria-label={`Remover ${nome}`}
                       onClick={() => removerPasseio(nome)}
                     >
                       ×
                     </button>
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
           )}
 
