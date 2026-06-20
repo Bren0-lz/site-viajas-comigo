@@ -197,6 +197,9 @@ a {
   /* gradiente horizontal próprio: em botão largo o --grad-hot (120deg) comprime
      o magenta no canto direito e parece bugado */
   background: linear-gradient(90deg, #FFC233, #FF7A45 55%, #E5277E);
+  /* confina o fundo ao padding-box: com a borda transparente + clip border-box
+     o gradiente se repetia e vazava um sliver amarelo no canto direito */
+  background-clip: padding-box;
   color: #fff;
   border-color: transparent;
   font-weight: 800;
