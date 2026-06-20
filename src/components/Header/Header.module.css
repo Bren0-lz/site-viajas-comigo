@@ -67,7 +67,7 @@
 }
 
 .emblem {
-  height: 52px;
+  height: 72px;
   width: auto;
   display: block;
 }
@@ -267,5 +267,5 @@
 @media (max-width: 420px) {
   .tagline { font-size: 8px; letter-spacing: 2.5px; }
   .wordmark { font-size: 21px; }
-  .emblem { height: 46px; }
+  .emblem { height: 60px; }
 }
