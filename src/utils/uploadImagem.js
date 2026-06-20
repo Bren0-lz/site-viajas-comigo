@@ -2,7 +2,7 @@
 // O fluxo é "upload assinado": pedimos uma assinatura ao nosso backend
 // (/api/upload-sign, que valida a sessão de admin e guarda o segredo do
 // Cloudinary) e então mandamos o arquivo direto para o Cloudinary — sem
-// passar pela função Netlify, o que evita o limite de tamanho dela.
+// passar pela função serverless, o que evita o limite de tamanho dela.
 
 const TAMANHO_MAX = 10 * 1024 * 1024 // 10 MB
 

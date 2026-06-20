@@ -1,11 +1,3 @@
-import { clientOpcional } from '../lib/store.js'
-
-const json = (statusCode, body) => ({
-  statusCode,
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify(body),
-})
-
 // Normaliza o termo de busca: tira espaços nas pontas, colapsa espaços internos
 // e padroniza em minúsculas (usado como chave de cache e na query).
 export function normalizarLocal(local) {
@@ -13,7 +5,6 @@ export function normalizarLocal(local) {
 }
 
 const USER_AGENT = 'viajas-comigo/1.0 (https://viajascomigo.com)'
-const CACHE_TTL = 60 * 60 * 24 * 30 // 30 dias
 
 // Títulos do Wikipedia que não fazem sentido como "passeio" (entradas
 // administrativas/genéricas). Comparação feita em minúsculas.
@@ -75,36 +66,4 @@ export async function buscarSugestoes(local, fetchImpl = fetch) {
   }
 
   return { local: termo, passeios }
-}
-
-export async function handler(event) {
-  try {
-    if (event.httpMethod !== 'GET') {
-      return { ...json(405, { erro: 'Método não permitido' }), headers: { 'Content-Type': 'application/json', Allow: 'GET' } }
-    }
-
-    const local = normalizarLocal(event.queryStringParameters?.local)
-    if (!local) return json(400, { erro: 'Informe o parâmetro "local".' })
-
-    const redis = clientOpcional()
-    const cacheKey = `sugestoes:${local}`
-
-    // Cache hit.
-    if (redis) {
-      const cached = await redis.get(cacheKey)
-      if (cached && Array.isArray(cached.passeios)) return json(200, cached)
-    }
-
-    const resultado = await buscarSugestoes(local)
-
-    // Só grava no cache quando achou algo, para permitir nova tentativa futura
-    // caso a primeira busca tenha falhado por rede.
-    if (redis && resultado.passeios.length) {
-      try { await redis.set(cacheKey, resultado, { ex: CACHE_TTL }) } catch (_) {}
-    }
-
-    return json(200, resultado)
-  } catch (err) {
-    return json(500, { erro: err.message || 'Erro interno' })
-  }
 }

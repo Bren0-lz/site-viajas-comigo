@@ -46,7 +46,7 @@ function readCookie(cookieHeader, name) {
   return null
 }
 
-// Recebe o cabeçalho Cookie cru (event.headers.cookie) e diz se a sessão é válida.
+// Recebe o cabeçalho Cookie cru (req.headers.cookie) e diz se a sessão é válida.
 export function isAuthed(cookieHeader) {
   return verifySession(readCookie(cookieHeader, COOKIE_NAME))
 }

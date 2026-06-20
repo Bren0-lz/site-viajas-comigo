@@ -4,7 +4,7 @@ Site de viagens em grupo: página inicial, páginas de detalhes de cada viagem e
 painel de administração (`/admin`) para cadastrar e editar as viagens — tudo sem
 precisar mexer em código.
 
-Aplicação **React + Vite** no front-end, com **funções serverless da Netlify** no
+Aplicação **React + Vite** no front-end, com **funções serverless da Vercel** no
 back-end. As viagens ficam guardadas no **Upstash Redis** e as fotos no
 **Cloudinary**. O painel é protegido por senha.
 
@@ -22,16 +22,18 @@ src/                    Aplicação React (o site em si)
   data/                 Dados de apoio do front
   styles/               Estilos globais
 
-netlify/functions/      Back-end (API serverless)
-  login.js              POST /api/login   — valida a senha do painel
-  logout.js             POST /api/logout  — encerra a sessão
-  me.js                 GET  /api/me      — diz se a sessão está autenticada
-  viagens.js            GET/POST /api/viagens — lê e grava as viagens no Redis
+api/                    Back-end (Vercel Serverless Functions — cada arquivo = uma rota /api/*)
+  login.js              POST /api/login     — valida a senha do painel
+  logout.js             POST /api/logout    — encerra a sessão
+  me.js                 GET  /api/me        — diz se a sessão está autenticada
+  viagens.js            GET/PUT /api/viagens — lê e grava as viagens no Redis
   upload-sign.js        Assina o upload das fotos para o Cloudinary
+  sugestoes.js          GET  /api/sugestoes — sugere passeios famosos de um destino
+  _lib/                 Código compartilhado (auth, store/Redis, busca de sugestões)
 
 index.html              Entrada do Vite (monta a aplicação React)
 vite.config.js          Configuração do Vite
-netlify.toml            Build e redirects da Netlify (API + fallback de SPA)
+vercel.json             Headers de segurança + fallback de SPA da Vercel
 public/                 Arquivos estáticos (logos etc.)
 ```
 
@@ -40,8 +42,8 @@ public/                 Arquivos estáticos (logos etc.)
 
 ## Rodando localmente
 
-Pré-requisitos: [Node.js](https://nodejs.org) e a [Netlify CLI](https://docs.netlify.com/cli/get-started/)
-(`npm i -g netlify-cli`).
+Pré-requisitos: [Node.js](https://nodejs.org) e a [Vercel CLI](https://vercel.com/docs/cli)
+(`npm i -g vercel`).
 
 1. Instale as dependências:
    ```bash
@@ -50,13 +52,13 @@ Pré-requisitos: [Node.js](https://nodejs.org) e a [Netlify CLI](https://docs.ne
 2. Copie `.env.example` para `.env` e preencha as variáveis (veja abaixo).
 3. Suba o site **com as funções** (assim o `/admin` e a API funcionam):
    ```bash
-   netlify dev
+   vercel dev
    ```
    Para rodar só o front (sem API), use `npm run dev`.
 
 ## Variáveis de ambiente
 
-Definidas na Netlify em **Site settings → Environment variables** (e em `.env`
+Definidas na Vercel em **Project Settings → Environment Variables** (e em `.env`
 para rodar local). Não usam o prefixo `VITE_`, então nunca vão para o navegador.
 
 | Variável | Para que serve |
@@ -87,15 +89,16 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 
 ## Deploy
 
-O deploy é feito pela Netlify a partir deste repositório:
+O deploy é feito pela Vercel a partir deste repositório:
 
-- **Build:** `npm run build` (definido em `netlify.toml`)
-- **Publish:** `dist/`
-- **Funções:** `netlify/functions/`
-- Redirects (em `netlify.toml`): `/api/*` aponta para as funções e qualquer outra
-  rota cai no `index.html` (o React Router cuida da navegação).
+- **Build:** `npm run build` (preset Vite detectado automaticamente)
+- **Output:** `dist/`
+- **Funções:** cada arquivo em `api/` vira uma rota `/api/*` (Vercel Serverless
+  Functions — detectadas sem configuração).
+- `vercel.json`: aplica os cabeçalhos de segurança (CSP etc.) e o fallback de SPA
+  — qualquer rota fora de `/api` cai no `index.html` (o React Router cuida do resto).
 
-Lembre de cadastrar as variáveis de ambiente acima no painel da Netlify antes do
+Lembre de cadastrar as variáveis de ambiente acima no painel da Vercel antes do
 primeiro deploy.
 
 ## Mapa
