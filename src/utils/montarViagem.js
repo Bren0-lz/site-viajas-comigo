@@ -50,29 +50,21 @@ export function formatarPeriodo(inicio, fim) {
 }
 
 /**
- * Monta a mensagem de WhatsApp concatenando destino, período e passeios.
- * Ignora seções vazias. Retorna texto puro (sem encode).
+ * Monta a mensagem de WhatsApp concatenando destino e período.
+ * Ignora seções vazias. Retorna texto puro (sem encode). Os passeios ficam
+ * por conta da consultora, então não entram na mensagem.
  *
- * @param {{ local?: string, dataInicio?: string, dataFim?: string, passeios?: string[] }} dados
+ * @param {{ local?: string, dataInicio?: string, dataFim?: string }} dados
  * @returns {string}
  */
-export function buildMensagemViagem({ local, dataInicio, dataFim, passeios } = {}) {
+export function buildMensagemViagem({ local, dataInicio, dataFim } = {}) {
   const destino = typeof local === 'string' ? local.trim() : ''
-  const lista = Array.isArray(passeios)
-    ? passeios.map(p => (typeof p === 'string' ? p.trim() : '')).filter(Boolean)
-    : []
   const periodo = formatarPeriodo(dataInicio, dataFim)
 
   const linhas = ['Olá! Montei uma viagem no site da Viajas Comigo e gostaria de um orçamento:', '']
 
   if (destino) linhas.push(`📍 Destino: ${destino}`)
   if (periodo) linhas.push(`🗓️ Período: ${periodo}`)
-
-  if (lista.length) {
-    linhas.push('')
-    linhas.push('🎟️ Passeios desejados:')
-    for (const p of lista) linhas.push(`• ${p}`)
-  }
 
   linhas.push('')
   linhas.push('Podemos conversar sobre os valores?')

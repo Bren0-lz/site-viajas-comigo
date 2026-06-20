@@ -28,8 +28,7 @@ api/                    Back-end (Vercel Serverless Functions — cada arquivo =
   me.js                 GET  /api/me        — diz se a sessão está autenticada
   viagens.js            GET/PUT /api/viagens — lê e grava as viagens no Redis
   upload-sign.js        Assina o upload das fotos para o Cloudinary
-  sugestoes.js          GET  /api/sugestoes — sugere passeios famosos de um destino
-  _lib/                 Código compartilhado (auth, store/Redis, busca de sugestões)
+  _lib/                 Código compartilhado (auth, store/Redis)
 
 index.html              Entrada do Vite (monta a aplicação React)
 vite.config.js          Configuração do Vite

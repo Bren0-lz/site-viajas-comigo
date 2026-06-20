@@ -3,26 +3,10 @@ import Header from '../../components/Header/Header.jsx'
 import Footer from '../../components/Footer/Footer.jsx'
 import Reveal from '../../components/Reveal/Reveal.jsx'
 import Autocomplete from '../../components/Autocomplete/Autocomplete.jsx'
-import { useSugestoes } from '../../hooks/useSugestoes.js'
 import { useCidades } from '../../hooks/useCidades.js'
-import { usePasseioBusca } from '../../hooks/usePasseioBusca.js'
 import { buildMensagemViagem } from '../../utils/montarViagem.js'
 import { waLink } from '../../utils/waLink.js'
 import s from './MontarViagemPage.module.css'
-
-// Foto do passeio com fallback: se não há imagem ou ela falha ao carregar
-// (CSP, 404, rede), mostra o gradiente em vez do ícone de imagem quebrada.
-function CardFoto({ imagem }) {
-  const [erro, setErro] = useState(false)
-  if (!imagem || erro) {
-    return <span className={s.cardFoto}><span className={s.cardFotoVazia} aria-hidden="true" /></span>
-  }
-  return (
-    <span className={s.cardFoto}>
-      <img src={imagem} alt="" loading="lazy" onError={() => setErro(true)} />
-    </span>
-  )
-}
 
 // Data de hoje no formato YYYY-MM-DD (horário local), usada como mínimo dos campos.
 function hojeISO() {
@@ -36,80 +20,17 @@ export default function MontarViagemPage() {
   const [local, setLocal] = useState('')
   const [dataInicio, setDataInicio] = useState('')
   const [dataFim, setDataFim] = useState('')
-  // Passeios escolhidos a partir das sugestões (toggle de cards).
-  const [selecionados, setSelecionados] = useState([])
-  // Passeios digitados manualmente pelo usuário.
-  const [personalizados, setPersonalizados] = useState([])
-  const [novoPasseio, setNovoPasseio] = useState('')
-  // Mapa nome(minúsculo) -> imagem, para mostrar a foto também em "Seus passeios".
-  const [imagens, setImagens] = useState({})
 
-  const { sugestoes, carregando, erro } = useSugestoes(local)
   const { cidades, carregando: carregandoCidades } = useCidades(local)
-  // Busca real por nome no campo "adicionar um passeio seu" (usa a cidade como contexto).
-  const { resultados: buscaPasseios, carregando: carregandoPasseios } = usePasseioBusca(novoPasseio, local)
 
   const hoje = hojeISO()
 
-  // União sem duplicar (sugeridos marcados + personalizados), preservando ordem.
-  const passeios = useMemo(() => {
-    const vistos = new Set()
-    const out = []
-    for (const p of [...selecionados, ...personalizados]) {
-      const chave = p.toLowerCase()
-      if (vistos.has(chave)) continue
-      vistos.add(chave)
-      out.push(p)
-    }
-    return out
-  }, [selecionados, personalizados])
-
-  // Resultados da busca por nome que ainda não foram escolhidos — viram o
-  // dropdown do autocomplete do campo "adicionar um passeio seu".
-  const opcoesPasseio = useMemo(() => {
-    if (!novoPasseio.trim()) return []
-    return buscaPasseios
-      .filter(({ nome }) => !passeios.some(p => p.toLowerCase() === nome.toLowerCase()))
-      .map(({ nome, imagem }) => ({ nome, imagem }))
-  }, [novoPasseio, buscaPasseios, passeios])
-
   const mensagem = useMemo(
-    () => buildMensagemViagem({ local, dataInicio, dataFim, passeios }),
-    [local, dataInicio, dataFim, passeios]
+    () => buildMensagemViagem({ local, dataInicio, dataFim }),
+    [local, dataInicio, dataFim]
   )
 
   const podeEnviar = local.trim().length > 0
-
-  // Guarda a foto associada ao passeio (quando há), para reusar em "Seus passeios".
-  function registrarImagem(nome, imagem) {
-    if (!imagem) return
-    setImagens(prev => ({ ...prev, [nome.toLowerCase()]: imagem }))
-  }
-
-  function toggleSugestao(nome, imagem) {
-    registrarImagem(nome, imagem)
-    setSelecionados(prev =>
-      prev.includes(nome) ? prev.filter(p => p !== nome) : [...prev, nome]
-    )
-  }
-
-  function adicionarPasseioNome(nomeBruto, imagem) {
-    const nome = (nomeBruto || '').trim()
-    if (!nome) return
-    registrarImagem(nome, imagem)
-    const existe = passeios.some(p => p.toLowerCase() === nome.toLowerCase())
-    if (!existe) setPersonalizados(prev => [...prev, nome])
-    setNovoPasseio('')
-  }
-
-  function adicionarPasseio() {
-    adicionarPasseioNome(novoPasseio)
-  }
-
-  function removerPasseio(nome) {
-    setSelecionados(prev => prev.filter(p => p !== nome))
-    setPersonalizados(prev => prev.filter(p => p !== nome))
-  }
 
   function onChangeInicio(valor) {
     setDataInicio(valor)
@@ -133,8 +54,8 @@ export default function MontarViagemPage() {
           <p className="eyebrow">Do seu jeito</p>
           <h1>Monte a sua <span className="gradText">própria viagem</span></h1>
           <p className={s.sub}>
-            Escolha o destino, o período e os passeios. A gente sugere os pontos mais
-            famosos da região e você manda tudo pronto para a nossa consultora no WhatsApp.
+            Escolha o destino e o período e mande tudo pronto para a nossa consultora
+            no WhatsApp. Ela cuida dos passeios e monta o roteiro com você.
           </p>
         </Reveal>
 
@@ -179,83 +100,6 @@ export default function MontarViagemPage() {
               />
             </div>
           </div>
-
-          {/* Sugestões */}
-          <div className={s.field}>
-            <label>Passeios famosos na região</label>
-            {carregando && <p className={s.hint}>Buscando sugestões...</p>}
-            {!carregando && erro && (
-              <p className={s.hint}>Não foi possível buscar sugestões agora. Adicione os passeios manualmente abaixo.</p>
-            )}
-            {!carregando && !erro && local.trim().length >= 3 && sugestoes.length === 0 && (
-              <p className={s.hint}>Nenhuma sugestão encontrada — adicione os seus passeios abaixo.</p>
-            )}
-            {sugestoes.length > 0 && (
-              <div className={s.cardsGrid}>
-                {sugestoes.map(({ nome, imagem }) => {
-                  const ativo = selecionados.includes(nome)
-                  return (
-                    <button
-                      key={nome}
-                      type="button"
-                      className={`${s.cardPasseio}${ativo ? ' ' + s.cardOn : ''}`}
-                      aria-pressed={ativo}
-                      onClick={() => toggleSugestao(nome, imagem)}
-                    >
-                      <CardFoto imagem={imagem} />
-                      <span className={s.cardNome}>{nome}</span>
-                      <span className={s.cardAdd}>{ativo ? '✓ Adicionado' : '+ Adicionar'}</span>
-                    </button>
-                  )
-                })}
-              </div>
-            )}
-          </div>
-
-          {/* Passeio personalizado */}
-          <div className={s.field}>
-            <label htmlFor="mv-novo">Adicionar um passeio seu</label>
-            <div className={s.addRow}>
-              <Autocomplete
-                id="mv-novo"
-                className={s.input}
-                placeholder="Ex.: Cristo Redentor, Pão de Açúcar..."
-                value={novoPasseio}
-                onChange={setNovoPasseio}
-                opcoes={opcoesPasseio}
-                onSelecionar={opcao => adicionarPasseioNome(opcao.nome, opcao.imagem)}
-                onEnterLivre={adicionarPasseio}
-                carregando={carregandoPasseios}
-              />
-              <button type="button" className="btn btn-ghost" onClick={adicionarPasseio}>
-                Adicionar
-              </button>
-            </div>
-            <p className={s.hint}>Dica: digite o nome do ponto turístico (ex.: "Cristo Redentor"), não uma frase.</p>
-          </div>
-
-          {/* Resumo dos passeios escolhidos */}
-          {passeios.length > 0 && (
-            <div className={s.field}>
-              <label>Seus passeios ({passeios.length})</label>
-              <div className={s.cardsGrid}>
-                {passeios.map(nome => (
-                  <div key={nome} className={s.cardSel}>
-                    <CardFoto imagem={imagens[nome.toLowerCase()]} />
-                    <span className={s.cardNome}>{nome}</span>
-                    <button
-                      type="button"
-                      className={s.cardRemover}
-                      aria-label={`Remover ${nome}`}
-                      onClick={() => removerPasseio(nome)}
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
 
           {/* Pré-visualização da mensagem */}
           <div className={s.field}>
