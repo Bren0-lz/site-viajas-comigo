@@ -102,6 +102,22 @@ export default function TripDetailPage({ viagens, loading }) {
               </Reveal>
             )}
 
+            {viagem.galeria?.length > 0 && (
+              <Reveal className={s.block}>
+                <h2>Galeria</h2>
+                <div className={s.galeria}>
+                  {viagem.galeria.map(img => (
+                    <div
+                      key={img}
+                      className={s.gItem}
+                      style={{ backgroundImage: `url('${img}')` }}
+                      onClick={() => setLbIndex(allImages.indexOf(img))}
+                    />
+                  ))}
+                </div>
+              </Reveal>
+            )}
+
             {viagem.inclusos?.length > 0 && (
               <Reveal className={s.block}>
                 <h2>O que está incluído</h2>
@@ -135,22 +151,6 @@ export default function TripDetailPage({ viagens, loading }) {
                       </div>
                     )
                   })}
-                </div>
-              </Reveal>
-            )}
-
-            {viagem.galeria?.length > 0 && (
-              <Reveal className={s.block}>
-                <h2>Galeria</h2>
-                <div className={s.galeria}>
-                  {viagem.galeria.map(img => (
-                    <div
-                      key={img}
-                      className={s.gItem}
-                      style={{ backgroundImage: `url('${img}')` }}
-                      onClick={() => setLbIndex(allImages.indexOf(img))}
-                    />
-                  ))}
                 </div>
               </Reveal>
             )}

@@ -93,7 +93,10 @@ html {
 html,
 body {
   width: 100%;
-  overflow-x: hidden;
+  /* clip (em vez de hidden) corta o overflow horizontal sem criar um
+     contêiner de rolagem — assim o position: sticky da navbar continua
+     funcionando nas páginas internas (ex.: detalhe da viagem) */
+  overflow-x: clip;
 }
 
 html {
