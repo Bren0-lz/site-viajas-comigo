@@ -19,7 +19,7 @@
   color: #fff;
   background: var(--grad-cool); /* base enquanto o vídeo carrega / troca de cena */
   min-height: 100vh;
-  min-height: 100svh; /* desconta a barra do navegador no mobile */
+  min-height: 100dvh; /* preenche toda a tela do celular, com ou sem a barra do navegador */
   display: flex;
   align-items: flex-end; /* conteúdo no canto inferior, vídeo em evidência */
   padding: calc(var(--header-h) + 32px) 5vw 64px;
@@ -31,6 +31,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* enquadra mais à esquerda para o pôr do sol aparecer no recorte vertical do celular */
+  object-position: 32% center;
   z-index: 0;
   opacity: 0;
   transition: opacity 0.8s ease; /* crossfade contínuo entre clipes */
