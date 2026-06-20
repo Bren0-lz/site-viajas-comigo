@@ -129,6 +129,13 @@
   padding: 40px 5vw 70px;
 }
 
+/* ===== Montar minha viagem (seção da Home) ===== */
+.montar {
+  background: #fff;
+  padding: 20px 5vw 80px;
+  border-top: 1px solid var(--line);
+}
+
 .featuredWideWrap {
   display: block;
   max-width: 1200px;
