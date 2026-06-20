@@ -49,9 +49,6 @@ export default function Header({ overlay = false }) {
           <a onClick={() => navTo('contato')} href="#contato">Contato</a>
 
           <div className={s.mobileActions}>
-            <Link to="/admin" className={s.adminBtn} onClick={() => setMenuOpen(false)}>
-              <i className="ph ph-gauge" />Admin
-            </Link>
             <a href={waLink()} target="_blank" rel="noopener" className={s.waBtn} onClick={() => setMenuOpen(false)}>
               <i className="ph ph-whatsapp-logo" />Falar conosco
             </a>
@@ -59,9 +56,6 @@ export default function Header({ overlay = false }) {
         </nav>
 
         <div className={s.actions}>
-          <Link to="/admin" className={s.adminBtn}>
-            <i className="ph ph-gauge" />Admin
-          </Link>
           <a href={waLink()} target="_blank" rel="noopener" className={s.waBtn}>
             <i className="ph ph-whatsapp-logo" />Falar conosco
           </a>
