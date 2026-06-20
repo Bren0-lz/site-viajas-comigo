@@ -65,7 +65,13 @@ export default function TripDetailPage({ viagens, loading }) {
 
       <div className="pageFade">
         <section className={s.top}>
-          <Link to="/#viagens" className={s.back}><i className="ph ph-arrow-left" />Voltar às viagens</Link>
+          <Link to="/#viagens" className={s.back}>
+            <svg className={s.backIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M19 12H5" />
+              <path d="M12 19l-7-7 7-7" />
+            </svg>
+            Voltar às viagens
+          </Link>
         </section>
 
         <section className={s.heroWrap}>
