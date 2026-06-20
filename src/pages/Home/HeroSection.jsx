@@ -56,7 +56,6 @@ export default function HeroSection({ variant, featured }) {
         ))}
         <span className={s.heroOverlay} />
         <div className={s.heroBInner}>
-          <span className={s.badgeB}><i className="ph ph-airplane-tilt" />Agência de viagens em grupo</span>
           <h1 className={s.heroBTitle}>
             O próximo destino do grupo já tem <span className="gradText">data marcada.</span>
           </h1>
