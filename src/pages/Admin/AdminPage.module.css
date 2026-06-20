@@ -276,6 +276,46 @@
 
 .trash:hover { background: #EF4444; color: #fff; border-color: #EF4444; transform: scale(1.06); }
 
+/* Card de destaque (1ª viagem = destaque na home) */
+.cardWrapFeatured .adCard {
+  border-color: rgba(255, 122, 69, 0.55);
+  box-shadow: 0 12px 30px rgba(255, 122, 69, 0.22);
+}
+
+/* Selo / botão de destaque sobre a capa do card */
+.destaqueTag,
+.destaqueBtn {
+  position: absolute;
+  top: 144px;
+  left: 12px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 800;
+  font-family: inherit;
+  line-height: 1;
+}
+
+.destaqueTag {
+  background: var(--grad-hot);
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(255, 122, 69, 0.34);
+}
+
+.destaqueBtn {
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--navy);
+  border: 1px solid rgba(11, 46, 99, 0.16);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.destaqueBtn:hover { border-color: var(--orange); color: var(--orange); transform: translateY(-1px); }
+
 /* Card do admin (mesma cara do site, mas para editar) */
 .adCard {
   display: flex;
@@ -573,7 +613,7 @@
   text-transform: uppercase;
 }
 
-/* Botão "fake" de WhatsApp no preview do editor */
+/* Botões "fake" no preview do editor (espelham a página pública) */
 .fakeWa {
   display: flex;
   align-items: center;
@@ -588,6 +628,24 @@
   font-size: 0.95rem;
   opacity: 0.7;
   margin-top: 11px;
+}
+
+.fakeReserve { background: var(--grad-hot); }
+
+.fakeSoldout {
+  background: rgba(11, 46, 99, 0.1);
+  color: var(--muted-l);
+}
+
+.fakeReassure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  opacity: 0.7;
 }
 
 /* TOAST */

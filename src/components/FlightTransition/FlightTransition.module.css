@@ -13,7 +13,7 @@
   left: -25%;
   width: 150%;
   height: 120%;
-  background: linear-gradient(120deg, var(--navy) 0%, var(--turquoise) 55%, var(--sky) 100%);
+  background: linear-gradient(120deg, var(--sun) 0%, var(--orange) 55%, var(--pink) 100%);
   transform: translateX(-130%) skewX(-12deg);
   animation: skyWipe 1.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }

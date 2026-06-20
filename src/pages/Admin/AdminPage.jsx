@@ -2,7 +2,8 @@ import { useState, useRef, useCallback, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import s from './AdminPage.module.css'
 import t from '../TripDetail/TripDetailPage.module.css'
-import { statusMeta } from '../../utils/viagemMeta.js'
+import { statusMeta, vagasLabel } from '../../utils/viagemMeta.js'
+import { slug } from '../../utils/slug.js'
 import ImageUpload from '../../components/ImageUpload/ImageUpload.jsx'
 
 const NOVA_VIAGEM = {
@@ -21,7 +22,6 @@ const NOVA_VIAGEM = {
   capaPosX: 50,
   capaPosY: 50,
   capaZoom: 1,
-  capaCor: '',
 }
 
 function linhas(v) {
@@ -208,6 +208,7 @@ function Editor({ trip, upd, onError }) {
           style={{
             backgroundImage: trip.imagem ? `url('${trip.imagem}')` : undefined,
             backgroundPosition: `${trip.capaPosX ?? 50}% ${trip.capaPosY ?? 50}%`,
+            backgroundSize: `${100 * (trip.capaZoom || 1)}%`,
           }}
         >
           <div className={t.heroScrim} />
@@ -257,10 +258,15 @@ function Editor({ trip, upd, onError }) {
               <input type="range" min="0" max="100" value={trip.capaPosY ?? 50}
                 onChange={e => upd('capaPosY', Number(e.target.value))} />
             </label>
+            <label className={s.capaCtrl}>
+              <span>Zoom</span>
+              <input type="range" min="1" max="2" step="0.05" value={trip.capaZoom || 1}
+                onChange={e => upd('capaZoom', Number(e.target.value))} />
+            </label>
             <button
               type="button"
               className={s.capaReset}
-              onClick={() => { upd('capaPosX', 50); upd('capaPosY', 50) }}
+              onClick={() => { upd('capaPosX', 50); upd('capaPosY', 50); upd('capaZoom', 1) }}
               title="Voltar ao enquadramento padrão"
             >Resetar</button>
           </div>
@@ -274,33 +280,6 @@ function Editor({ trip, upd, onError }) {
             <p className={t.lead}>
               <EditText v={trip.detalhes} set={x => upd('detalhes', x)} ph="Descrição completa da viagem…" area />
             </p>
-          </div>
-
-          <div className={t.block}>
-            <h2>Fotos da viagem</h2>
-            <div className={s.galeriaUpload}>
-              <ImageUpload
-                multiple
-                label="Adicionar fotos"
-                onUploaded={url => upd('galeria', [...(trip.galeria || []), url])}
-                onError={onError}
-              />
-            </div>
-            {trip.galeria?.length ? (
-              <div className={t.galeria}>
-                {trip.galeria.map((img, i) => (
-                  <div key={img} className={`${t.gItem} ${s.gItemEdit}`}>
-                    <img src={img} alt={trip.titulo} loading="lazy" decoding="async" />
-                    <button
-                      type="button"
-                      className={s.gRemove}
-                      title="Remover esta foto"
-                      onClick={() => upd('galeria', trip.galeria.filter((_, j) => j !== i))}
-                    >×</button>
-                  </div>
-                ))}
-              </div>
-            ) : <p className={s.ph}>Nenhuma foto ainda.</p>}
           </div>
 
           <div className={t.block}>
@@ -337,6 +316,33 @@ function Editor({ trip, upd, onError }) {
           </div>
 
           <div className={t.block}>
+            <h2>Fotos da viagem</h2>
+            <div className={s.galeriaUpload}>
+              <ImageUpload
+                multiple
+                label="Adicionar fotos"
+                onUploaded={url => upd('galeria', [...(trip.galeria || []), url])}
+                onError={onError}
+              />
+            </div>
+            {trip.galeria?.length ? (
+              <div className={t.galeria}>
+                {trip.galeria.map((img, i) => (
+                  <div key={img} className={`${t.gItem} ${s.gItemEdit}`}>
+                    <img src={img} alt={trip.titulo} loading="lazy" decoding="async" />
+                    <button
+                      type="button"
+                      className={s.gRemove}
+                      title="Remover esta foto"
+                      onClick={() => upd('galeria', trip.galeria.filter((_, j) => j !== i))}
+                    >×</button>
+                  </div>
+                ))}
+              </div>
+            ) : <p className={s.ph}>Nenhuma foto ainda.</p>}
+          </div>
+
+          <div className={t.block}>
             <h2>Onde fica</h2>
             <p className={t.loc}><i className="ph ph-map-pin" /><EditText v={trip.local} set={x => upd('local', x)} ph="Cidade e estado" /></p>
             {trip.local && (
@@ -354,7 +360,7 @@ function Editor({ trip, upd, onError }) {
           <div className={t.cardPrice}>
             <span className={t.priceLbl}>a partir de</span>
             <div className={t.priceVal}>R$ <EditText v={trip.preco} set={x => upd('preco', x)} ph="0.000" /></div>
-            <div className={t.priceNote}>por pessoa</div>
+            <div className={t.priceNote}>por pessoa · parcelamos em até 12x</div>
             <div className={t.divider} />
             <ul className={t.facts}>
               <li><span><i className="ph ph-calendar-blank" />Datas</span><b><EditText v={trip.data} set={x => upd('data', x)} ph="A definir" /></b></li>
@@ -367,7 +373,13 @@ function Editor({ trip, upd, onError }) {
               <EditText v={trip.descricao} set={x => upd('descricao', x)} ph="Uma frase chamativa sobre a viagem." area />
             </div>
 
-            <span className={s.fakeWa}><i className="ph ph-whatsapp-logo" />Tenho interesse (WhatsApp)</span>
+            {trip.esgotado ? (
+              <span className={`${s.fakeWa} ${s.fakeSoldout}`}>Esgotado</span>
+            ) : (
+              <span className={`${s.fakeWa} ${s.fakeReserve}`}>Reservar minha vaga</span>
+            )}
+            <span className={s.fakeWa}><i className="ph ph-whatsapp-logo" />Tirar dúvidas no WhatsApp</span>
+            <div className={s.fakeReassure}><i className="ph ph-shield-check" />Reserva sem compromisso</div>
           </div>
         </aside>
       </div>
@@ -412,9 +424,21 @@ function AdminPanel({ viagens, salvarTudo, onLogout }) {
   }
 
   function nova() {
-    setDraft(d => [{ ...NOVA_VIAGEM }, ...d])
+    setDraft(d => [...d, { ...NOVA_VIAGEM }])
     setDirty(true)
-    setEditIndex(0)
+    setEditIndex(draft.length)
+  }
+
+  function tornarDestaque(i, e) {
+    e?.stopPropagation()
+    if (i === 0) return
+    setDraft(d => {
+      const arr = [...d]
+      const [alvo] = arr.splice(i, 1)
+      return [alvo, ...arr]
+    })
+    setDirty(true)
+    toast('Viagem definida como destaque — clique em Salvar alterações para confirmar')
   }
 
   async function salvar() {
@@ -469,26 +493,37 @@ function AdminPanel({ viagens, salvarTudo, onLogout }) {
           <div className={s.cardsBar}>
             <div>
               <h2>Próximas viagens</h2>
-              <p>Clique em uma viagem para editá-la, ou use a lixeira para excluir. As mudanças só vão para o ar quando você clicar em <b>Salvar alterações</b>.</p>
+              <p>Clique em uma viagem para editá-la, ou use a lixeira para excluir. A primeira viagem aparece em <b>destaque</b> na página inicial. As mudanças só vão para o ar quando você clicar em <b>Salvar alterações</b>.</p>
             </div>
             <button type="button" className={s.btnSolid} onClick={nova}><i className="ph ph-plus" />Nova viagem</button>
           </div>
 
           <div className={s.cardsGrid}>
             {draft.map((v, i) => (
-              <div key={i} className={s.cardWrap}>
+              <div key={slug(v.titulo) || i} className={`${s.cardWrap}${i === 0 ? ' ' + s.cardWrapFeatured : ''}`}>
                 <button
                   type="button"
                   className={s.trash}
                   title="Excluir esta viagem"
                   onClick={e => remover(i, e)}
                 ><i className="ph ph-trash" /></button>
+                {i === 0 ? (
+                  <span className={s.destaqueTag}><i className="ph ph-star" />Destaque na home</span>
+                ) : (
+                  <button
+                    type="button"
+                    className={s.destaqueBtn}
+                    title="Mostrar esta viagem em destaque na página inicial"
+                    onClick={e => tornarDestaque(i, e)}
+                  ><i className="ph ph-star" />Tornar destaque</button>
+                )}
                 <div className={s.adCard} onClick={() => setEditIndex(i)} role="button" tabIndex={0}
                   onKeyDown={e => { if (e.key === 'Enter') setEditIndex(i) }}>
                   <div className={s.adMedia}>
                     <div className={s.adBg} style={{
                       backgroundImage: v.imagem ? `url('${v.imagem}')` : undefined,
                       backgroundPosition: `${v.capaPosX ?? 50}% ${v.capaPosY ?? 50}%`,
+                      transform: `scale(${v.capaZoom || 1})`,
                     }} />
                     <span className={`${s.adBadge}${v.esgotado ? ' ' + s.adBadgeNo : ''}`}>
                       {v.esgotado ? 'Esgotado' : 'Vagas abertas'}
@@ -502,7 +537,7 @@ function AdminPanel({ viagens, salvarTudo, onLogout }) {
                       <div className={s.adPrice}>
                         <small>A partir de</small>
                         <b>R$ {v.preco || '—'}</b>
-                        <div className={s.adVagas}>{v.vagas}</div>
+                        <div className={s.adVagas}>{vagasLabel(v)}</div>
                       </div>
                       <span className={s.adEdit}>Editar ✎</span>
                     </div>
