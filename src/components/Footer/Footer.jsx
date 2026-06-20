@@ -5,6 +5,15 @@ import s from './Footer.module.css'
 export default function Footer() {
   const navigate = useNavigate()
 
+  function goTop(e) {
+    e.preventDefault()
+    if (window.location.pathname !== '/') {
+      navigate('/')
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+
   function navTo(hash) {
     if (window.location.pathname !== '/') {
       navigate('/')
@@ -21,9 +30,20 @@ export default function Footer() {
       <div className="wrap">
         <div className={s.grid}>
           <div className={s.brandCol}>
-            <div className={s.logoBox}>
-              <img src="/logo.webp" alt="Viajas Comigo" className={s.logoImg} />
-            </div>
+            <a
+              href="/"
+              className={s.brand}
+              onClick={goTop}
+              aria-label="Viajas Comigo"
+            >
+              <img src="/logo-emblem.webp" alt="" className={s.emblem} width="220" height="194" decoding="async" />
+              <span className={s.word}>
+                <span className={s.wordmark}>
+                  <span className={s.wordV}>Viajas</span><span className="gradText">comigo</span>
+                </span>
+                <span className={s.tagline}>AGÊNCIA DE VIAGENS</span>
+              </span>
+            </a>
             <p className={s.about}>
               Agência de viagens em grupo. A gente cuida de cada detalhe pra você só aproveitar.
             </p>
