@@ -1,3 +1,4 @@
+import { useSeamlessLoop } from '../../hooks/useSeamlessLoop.js'
 import s from './HomePage.module.css'
 
 // Vídeo de fundo do hero, tocado em loop contínuo
@@ -8,15 +9,28 @@ function scrollTo(id) {
 }
 
 export default function HeroSection() {
+  const { videoARef, videoBRef, active, onTimeUpdate } = useSeamlessLoop()
+
   return (
     <section className={s.heroB} id="topo">
       <video
-        className={`${s.heroVideo} ${s.heroVideoOn}`}
+        ref={videoARef}
+        className={`${s.heroVideo} ${active === 0 ? s.heroVideoOn : ''}`}
         autoPlay
-        loop
         muted
         playsInline
         preload="auto"
+        onTimeUpdate={onTimeUpdate}
+      >
+        <source src={HERO_VIDEO} type="video/mp4" />
+      </video>
+      <video
+        ref={videoBRef}
+        className={`${s.heroVideo} ${active === 1 ? s.heroVideoOn : ''}`}
+        muted
+        playsInline
+        preload="auto"
+        onTimeUpdate={onTimeUpdate}
       >
         <source src={HERO_VIDEO} type="video/mp4" />
       </video>
