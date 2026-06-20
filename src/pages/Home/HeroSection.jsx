@@ -24,7 +24,7 @@ export default function HeroSection() {
       <span className={s.heroOverlay} />
       <div className={s.heroBInner}>
         <h1 className={s.heroBTitle}>
-          A viagem já existe. <span className="gradText">Só falta você embarcar.</span>
+          Chega de esperar. <span className="gradText">Sua viagem já tem data.</span>
         </h1>
         <p className={s.heroBText}>
           Pacotes completos com passagem, hospedagem, passeios e ingressos. É só escolher entre
