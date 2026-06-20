@@ -69,6 +69,9 @@ export default function TripDetailPage({ viagens, loading }) {
         </section>
 
         <section className={s.heroWrap}>
+          <span className={s.status} style={{ background: st.bg, color: st.color }}>
+            <span className={s.dot} style={{ background: st.dot }} />{st.label}
+          </span>
           <div
             className={s.hero}
             style={heroBg}
@@ -77,9 +80,6 @@ export default function TripDetailPage({ viagens, loading }) {
           >
             <div className={s.heroScrim} />
             <div className={s.heroContent}>
-              <span className={s.status} style={{ background: st.bg, color: st.color }}>
-                <span className={s.dot} style={{ background: st.dot }} />{st.label}
-              </span>
               {viagem.local && <div className={s.region}>{viagem.local}</div>}
               <h1>{viagem.titulo}</h1>
               <div className={s.meta}>
@@ -87,9 +87,6 @@ export default function TripDetailPage({ viagens, loading }) {
                 {viagem.local && <span><i className="ph ph-map-pin" />{viagem.local}</span>}
               </div>
             </div>
-            {allImages.length > 1 && (
-              <span className={s.photoCount}><i className="ph ph-images" />{allImages.length} fotos · toque para ampliar</span>
-            )}
           </div>
         </section>
 

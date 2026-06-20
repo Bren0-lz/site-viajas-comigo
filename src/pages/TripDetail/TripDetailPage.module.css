@@ -60,6 +60,7 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
+  margin-bottom: 14px;
   padding: 6px 13px;
   border-radius: 50px;
   font-size: 12px;
@@ -79,13 +80,12 @@
   letter-spacing: 1.5px;
   text-transform: uppercase;
   opacity: 0.92;
-  margin-top: 14px;
 }
 
 .heroContent h1 {
   font-family: 'DM Serif Display', serif;
-  font-size: clamp(38px, 5vw, 60px);
-  line-height: 1.02;
+  font-size: clamp(28px, 5vw, 60px);
+  line-height: 1.05;
   margin: 4px 0 12px;
   color: #fff;
 }
@@ -103,21 +103,6 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-}
-
-.photoCount {
-  position: absolute;
-  top: calc(18px + env(safe-area-inset-top));
-  right: calc(18px + env(safe-area-inset-right));
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  background: rgba(8, 28, 62, 0.6);
-  color: #fff;
-  padding: 8px 14px;
-  border-radius: 50px;
-  font-size: 13px;
-  font-weight: 600;
 }
 
 /* ===== Layout em 2 colunas ===== */
@@ -439,7 +424,10 @@
 @media (max-width: 600px) {
   .inclusos { grid-template-columns: 1fr; }
   .galeria { grid-template-columns: 1fr 1fr; }
-  .heroContent { padding: 24px 22px; }
+  .heroContent { padding: 22px 20px; }
+  .heroContent h1 { font-size: 30px; }
+  .region { font-size: 11px; letter-spacing: 1px; }
+  .meta { gap: 16px; font-size: 13px; }
   .main { gap: 32px; }
   .hero { min-height: 300px; border-radius: 22px; }
   .gItem { height: 130px; }
@@ -449,7 +437,8 @@
 }
 
 @media (max-width: 400px) {
-  .heroContent { padding: 20px 16px; }
-  .hero { min-height: 260px; }
+  .heroContent { padding: 18px 16px; }
+  .heroContent h1 { font-size: 26px; }
+  .hero { min-height: 240px; }
   .top { padding-top: 18px; }
 }
