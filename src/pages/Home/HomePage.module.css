@@ -89,10 +89,11 @@
   overflow: hidden;
   color: #fff;
   background: var(--grad-cool); /* base enquanto o vídeo carrega / troca de cena */
-  min-height: 90vh;
+  min-height: 100vh;
+  min-height: 100svh; /* desconta a barra do navegador no mobile */
   display: flex;
-  align-items: center;
-  padding: 96px 5vw 72px;
+  align-items: flex-end; /* conteúdo no canto inferior, vídeo em evidência */
+  padding: calc(var(--header-h) + 32px) 5vw 64px;
 }
 
 .heroVideo {
@@ -102,12 +103,12 @@
   height: 100%;
   object-fit: cover;
   z-index: 0;
-  animation: vc-hero-fade 0.9s ease;
+  opacity: 0;
+  transition: opacity 0.8s ease; /* crossfade contínuo entre clipes */
 }
 
-@keyframes vc-hero-fade {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.heroVideoOn {
+  opacity: 1;
 }
 
 .heroOverlay {
@@ -115,9 +116,11 @@
   inset: 0;
   z-index: 1;
   pointer-events: none;
+  /* Overlay leve: só o suficiente para o texto no canto inferior-esquerdo
+     ficar legível, deixando o vídeo bem visível. */
   background:
-    linear-gradient(90deg, rgba(8, 35, 77, 0.9) 0%, rgba(8, 35, 77, 0.62) 42%, rgba(8, 35, 77, 0.18) 100%),
-    linear-gradient(180deg, rgba(8, 35, 77, 0.35) 0%, rgba(8, 35, 77, 0) 30%, rgba(8, 35, 77, 0.5) 100%);
+    linear-gradient(90deg, rgba(8, 35, 77, 0.55) 0%, rgba(8, 35, 77, 0.25) 45%, rgba(8, 35, 77, 0) 100%),
+    linear-gradient(180deg, rgba(8, 35, 77, 0) 45%, rgba(8, 35, 77, 0.5) 100%);
 }
 
 .heroBInner {
@@ -150,22 +153,22 @@
 .heroBTitle {
   font-family: 'Playfair Display', serif;
   font-weight: 800;
-  font-size: clamp(44px, 6.4vw, 84px);
-  line-height: 1.05;
+  font-size: clamp(30px, 4.2vw, 56px);
+  line-height: 1.08;
   letter-spacing: -0.5px;
-  margin: 22px 0 0;
+  margin: 18px 0 0;
   color: #fff;
-  max-width: 720px;
-  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.35);
+  max-width: 560px;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.45);
 }
 
 .heroBText {
-  font-size: 18px;
-  line-height: 1.7;
-  color: rgba(255, 255, 255, 0.88);
-  max-width: 540px;
-  margin: 22px 0 0;
-  text-shadow: 0 1px 18px rgba(0, 0, 0, 0.3);
+  font-size: 16px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 440px;
+  margin: 16px 0 0;
+  text-shadow: 0 1px 18px rgba(0, 0, 0, 0.4);
 }
 
 .heroB .heroActions {
@@ -493,11 +496,13 @@
   .light { padding: 56px 5vw; }
   .cta { padding: 56px 5vw; }
   .agenda { padding: 32px 5vw 56px; }
-  .heroB { min-height: 82vh; padding: 88px 6vw 56px; }
+  .heroB { padding: calc(var(--header-h) + 24px) 6vw 48px; }
   .heroOverlay {
-    background: linear-gradient(180deg, rgba(8, 35, 77, 0.78) 0%, rgba(8, 35, 77, 0.55) 45%, rgba(8, 35, 77, 0.85) 100%);
+    /* No mobile o texto ocupa mais largura, então reforça um pouco o scrim inferior */
+    background:
+      linear-gradient(180deg, rgba(8, 35, 77, 0.15) 0%, rgba(8, 35, 77, 0) 40%, rgba(8, 35, 77, 0.7) 100%);
   }
-  .heroBTitle { font-size: clamp(38px, 9vw, 56px); }
+  .heroBTitle { font-size: clamp(30px, 8vw, 44px); }
 }
 
 /* Fallback: respeita "reduzir movimento" — esconde o vídeo e usa o gradiente */

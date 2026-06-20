@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { waLink } from '../../utils/waLink.js'
 import { FeaturedCard } from '../../components/TripCard/TripCard.jsx'
 import s from './HomePage.module.css'
@@ -24,21 +24,36 @@ function Stats({ light }) {
 
 export default function HeroSection({ variant, featured }) {
   const [clip, setClip] = useState(0)
+  const videoRefs = useRef([])
+
+  // Toca o clipe ativo e reinicia do começo; o crossfade por opacidade (CSS)
+  // evita o "flash"/pausa que existia ao remontar o <video> a cada troca.
+  useEffect(() => {
+    if (variant !== 'B') return
+    const v = videoRefs.current[clip]
+    if (v) {
+      v.currentTime = 0
+      v.play().catch(() => {})
+    }
+  }, [clip, variant])
 
   if (variant === 'B') {
     return (
       <section className={s.heroB} id="topo">
-        <video
-          key={clip}
-          className={s.heroVideo}
-          autoPlay
-          muted
-          playsInline
-          preload="auto"
-          onEnded={() => setClip(c => (c + 1) % HERO_CLIPS.length)}
-        >
-          <source src={HERO_CLIPS[clip]} type="video/mp4" />
-        </video>
+        {HERO_CLIPS.map((src, i) => (
+          <video
+            key={src}
+            ref={el => { videoRefs.current[i] = el }}
+            className={`${s.heroVideo}${i === clip ? ' ' + s.heroVideoOn : ''}`}
+            autoPlay={i === 0}
+            muted
+            playsInline
+            preload="auto"
+            onEnded={() => setClip(c => (c + 1) % HERO_CLIPS.length)}
+          >
+            <source src={src} type="video/mp4" />
+          </video>
+        ))}
         <span className={s.heroOverlay} />
         <div className={s.heroBInner}>
           <span className={s.badgeB}><i className="ph ph-airplane-tilt" />Agência de viagens em grupo</span>
@@ -57,7 +72,6 @@ export default function HeroSection({ variant, featured }) {
               <i className="ph ph-whatsapp-logo" />Falar com consultor
             </a>
           </div>
-          <Stats light />
         </div>
       </section>
     )

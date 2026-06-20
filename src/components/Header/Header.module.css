@@ -16,9 +16,10 @@
   right: 0;
 }
 
-/* No topo do hero: "invisível", só um scrim sutil para legibilidade */
+/* No topo do hero: totalmente transparente (sem faixa/linha escura).
+   A legibilidade vem de text-shadow nos textos, não de um scrim. */
 .transparent {
-  background: linear-gradient(180deg, rgba(8, 35, 77, 0.45) 0%, rgba(8, 35, 77, 0) 100%);
+  background: transparent;
   border-bottom-color: transparent;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
@@ -30,8 +31,14 @@
   color: #fff;
 }
 
+.transparent .wordV,
+.transparent .links > a {
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
+}
+
 .transparent .tagline {
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
 }
 
 .transparent .burger span {
