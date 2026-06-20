@@ -24,11 +24,11 @@ export default function HeroSection() {
       <span className={s.heroOverlay} />
       <div className={s.heroBInner}>
         <h1 className={s.heroBTitle}>
-          O próximo destino do grupo já tem <span className="gradText">data marcada.</span>
+          A viagem já existe. <span className="gradText">Só falta você embarcar.</span>
         </h1>
         <p className={s.heroBText}>
-          Pacotes completos com passagem, hospedagem, passeios e ingressos. Veja as viagens
-          programadas, escolha a sua e garanta sua vaga.
+          Pacotes completos com passagem, hospedagem, passeios e ingressos. É só escolher entre
+          as viagens programadas e garantir sua vaga — do resto a gente cuida.
         </p>
         <div className={s.heroActions}>
           <a onClick={() => scrollTo('viagens')} href="#viagens" className="btn btn-solid">
