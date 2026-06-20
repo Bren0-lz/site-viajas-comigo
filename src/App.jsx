@@ -6,6 +6,7 @@ import HomePage from './pages/Home/HomePage.jsx'
 
 const TripDetailPage = lazy(() => import('./pages/TripDetail/TripDetailPage.jsx'))
 const AdminPage = lazy(() => import('./pages/Admin/AdminPage.jsx'))
+const MontarViagemPage = lazy(() => import('./pages/MontarViagem/MontarViagemPage.jsx'))
 
 export default function App() {
   const { viagens, loading, addViagem, updateViagem, deleteViagem, restaurar, salvarTudo } = useViagens()
@@ -15,6 +16,7 @@ export default function App() {
     <Suspense fallback={null}>
     <Routes>
       <Route path="/" element={<HomePage viagens={viagens} />} />
+      <Route path="/montar-viagem" element={<MontarViagemPage />} />
       <Route path="/viagem/:slug" element={<TripDetailPage viagens={viagens} loading={loading} />} />
       <Route
         path="/admin"
