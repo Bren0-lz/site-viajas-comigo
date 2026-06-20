@@ -95,10 +95,8 @@
   transform: scale(1.06);
 }
 
-.media .status {
-  position: absolute;
-  top: 14px;
-  left: 14px;
+.body .status {
+  align-self: flex-start;
 }
 
 .price {

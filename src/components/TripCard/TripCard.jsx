@@ -38,7 +38,6 @@ export default function TripCard({ viagem }) {
       <div className={s.media}>
         <div className={s.bg} style={bgStyle(viagem)} />
         <div className={s.scrim} />
-        <StatusBadge viagem={viagem} />
         <div className={s.price}>
           <small>a partir de</small>
           <b>R$ {viagem.preco || '—'}</b>
@@ -50,6 +49,7 @@ export default function TripCard({ viagem }) {
       </div>
 
       <div className={s.body}>
+        <StatusBadge viagem={viagem} />
         <div className={s.meta}><i className="ph ph-calendar-blank" />{viagem.data || 'Datas a definir'}</div>
         {viagem.descricao && <p className={s.desc}>{viagem.descricao}</p>}
         <div className={s.foot}>
