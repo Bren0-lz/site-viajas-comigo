@@ -339,6 +339,24 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
+/* No celular, empilha os botões da CTA com a mesma largura (evita o visual
+   irregular de cada botão se ajustando ao próprio texto) */
+@media (max-width: 600px) {
+  .cta .heroActions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+    gap: 12px;
+  }
+  .cta .heroActions > * {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 /* ===== Responsivo ===== */
 @media (max-width: 980px) {
   .grid { grid-template-columns: 1fr 1fr; }
