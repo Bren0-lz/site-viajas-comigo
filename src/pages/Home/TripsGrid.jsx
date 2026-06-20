@@ -16,7 +16,7 @@ function matchFilter(viagem, filter) {
   return true
 }
 
-export default function TripsGrid({ viagens, variant, featured }) {
+export default function TripsGrid({ viagens, featured }) {
   const [filter, setFilter] = useState('todas')
 
   const featuredSlug = featured ? slug(featured.titulo) : null
@@ -27,7 +27,7 @@ export default function TripsGrid({ viagens, variant, featured }) {
   return (
     <section className={s.agenda} id="viagens">
       <div className="wrap">
-        {variant === 'B' && featured && (
+        {featured && (
           <Reveal className={s.featuredWideWrap}>
             <FeaturedCard viagem={featured} layout="wide" />
           </Reveal>
@@ -36,7 +36,7 @@ export default function TripsGrid({ viagens, variant, featured }) {
         <Reveal className={s.agendaHead}>
           <div>
             <p className="eyebrow">Agenda</p>
-            <h2>{variant === 'B' ? 'Todas as viagens' : 'Próximas viagens programadas'}</h2>
+            <h2>Todas as viagens</h2>
           </div>
           <div className={s.chips}>
             {CHIPS.map(c => (
