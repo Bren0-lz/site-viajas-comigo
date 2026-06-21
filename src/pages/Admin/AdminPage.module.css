@@ -507,20 +507,41 @@
 
 .inlineInput:focus, .inlineArea:focus { outline: none; box-shadow: 0 0 0 3px rgba(255, 122, 69, 0.18); }
 
-/* Seletor de período (saída / chegada) */
-.dateRange { display: flex; flex-wrap: wrap; gap: 12px; }
+/* Seletor de período (saída / chegada): um cartão claro que se destaca sobre a
+   foto de capa, agrupando os dois campos e o botão de concluir na mesma linha. */
+.dateEditPanel {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px 14px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(255, 122, 69, 0.35);
+  box-shadow: 0 18px 40px rgba(11, 46, 99, 0.28);
+  backdrop-filter: blur(4px);
+}
 
-.dateField { display: flex; flex-direction: column; gap: 4px; }
+.dateField { display: flex; flex-direction: column; gap: 5px; }
 
 .dateField > span {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--orange);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
 }
 
 .dateField .inlineInput { min-width: 150px; }
+
+/* O botão "Pronto" alinha pela base, junto aos campos, em vez de flutuar solto. */
+.dateEditDone { align-self: flex-end; }
+
+@media (max-width: 480px) {
+  .dateEditPanel { width: 100%; }
+  .dateField, .dateField .inlineInput { flex: 1 1 100%; min-width: 0; }
+  .dateEditDone { width: 100%; }
+}
 
 /* Campo de preço: não herda os 38px do .priceVal nem o min-width largo.
    A largura vem de um estilo inline em ch (cresce conforme o número digitado). */

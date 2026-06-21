@@ -219,36 +219,34 @@ function EditDateRange({ trip, upd, ph }) {
 
   if (editing) {
     return (
-      <span className={s.editingBlock}>
-        <span className={s.dateRange}>
-          <label className={s.dateField}>
-            <span>Saída</span>
-            <input
-              type="date"
-              className={s.inlineInput}
-              min={hoje}
-              value={inicio}
-              onChange={e => setInicio(e.target.value)}
-            />
-          </label>
-          <label className={s.dateField}>
-            <span>Chegada</span>
-            <input
-              type="date"
-              className={s.inlineInput}
-              min={inicio || hoje}
-              value={fim}
-              onChange={e => setFim(e.target.value)}
-            />
-          </label>
-        </span>
+      <span className={s.dateEditPanel}>
+        <label className={s.dateField}>
+          <span>Saída</span>
+          <input
+            type="date"
+            className={s.inlineInput}
+            min={hoje}
+            value={inicio}
+            onChange={e => setInicio(e.target.value)}
+          />
+        </label>
+        <label className={s.dateField}>
+          <span>Chegada</span>
+          <input
+            type="date"
+            className={s.inlineInput}
+            min={inicio || hoje}
+            value={fim}
+            onChange={e => setFim(e.target.value)}
+          />
+        </label>
         <button
           type="button"
-          className={`${s.pencil} ${s.pencilOk}`}
+          className={`${s.pencil} ${s.pencilOk} ${s.dateEditDone}`}
           onMouseDown={e => e.preventDefault()}
           onClick={() => setEditing(false)}
           title="Pronto"
-        >✓</button>
+        >✓ Pronto</button>
       </span>
     )
   }
