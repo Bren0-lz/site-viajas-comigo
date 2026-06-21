@@ -5,6 +5,9 @@ export default async function handler(req, res) {
   try {
     if (req.method === 'GET') {
       // Leitura pública: o site usa isto para listar as viagens.
+      // Cache na CDN da Vercel: serve sem invocar a function por 5 min;
+      // stale-while-revalidate entrega o cache antigo na hora e revalida em background.
+      res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=86400')
       return res.status(200).json(await getViagens())
     }
 
