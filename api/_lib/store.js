@@ -41,3 +41,24 @@ export async function setViagens(viagens) {
   await client().set(KEY, viagens)
   return viagens
 }
+
+// Hash da senha do admin (alterável pelo painel). Guardado separado das viagens.
+const SENHA_KEY = 'admin_password'
+
+// Lê o hash da senha. Usa o client opcional para "falhar aberto": se o Redis
+// estiver indisponível, retorna null e o login cai para a ADMIN_PASSWORD do env.
+export async function getPasswordHash() {
+  const redis = clientOpcional()
+  if (!redis) return null
+  try {
+    const hash = await redis.get(SENHA_KEY)
+    return typeof hash === 'string' ? hash : null
+  } catch {
+    return null
+  }
+}
+
+export async function setPasswordHash(hash) {
+  if (typeof hash !== 'string' || !hash) throw new Error('Hash inválido')
+  await client().set(SENHA_KEY, hash)
+}

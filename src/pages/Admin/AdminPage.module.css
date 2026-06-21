@@ -985,3 +985,55 @@
   /* Overlay de capa não pode invadir a largura toda do hero. */
   .heroEditWrap { max-width: calc(100% - 28px); font-size: 0.78rem; }
 }
+
+/* ===== MODAL DE TROCA DE SENHA ===== */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(8, 28, 62, 0.5);
+  backdrop-filter: blur(3px);
+}
+
+.modalCard {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 24px;
+  padding: 32px 28px;
+  box-shadow: 0 30px 70px rgba(8, 28, 62, 0.35);
+}
+
+.modalTitle {
+  font-size: 1.3rem;
+  color: var(--navy);
+}
+
+.modalSub {
+  color: var(--muted-l);
+  font-size: 0.92rem;
+  margin: 6px 0 20px;
+}
+
+.modalFields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modalActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+@media (max-width: 480px) {
+  .modalCard { padding: 26px 20px; }
+  .modalActions { flex-direction: column-reverse; align-items: stretch; }
+  .modalActions .btnSolid { justify-content: center; }
+}

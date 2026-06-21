@@ -1,5 +1,6 @@
-import { safeEqual, signSession, sessionCookie } from './_lib/auth.js'
-import { clientOpcional } from './_lib/store.js'
+import { signSession, sessionCookie } from './_lib/auth.js'
+import { clientOpcional, getPasswordHash } from './_lib/store.js'
+import { senhaConfere } from './_lib/senha.js'
 
 // Limite de tentativas de senha por IP, para frear ataques de força bruta.
 const MAX_TENTATIVAS = 8          // tentativas erradas permitidas...
@@ -21,9 +22,11 @@ export default async function handler(req, res) {
     res.setHeader('Allow', 'POST')
     return res.status(405).json({ erro: 'Método não permitido' })
   }
-  const expected = process.env.ADMIN_PASSWORD
-  if (!expected) {
-    return res.status(500).json({ erro: 'ADMIN_PASSWORD não configurada no servidor.' })
+  // A senha vigente pode vir do banco (trocada pelo painel) ou da ADMIN_PASSWORD do
+  // ambiente (semente inicial). Só é erro de configuração se nenhuma das duas existir.
+  const temSenhaSalva = !!(await getPasswordHash())
+  if (!temSenhaSalva && !process.env.ADMIN_PASSWORD) {
+    return res.status(500).json({ erro: 'Nenhuma senha configurada no servidor (defina ADMIN_PASSWORD).' })
   }
 
   // Rate limiting: se o IP já estourou o limite, bloqueia antes de checar a senha.
@@ -46,7 +49,7 @@ export default async function handler(req, res) {
   }
   const senha = (body && body.senha) || ''
 
-  if (!safeEqual(senha, expected)) {
+  if (!(await senhaConfere(senha))) {
     // Conta a tentativa errada e (re)arma a expiração da janela.
     if (redis) {
       try {

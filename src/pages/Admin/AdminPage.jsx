@@ -143,6 +143,110 @@ function LoginScreen({ onSuccess }) {
   )
 }
 
+/* Campo de senha reutilizável: cadeado à esquerda + botão de mostrar/ocultar.
+   Mesmo visual do login. */
+function PasswordField({ value, onChange, placeholder, autoFocus, erro }) {
+  const [mostrar, setMostrar] = useState(false)
+  return (
+    <div className={`${s.loginField} ${erro ? s.loginFieldErro : ''}`}>
+      <svg className={s.loginFieldIcon} viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <rect x="3" y="11" width="18" height="11" rx="2" />
+        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+      </svg>
+      <input
+        className={s.loginInput}
+        type={mostrar ? 'text' : 'password'}
+        value={value}
+        autoFocus={autoFocus}
+        onChange={e => onChange(e.target.value)}
+        placeholder={placeholder}
+      />
+      <button
+        type="button"
+        className={s.loginToggle}
+        onClick={() => setMostrar(v => !v)}
+        aria-label={mostrar ? 'Ocultar senha' : 'Mostrar senha'}
+        title={mostrar ? 'Ocultar senha' : 'Mostrar senha'}
+      >
+        {mostrar ? (
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+            <line x1="1" y1="1" x2="23" y2="23" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+        )}
+      </button>
+    </div>
+  )
+}
+
+/* Modal de troca de senha (admin já autenticado). Exige a senha atual. */
+function SenhaModal({ onClose, onSuccess }) {
+  const [atual, setAtual] = useState('')
+  const [nova, setNova] = useState('')
+  const [confirma, setConfirma] = useState('')
+  const [erro, setErro] = useState('')
+  const [enviando, setEnviando] = useState(false)
+
+  async function enviar(e) {
+    e.preventDefault()
+    setErro('')
+    if (nova.length < 6) {
+      setErro('A nova senha precisa ter pelo menos 6 caracteres.')
+      return
+    }
+    if (nova !== confirma) {
+      setErro('A confirmação não bate com a nova senha.')
+      return
+    }
+    setEnviando(true)
+    try {
+      const res = await fetch('/api/senha', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ senhaAtual: atual, novaSenha: nova }),
+      })
+      if (res.ok) {
+        onSuccess()
+      } else {
+        const data = await res.json().catch(() => ({}))
+        setErro(data.erro || 'Não foi possível alterar a senha.')
+      }
+    } catch {
+      setErro('Não foi possível conectar. Tente de novo.')
+    } finally {
+      setEnviando(false)
+    }
+  }
+
+  return (
+    <div className={s.modalOverlay} onMouseDown={onClose}>
+      <form className={s.modalCard} onSubmit={enviar} onMouseDown={e => e.stopPropagation()}>
+        <h2 className={s.modalTitle}>Alterar senha</h2>
+        <p className={s.modalSub}>Digite sua senha atual e escolha uma nova.</p>
+
+        <div className={s.modalFields}>
+          <PasswordField value={atual} onChange={v => { setAtual(v); setErro('') }} placeholder="Senha atual" autoFocus erro={!!erro} />
+          <PasswordField value={nova} onChange={v => { setNova(v); setErro('') }} placeholder="Nova senha (mín. 6 caracteres)" />
+          <PasswordField value={confirma} onChange={v => { setConfirma(v); setErro('') }} placeholder="Confirmar nova senha" />
+        </div>
+        {erro && <p className={s.loginErro}>{erro}</p>}
+
+        <div className={s.modalActions}>
+          <button type="button" className={s.viewLink} onClick={onClose} disabled={enviando}>Cancelar</button>
+          <button type="submit" className={s.btnSolid} disabled={enviando}>
+            {enviando ? 'Salvando…' : 'Salvar nova senha'}
+          </button>
+        </div>
+      </form>
+    </div>
+  )
+}
+
 export default function AdminPage(props) {
   // null = ainda verificando a sessão no servidor
   const [authed, setAuthed] = useState(null)
@@ -559,6 +663,7 @@ function AdminPanel({ viagens, salvarTudo, onLogout }) {
   const [saving, setSaving] = useState(false)
   const [toastMsg, setToastMsg] = useState('')
   const [toastVisible, setToastVisible] = useState(false)
+  const [senhaAberta, setSenhaAberta] = useState(false)
   const toastTimer = useRef(null)
 
   useEffect(() => {
@@ -648,9 +753,17 @@ function AdminPanel({ viagens, salvarTudo, onLogout }) {
             {saving ? 'Salvando…' : 'Salvar alterações'}
             {dirty && !saving && <span className={s.dirtyDot} aria-hidden="true" />}
           </button>
+          <button type="button" className={s.viewLink} onClick={() => setSenhaAberta(true)}>Alterar senha</button>
           <button type="button" className={s.viewLink} onClick={onLogout}>Sair</button>
         </div>
       </div>
+
+      {senhaAberta && (
+        <SenhaModal
+          onClose={() => setSenhaAberta(false)}
+          onSuccess={() => { setSenhaAberta(false); toast('Senha alterada com sucesso ✓') }}
+        />
+      )}
 
       {trip ? (
         <Editor trip={trip} upd={upd} onError={toast} />

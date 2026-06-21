@@ -16,6 +16,30 @@ export function safeEqual(a, b) {
   return crypto.timingSafeEqual(ha, hb)
 }
 
+// Gera um hash seguro da senha, com salt aleatório, no formato "<salt_hex>:<hash_hex>".
+// Usa scrypt (lento por design) para resistir a ataques de força bruta caso o banco vaze.
+export function hashPassword(senha) {
+  const salt = crypto.randomBytes(16)
+  const hash = crypto.scryptSync(String(senha), salt, 64)
+  return `${salt.toString('hex')}:${hash.toString('hex')}`
+}
+
+// Confere uma senha contra o hash armazenado (formato gerado por hashPassword).
+// Comparação em tempo constante; retorna false se o formato for inválido.
+export function verifyPassword(senha, armazenado) {
+  if (typeof armazenado !== 'string' || !armazenado.includes(':')) return false
+  const [saltHex, hashHex] = armazenado.split(':')
+  let esperado
+  try {
+    esperado = Buffer.from(hashHex, 'hex')
+  } catch {
+    return false
+  }
+  if (esperado.length === 0) return false
+  const atual = crypto.scryptSync(String(senha), Buffer.from(saltHex, 'hex'), esperado.length)
+  return atual.length === esperado.length && crypto.timingSafeEqual(atual, esperado)
+}
+
 // Gera um token de sessão assinado: payload.assinatura
 export function signSession() {
   const payload = Buffer.from(JSON.stringify({ exp: Date.now() + MAX_AGE * 1000 })).toString('base64url')

@@ -27,6 +27,7 @@ api/                    Back-end (Vercel Serverless Functions — cada arquivo =
   logout.js             POST /api/logout    — encerra a sessão
   me.js                 GET  /api/me        — diz se a sessão está autenticada
   viagens.js            GET/PUT /api/viagens — lê e grava as viagens no Redis
+  senha.js              POST /api/senha     — troca a senha do painel (salva no Redis)
   upload-sign.js        Assina o upload das fotos para o Cloudinary
   _lib/                 Código compartilhado (auth, store/Redis)
 
@@ -62,7 +63,7 @@ para rodar local). Não usam o prefixo `VITE_`, então nunca vão para o navegad
 
 | Variável | Para que serve |
 | --- | --- |
-| `ADMIN_PASSWORD` | Senha de acesso ao painel `/admin`. |
+| `ADMIN_PASSWORD` | Senha **inicial** do painel `/admin`. Pode ser trocada pelo próprio painel depois (a nova fica salva no Redis); só vale enquanto você não trocar. |
 | `SESSION_SECRET` | Segredo que assina o cookie de sessão. Gere um valor longo e aleatório. |
 | `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | Banco onde as viagens são salvas. Conta grátis em [upstash.com](https://upstash.com) → database → aba "REST API". |
 | `CLOUDINARY_CLOUD_NAME` / `CLOUDINARY_API_KEY` / `CLOUDINARY_API_SECRET` | Onde ficam as fotos enviadas pelo painel. Conta grátis em [cloudinary.com](https://cloudinary.com) → Dashboard. |
@@ -74,7 +75,8 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 
 ## Como gerenciar as viagens (sem código)
 
-1. Acesse `/admin` e entre com a senha (`ADMIN_PASSWORD`).
+1. Acesse `/admin` e entre com a senha (`ADMIN_PASSWORD` na primeira vez; depois, a
+   senha que você definiu pelo botão **Alterar senha** no topo do painel).
 2. Clique em **+ Nova viagem** ou em uma viagem existente para editar.
 3. Edite cada campo direto na página (lápis ✎). Quanto mais completo (datas, local,
    roteiro, o que está incluso, fotos), melhor a página de detalhes.
