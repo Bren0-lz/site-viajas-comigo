@@ -42,10 +42,55 @@
   margin: 8px 0 22px;
 }
 
+/* Campo de senha: wrapper com ícone de cadeado à esquerda */
+.loginField {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  background: #F4F7FC;
+  border: 1.5px solid #E2E9F3;
+  border-radius: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.loginField:focus-within {
+  background: #fff;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 4px rgba(11, 46, 99, 0.1);
+}
+
+.loginFieldErro {
+  border-color: #E0584C;
+  box-shadow: 0 0 0 4px rgba(224, 88, 76, 0.12);
+}
+
+.loginFieldIcon {
+  color: #9AAAC4;
+  flex-shrink: 0;
+}
+
+.loginField:focus-within .loginFieldIcon { color: var(--navy); }
+
+.loginInput {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 14px 0;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--navy);
+}
+
+.loginInput::placeholder { color: #9AAAC4; }
+
 .loginErro {
   color: #C2362B;
   font-size: 0.84rem;
   margin-top: 10px;
+  text-align: left;
 }
 
 .loginBack {

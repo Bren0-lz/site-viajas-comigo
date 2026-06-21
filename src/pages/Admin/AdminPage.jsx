@@ -97,14 +97,20 @@ function LoginScreen({ onSuccess }) {
         <Brand className={s.loginBrand} />
         <p className={s.loginSub}>Digite a senha para acessar o painel.</p>
 
-        <input
-          className={s.input}
-          type="password"
-          value={senha}
-          autoFocus
-          onChange={e => { setSenha(e.target.value); setErro('') }}
-          placeholder="Senha"
-        />
+        <div className={`${s.loginField} ${erro ? s.loginFieldErro : ''}`}>
+          <svg className={s.loginFieldIcon} viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+          <input
+            className={s.loginInput}
+            type="password"
+            value={senha}
+            autoFocus
+            onChange={e => { setSenha(e.target.value); setErro('') }}
+            placeholder="Senha"
+          />
+        </div>
         {erro && <p className={s.loginErro}>{erro}</p>}
 
         <button type="submit" className={s.btnSolid} style={{ width: '100%', marginTop: 18 }} disabled={enviando}>
