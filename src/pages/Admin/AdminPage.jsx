@@ -687,9 +687,11 @@ function AdminPanel({ viagens, salvarTudo, onLogout }) {
                       backgroundPosition: `${v.capaPosX ?? 50}% ${v.capaPosY ?? 50}%`,
                       transform: `scale(${v.capaZoom || 1})`,
                     }} />
-                    <span className={`${s.adBadge}${v.esgotado ? ' ' + s.adBadgeNo : ''}`}>
-                      {v.esgotado ? 'Esgotado' : 'Vagas abertas'}
-                    </span>
+                    {v.esgotado && (
+                      <span className={`${s.adBadge} ${s.adBadgeNo}`}>
+                        Esgotado
+                      </span>
+                    )}
                   </div>
                   <div className={s.adBody}>
                     <h3>{v.titulo || '(sem título)'}</h3>

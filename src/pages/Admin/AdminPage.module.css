@@ -437,7 +437,11 @@
 }
 
 /* ===== Edição inline ===== */
-.editable, .editing { display: inline-flex; align-items: center; gap: 8px; }
+.editable, .editing { display: inline-flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; }
+
+/* Texto longo sem espaços (ex.: "aaaa...") deve quebrar dentro do cartão em vez
+   de transbordar para fora da caixa. */
+.editable > span:first-child { min-width: 0; overflow-wrap: anywhere; word-break: break-word; }
 
 .editingBlock {
   display: flex;

@@ -7,7 +7,9 @@
   padding: 11px 20px;
   font-size: 0.9rem;
   font-weight: 600;
+  line-height: 1;
   letter-spacing: 0.01em;
+  white-space: nowrap;
   cursor: pointer;
   background: var(--grad-hot);
   color: #fff;
@@ -37,6 +39,7 @@
 }
 
 .icon {
+  display: block;
   width: 18px;
   height: 18px;
   flex: 0 0 auto;
