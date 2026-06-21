@@ -86,6 +86,23 @@
 
 .loginInput::placeholder { color: #9AAAC4; }
 
+.loginToggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: #9AAAC4;
+  cursor: pointer;
+  padding: 6px;
+  margin-right: -6px;
+  border-radius: 8px;
+  transition: color 0.2s, background 0.2s;
+}
+
+.loginToggle:hover { color: var(--navy); background: rgba(11, 46, 99, 0.06); }
+
 .loginErro {
   color: #C2362B;
   font-size: 0.84rem;
