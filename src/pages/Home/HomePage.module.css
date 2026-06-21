@@ -130,6 +130,12 @@
   border-color: transparent;
 }
 
+.igBtn i {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
 .igBtn:hover {
   filter: brightness(1.08);
   color: #fff;
