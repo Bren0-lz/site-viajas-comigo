@@ -214,6 +214,16 @@ function Editor({ trip, upd, onError }) {
   return (
     <div className="pageFade">
       <div className={t.heroWrap}>
+        <button
+          type="button"
+          className={`${t.status} ${s.badgeBtn}`}
+          style={{ background: st.bg, color: st.color }}
+          onClick={() => upd('esgotado', !trip.esgotado)}
+          title="Alternar entre Vagas abertas e Esgotado"
+        >
+          <span className={t.dot} style={{ background: st.dot }} />
+          {trip.esgotado ? 'Esgotado' : 'Vagas abertas'} ✎
+        </button>
         <section
           className={t.hero}
           style={{
@@ -236,16 +246,6 @@ function Editor({ trip, upd, onError }) {
           </div>
 
           <div className={t.heroContent}>
-            <button
-              type="button"
-              className={`${t.status} ${s.badgeBtn}`}
-              style={{ background: st.bg, color: st.color }}
-              onClick={() => upd('esgotado', !trip.esgotado)}
-              title="Alternar entre Vagas abertas e Esgotado"
-            >
-              <span className={t.dot} style={{ background: st.dot }} />
-              {trip.esgotado ? 'Esgotado' : 'Vagas abertas'} ✎
-            </button>
             <h1><EditText v={trip.titulo} set={x => upd('titulo', x)} ph="Título da viagem" /></h1>
             <div className={t.meta}>
               <span><EditText v={trip.data} set={x => upd('data', x)} ph="Datas" /></span>
