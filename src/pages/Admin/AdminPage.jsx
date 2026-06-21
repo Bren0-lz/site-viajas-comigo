@@ -4,6 +4,7 @@ import s from './AdminPage.module.css'
 import t from '../TripDetail/TripDetailPage.module.css'
 import { statusMeta, vagasLabel } from '../../utils/viagemMeta.js'
 import { slug } from '../../utils/slug.js'
+import { formatPreco } from '../../utils/formatPreco.js'
 import ImageUpload from '../../components/ImageUpload/ImageUpload.jsx'
 
 const NOVA_VIAGEM = {
@@ -370,7 +371,7 @@ function Editor({ trip, upd, onError }) {
         <aside className={t.side}>
           <div className={t.cardPrice}>
             <span className={t.priceLbl}>a partir de</span>
-            <div className={t.priceVal}>R$ <EditText v={trip.preco} set={x => upd('preco', x)} ph="0.000" cls={s.priceInput} /></div>
+            <div className={t.priceVal}>R$ <EditText v={trip.preco} set={x => upd('preco', formatPreco(x))} ph="0.000" cls={s.priceInput} /></div>
             <div className={t.priceNote}>por pessoa · parcelamos em até 12x</div>
             <div className={t.divider} />
             <ul className={t.facts}>
