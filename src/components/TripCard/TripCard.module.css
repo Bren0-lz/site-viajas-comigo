@@ -363,11 +363,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 14px;
   margin-top: 6px;
   padding-top: 18px;
   border-top: 1px solid rgba(11, 46, 99, 0.1);
 }
 
+.widedPrice { flex-shrink: 0; }
 .widedPrice small { font-size: 13px; color: #7A8BA8; }
 .widedPrice b {
   display: block;
@@ -376,6 +378,7 @@
   color: var(--navy);
   line-height: 1;
   font-family: 'Plus Jakarta Sans', sans-serif;
+  white-space: nowrap;
 }
 
 .wideBtn {
