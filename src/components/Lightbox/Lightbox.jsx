@@ -63,6 +63,21 @@ export default function Lightbox({ images, initialIndex = 0, onClose }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [n, w, onClose])
 
+  // No celular, o botão "voltar" deve fechar a galeria em vez de sair da página.
+  // Empurramos uma entrada no histórico ao abrir e interceptamos o popstate.
+  useEffect(() => {
+    window.history.pushState({ lightbox: true }, '')
+    function onPop() { onClose() }
+    window.addEventListener('popstate', onPop)
+    return () => {
+      window.removeEventListener('popstate', onPop)
+      // Se fechou pelo X/ESC/overlay (entrada extra ainda no topo), removemos ela.
+      // Se fechou pelo "voltar", o navegador já consumiu a entrada — não mexemos.
+      if (window.history.state?.lightbox) window.history.back()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   function onTouchStart(e) {
     if (dirRef.current !== 0) return
     const t = e.changedTouches[0]
