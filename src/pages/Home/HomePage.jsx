@@ -9,7 +9,9 @@ import MontarViagemForm from '../MontarViagem/MontarViagemForm.jsx'
 import s from './HomePage.module.css'
 
 export default function HomePage({ viagens }) {
-  const featured = viagens[0] || null
+  // Destaque = viagem marcada no admin (flag `destaque`). Se nenhuma estiver
+  // marcada, cai para a primeira da lista (retrocompatível com dados antigos).
+  const featured = viagens.find(v => v.destaque) || viagens[0] || null
 
   return (
     <>

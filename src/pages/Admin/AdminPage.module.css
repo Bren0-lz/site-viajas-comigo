@@ -28,26 +28,12 @@
   box-shadow: 0 30px 70px rgba(8, 28, 62, 0.3);
 }
 
-.loginLogo {
-  display: inline-block;
-  background: #fff;
-  border-radius: 16px;
-  padding: 6px 10px;
-}
-
-.loginLogo img {
-  height: 56px;
-  width: auto;
-  display: block;
-}
-
-.loginTitle {
-  font-size: 0.72rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--orange);
-  font-weight: 700;
-  margin-top: 16px;
+.loginBrand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 6px;
 }
 
 .loginSub {
@@ -89,17 +75,31 @@
   z-index: 10;
 }
 
-.brand { display: flex; align-items: center; gap: 10px; }
-.brandLink { display: flex; align-items: center; }
-.brandImg { display: block; height: 46px; width: auto; }
+.brand { display: flex; align-items: center; gap: 11px; }
 
-.tag {
-  font-size: 0.72rem;
-  letter-spacing: 0.16em;
+/* Lockup de marca (emblema + wordmark), reutilizado no login e na topbar */
+.brandEmblem { display: block; height: 44px; width: auto; flex-shrink: 0; }
+
+.brandWord { display: flex; flex-direction: column; line-height: 1.05; }
+
+.brandName {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.35rem;
+  color: var(--navy);
+  letter-spacing: -0.01em;
+}
+
+.brandTag {
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #7A8BA8;
   font-weight: 700;
+  margin-top: 2px;
 }
+
+.loginBrand .brandEmblem { height: 52px; }
+.loginBrand .brandName { font-size: 1.6rem; }
 
 .topActions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
@@ -275,6 +275,34 @@
 }
 
 .trash:hover { background: #EF4444; color: #fff; border-color: #EF4444; transform: scale(1.06); }
+
+/* Setas de reordenação (a ordem aqui é a ordem na home) */
+.orderCtrls {
+  position: absolute;
+  top: 58px;
+  right: 12px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.orderBtn {
+  width: 32px;
+  height: 28px;
+  border-radius: 9px;
+  border: 1px solid rgba(11, 46, 99, 0.16);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--navy);
+  font-size: 14px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: 0.2s;
+}
+
+.orderBtn:hover:not(:disabled) { border-color: var(--orange); color: var(--orange); }
+.orderBtn:disabled { opacity: 0.4; cursor: default; }
 
 /* Card de destaque (1ª viagem = destaque na home) */
 .cardWrapFeatured .adCard {

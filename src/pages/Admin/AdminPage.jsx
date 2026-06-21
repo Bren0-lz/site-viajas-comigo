@@ -19,9 +19,23 @@ const NOVA_VIAGEM = {
   roteiro: [],
   galeria: [],
   esgotado: false,
+  destaque: false,
   capaPosX: 50,
   capaPosY: 50,
   capaZoom: 1,
+}
+
+/* Marca de identidade do painel (mesmo lockup do site público). */
+function Brand({ as: As = 'div', className, ...rest }) {
+  return (
+    <As className={className} {...rest}>
+      <img src="/logo-emblem.webp" alt="" className={s.brandEmblem} width="220" height="194" decoding="async" />
+      <span className={s.brandWord}>
+        <span className={s.brandName}>Viajas<span className="gradText">comigo</span></span>
+        <span className={s.brandTag}>Painel administrativo</span>
+      </span>
+    </As>
+  )
 }
 
 function linhas(v) {
@@ -62,11 +76,8 @@ function LoginScreen({ onSuccess }) {
   return (
     <div className={s.loginPage}>
       <form className={s.loginCard} onSubmit={entrar}>
-        <div className={s.loginLogo}>
-          <img src="/logo.webp" alt="Viajas Comigo" />
-        </div>
-        <p className={s.loginTitle}>Painel de viagens</p>
-        <p className={s.loginSub}>Digite a senha para acessar.</p>
+        <Brand className={s.loginBrand} />
+        <p className={s.loginSub}>Digite a senha para acessar o painel.</p>
 
         <input
           className={s.input}
@@ -429,16 +440,25 @@ function AdminPanel({ viagens, salvarTudo, onLogout }) {
     setEditIndex(draft.length)
   }
 
-  function tornarDestaque(i, e) {
+  // Marca UMA viagem como destaque (e desmarca as demais), sem mexer na ordem.
+  function definirDestaque(i, e) {
     e?.stopPropagation()
-    if (i === 0) return
-    setDraft(d => {
-      const arr = [...d]
-      const [alvo] = arr.splice(i, 1)
-      return [alvo, ...arr]
-    })
+    setDraft(d => d.map((v, j) => ({ ...v, destaque: j === i })))
     setDirty(true)
     toast('Viagem definida como destaque — clique em Salvar alterações para confirmar')
+  }
+
+  // Troca a viagem de posição na agenda (a ordem aqui é a ordem na home).
+  function mover(i, dir, e) {
+    e?.stopPropagation()
+    const j = i + dir
+    if (j < 0 || j >= draft.length) return
+    setDraft(d => {
+      const arr = [...d]
+      ;[arr[i], arr[j]] = [arr[j], arr[i]]
+      return arr
+    })
+    setDirty(true)
   }
 
   async function salvar() {
@@ -457,16 +477,16 @@ function AdminPanel({ viagens, salvarTudo, onLogout }) {
   const trip = editIndex !== null ? draft[editIndex] : null
   const abertas = draft.filter(v => !v.esgotado).length
   const esgotadas = draft.filter(v => v.esgotado).length
+  // Espelha a regra da home: viagem marcada como destaque ou, na falta, a primeira.
+  const destaqueIdx = (() => {
+    const i = draft.findIndex(v => v.destaque)
+    return i >= 0 ? i : (draft.length ? 0 : -1)
+  })()
 
   return (
     <div className={s.page}>
       <div className={s.topbar}>
-        <div className={s.brand}>
-          <Link to="/" className={s.brandLink} aria-label="Viajas Comigo">
-            <img src="/logo.webp" alt="Viajas Comigo" className={s.brandImg} />
-          </Link>
-          <span className={s.tag}>Painel de viagens</span>
-        </div>
+        <Brand as={Link} to="/" className={s.brand} aria-label="Viajas Comigo — ir ao site" />
         <div className={s.topActions}>
           {trip && (
             <button type="button" className={s.viewLink} onClick={() => setEditIndex(null)}>← Voltar aos cards</button>
@@ -493,28 +513,44 @@ function AdminPanel({ viagens, salvarTudo, onLogout }) {
           <div className={s.cardsBar}>
             <div>
               <h2>Próximas viagens</h2>
-              <p>Clique em uma viagem para editá-la, ou use a lixeira para excluir. A primeira viagem aparece em <b>destaque</b> na página inicial. As mudanças só vão para o ar quando você clicar em <b>Salvar alterações</b>.</p>
+              <p>Clique em uma viagem para <b>editá-la</b>, ou na lixeira para excluir. Use a <b>estrela ★</b> para escolher qual viagem aparece em <b>destaque</b> na página inicial. As mudanças só vão para o ar quando você clicar em <b>Salvar alterações</b>.</p>
             </div>
             <button type="button" className={s.btnSolid} onClick={nova}><i className="ph ph-plus" />Nova viagem</button>
           </div>
 
           <div className={s.cardsGrid}>
             {draft.map((v, i) => (
-              <div key={slug(v.titulo) || i} className={`${s.cardWrap}${i === 0 ? ' ' + s.cardWrapFeatured : ''}`}>
+              <div key={slug(v.titulo) || i} className={`${s.cardWrap}${i === destaqueIdx ? ' ' + s.cardWrapFeatured : ''}`}>
+                <div className={s.orderCtrls}>
+                  <button
+                    type="button"
+                    className={s.orderBtn}
+                    title="Mover para cima (aparece antes na home)"
+                    disabled={i === 0}
+                    onClick={e => mover(i, -1, e)}
+                  ><i className="ph ph-arrow-up" /></button>
+                  <button
+                    type="button"
+                    className={s.orderBtn}
+                    title="Mover para baixo (aparece depois na home)"
+                    disabled={i === draft.length - 1}
+                    onClick={e => mover(i, 1, e)}
+                  ><i className="ph ph-arrow-down" /></button>
+                </div>
                 <button
                   type="button"
                   className={s.trash}
                   title="Excluir esta viagem"
                   onClick={e => remover(i, e)}
                 ><i className="ph ph-trash" /></button>
-                {i === 0 ? (
-                  <span className={s.destaqueTag}><i className="ph ph-star" />Destaque na home</span>
+                {i === destaqueIdx ? (
+                  <span className={s.destaqueTag}><i className="ph ph-star-fill" />Destaque na home</span>
                 ) : (
                   <button
                     type="button"
                     className={s.destaqueBtn}
                     title="Mostrar esta viagem em destaque na página inicial"
-                    onClick={e => tornarDestaque(i, e)}
+                    onClick={e => definirDestaque(i, e)}
                   ><i className="ph ph-star" />Tornar destaque</button>
                 )}
                 <div className={s.adCard} onClick={() => setEditIndex(i)} role="button" tabIndex={0}
