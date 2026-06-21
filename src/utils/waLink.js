@@ -1,4 +1,4 @@
-const WHATSAPP = '5599999999999'
+const WHATSAPP = '5527997499609'
 const MSG_PADRAO = 'Olá! Vim pelo site da Viajas Comigo e quero saber das próximas viagens.'
 
 export function waLink(extra) {

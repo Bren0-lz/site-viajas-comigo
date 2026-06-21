@@ -75,6 +75,9 @@ export default function Footer() {
         </div>
 
         <div className={s.copy}>
+          <div className={s.legal}>
+            CNPJ: 57.874.630/0001-02 · Registro de profissional em turismo: 57874630
+          </div>
           © {new Date().getFullYear()} Viajas Comigo · Agência de Viagens. Todos os direitos reservados.
         </div>
       </div>

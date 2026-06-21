@@ -3,7 +3,7 @@ import { waLink } from './waLink.js'
 
 describe('waLink', () => {
   it('gera link para o número do WhatsApp configurado', () => {
-    expect(waLink()).toMatch(/^https:\/\/wa\.me\/5599999999999\?text=/)
+    expect(waLink()).toMatch(/^https:\/\/wa\.me\/5527997499609\?text=/)
   })
 
   it('usa a mensagem padrão quando nenhum texto é passado', () => {
