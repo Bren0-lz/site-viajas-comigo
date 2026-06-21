@@ -885,15 +885,34 @@
   .btnSolid { justify-content: center; }
   /* alvos de toque maiores para a edição inline */
   .pencil { width: 40px; height: 40px; font-size: 0.95rem; }
-  .pencilOk, .pencilFloat { height: 40px; }
+  /* Botões com rótulo (✓ Pronto / ✎ Editar) precisam manter a largura
+     automática — senão a regra .pencil acima os espreme em 40px. */
+  .pencilOk, .pencilFloat { width: auto; height: 40px; }
   .trash { width: 40px; height: 40px; }
+
+  /* TOPBAR no celular: marca compacta e ações em grade legível. */
+  .topbar { padding: 10px 18px; gap: 10px; }
+  .brandEmblem { height: 38px; }
+  .brandName { font-size: 1.15rem; }
+  .brandTag { font-size: 0.56rem; letter-spacing: 0.14em; }
+  .topActions { width: 100%; gap: 8px; }
+  /* Não deixa o texto dos botões quebrar palavra a palavra. */
+  .topActions > * {
+    flex: 1 1 auto;
+    justify-content: center;
+    text-align: center;
+    white-space: nowrap;
+    font-size: 0.82rem;
+    padding: 10px 12px;
+  }
+  /* "Salvar alterações" é a ação principal: linha inteira, no topo. */
+  .saveTop { order: -1; flex-basis: 100%; }
+
+  /* Programação dia a dia: deleção com alvo de toque maior. */
+  .roteiroDel { width: 36px; height: 36px; }
 }
 
 @media (max-width: 480px) {
-  .topbar { padding: 10px 18px; gap: 10px; }
-  /* botões da topbar dividem a largura em vez de se espremerem */
-  .topActions { width: 100%; }
-  .topActions > * { flex: 1; justify-content: center; }
   .loginPage { padding: 18px; }
   .loginCard { padding: 28px 22px; }
   .cardsWrap { padding: 28px 18px 70px; }
@@ -901,4 +920,6 @@
   .capaBar { padding: 14px 18px; }
   .capaCtrl { flex: 1; min-width: 130px; }
   .capaCtrl input[type='range'] { width: 100%; }
+  /* Overlay de capa não pode invadir a largura toda do hero. */
+  .heroEditWrap { max-width: calc(100% - 28px); font-size: 0.78rem; }
 }
