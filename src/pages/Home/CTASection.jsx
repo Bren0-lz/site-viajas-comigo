@@ -1,7 +1,10 @@
-import { Link } from 'react-router-dom'
 import { waLink } from '../../utils/waLink.js'
 import Reveal from '../../components/Reveal/Reveal.jsx'
 import s from './HomePage.module.css'
+
+function scrollTo(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+}
 
 export default function CTASection() {
   return (
@@ -16,9 +19,9 @@ export default function CTASection() {
           <a href={waLink()} target="_blank" rel="noopener" className={s.waPulse}>
             <i className="ph ph-whatsapp-logo" />Falar no WhatsApp
           </a>
-          <Link to="/montar-viagem" className="btn btn-ghost">
+          <a onClick={() => scrollTo('montar-viagem')} href="#montar-viagem" className="btn btn-ghost">
             <i className="ph ph-map-trifold" />Montar minha viagem
-          </Link>
+          </a>
           <a href="https://instagram.com/viajascomigo" target="_blank" rel="noopener" className={`btn ${s.igBtn}`}>
             <i className="ph ph-instagram-logo" />@viajascomigo
           </a>

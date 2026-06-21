@@ -53,7 +53,8 @@ export default function TripDetailPage({ viagens, loading }) {
 
   const st = statusMeta(viagem)
   const allImages = [viagem.imagem, ...(viagem.galeria || [])].filter(Boolean)
-  const msg = `Olá! Tenho interesse na viagem para ${viagem.titulo} (${viagem.data}). Pode me passar mais detalhes?`
+  const msgReserva = `Olá! Quero reservar minha vaga na viagem para ${viagem.titulo} (${viagem.data}). Como faço para garantir?`
+  const msgDuvidas = `Olá! Tenho interesse na viagem para ${viagem.titulo} (${viagem.data}). Pode me passar mais informações?`
   const heroBg = {
     backgroundImage: viagem.imagem ? `url('${viagem.imagem}')` : undefined,
     backgroundPosition: `${viagem.capaPosX ?? 50}% ${viagem.capaPosY ?? 50}%`,
@@ -187,9 +188,9 @@ export default function TripDetailPage({ viagens, loading }) {
               {viagem.esgotado ? (
                 <span className={s.btnSoldout}>Esgotado</span>
               ) : (
-                <a href={waLink(msg)} target="_blank" rel="noopener" className={s.btnReserve}>Reservar minha vaga</a>
+                <a href={waLink(msgReserva)} target="_blank" rel="noopener" className={s.btnReserve}>Reservar minha vaga</a>
               )}
-              <a href={waLink(msg)} target="_blank" rel="noopener" className={s.btnWa}>
+              <a href={waLink(msgDuvidas)} target="_blank" rel="noopener" className={s.btnWa}>
                 <i className="ph ph-whatsapp-logo" />Tirar dúvidas no WhatsApp
               </a>
               <div className={s.reassure}><i className="ph ph-shield-check" />Reserva sem compromisso</div>
