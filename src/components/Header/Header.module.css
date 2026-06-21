@@ -113,11 +113,12 @@
 .links > a {
   cursor: pointer;
   opacity: 0.82;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease, color 0.2s ease;
 }
 
 .links > a:hover {
   opacity: 1;
+  color: var(--orange);
 }
 
 /* ===== Ações ===== */

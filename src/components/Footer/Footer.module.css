@@ -85,6 +85,12 @@
   color: #fff;
   font-weight: 700;
   font-size: 14px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.waBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(37, 211, 102, 0.32);
 }
 
 .waBtn i { font-size: 17px; }
