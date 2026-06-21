@@ -165,8 +165,8 @@
 .igLink i {
   background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
   border-color: transparent;
-  /* sobe 1px para casar com o centro óptico do texto minúsculo ao lado */
-  transform: translateY(-1px);
+  /* desce 1px para casar com o centro óptico do texto minúsculo ao lado */
+  transform: translateY(1px);
 }
 
 .igLink:hover i {

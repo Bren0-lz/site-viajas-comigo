@@ -142,8 +142,8 @@
   justify-content: center;
   line-height: 1;
   font-size: 1.15em;
-  /* sobe 1px para casar com o centro óptico do texto minúsculo ao lado */
-  transform: translateY(-1px);
+  /* desce 1px para casar com o centro óptico do texto minúsculo ao lado */
+  transform: translateY(1px);
 }
 
 .igBtn:hover {
