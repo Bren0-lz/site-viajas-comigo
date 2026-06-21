@@ -525,17 +525,17 @@ function AdminPanel({ viagens, salvarTudo, onLogout }) {
                   <button
                     type="button"
                     className={s.orderBtn}
-                    title="Mover para cima (aparece antes na home)"
+                    title="Mover para a esquerda (aparece antes na home)"
                     disabled={i === 0}
                     onClick={e => mover(i, -1, e)}
-                  ><i className="ph ph-arrow-up" /></button>
+                  ><i className="ph ph-arrow-left" /></button>
                   <button
                     type="button"
                     className={s.orderBtn}
-                    title="Mover para baixo (aparece depois na home)"
+                    title="Mover para a direita (aparece depois na home)"
                     disabled={i === draft.length - 1}
                     onClick={e => mover(i, 1, e)}
-                  ><i className="ph ph-arrow-down" /></button>
+                  ><i className="ph ph-arrow-right" /></button>
                 </div>
                 <button
                   type="button"
