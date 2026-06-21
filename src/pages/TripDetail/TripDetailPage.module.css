@@ -458,8 +458,9 @@
   .galeria::-webkit-scrollbar { display: none; }
 
   .gItem {
-    flex: 0 0 100%;
-    width: 100%;
+    flex: 0 0 70%;
+    width: 70%;
+    max-width: 320px;
     aspect-ratio: 1 / 1;
     height: auto;
     scroll-snap-align: center;
