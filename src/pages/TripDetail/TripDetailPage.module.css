@@ -456,19 +456,17 @@
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    scroll-padding: 0 5vw;
-    /* sangra até as bordas da tela usando o gutter da página (5vw) */
-    margin: 0 -5vw;
-    padding: 4px 5vw 14px;
+    padding-bottom: 12px;
     scrollbar-width: none;
   }
   .galeria::-webkit-scrollbar { display: none; }
 
   .gItem {
-    flex: 0 0 82%;
-    height: 240px;
+    flex: 0 0 100%;
+    width: 100%;
+    height: 220px;
     scroll-snap-align: center;
-    border-radius: 20px;
+    border-radius: 18px;
   }
   .gItem:hover { transform: none; }
 
