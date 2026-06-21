@@ -285,6 +285,7 @@
   display: flex;
   flex-direction: row;
   gap: 4px;
+  transition: transform 0.2s ease;
 }
 
 .orderBtn {
@@ -326,20 +327,7 @@
   font-weight: 800;
   font-family: inherit;
   line-height: 1;
-  opacity: 0;
-  transform: translateY(6px);
-  pointer-events: none;
-  transition: opacity 0.2s, transform 0.2s, border-color 0.2s, color 0.2s;
-}
-
-/* Aparecem ao passar o mouse (ou focar) no card */
-.cardWrap:hover .destaqueTag,
-.cardWrap:focus-within .destaqueTag,
-.cardWrap:hover .destaqueBtn,
-.cardWrap:focus-within .destaqueBtn {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
+  transition: transform 0.2s ease, border-color 0.2s, color 0.2s;
 }
 
 .destaqueTag {
@@ -371,7 +359,18 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.adCard:hover { transform: translateY(-6px); box-shadow: 0 26px 54px rgba(11, 46, 99, 0.18); }
+/* Hover é gatilhado no wrapper inteiro, para o card seguir elevado
+   mesmo quando o mouse está sobre os botões sobrepostos */
+.cardWrap:hover .adCard { transform: translateY(-6px); box-shadow: 0 26px 54px rgba(11, 46, 99, 0.18); }
+
+/* Controles sobrepostos sobem junto com o card no hover */
+.cardWrap:hover .trash,
+.cardWrap:hover .orderCtrls,
+.cardWrap:hover .destaqueTag,
+.cardWrap:hover .destaqueBtn { transform: translateY(-6px); }
+
+.cardWrap:hover .trash:hover { transform: translateY(-6px) scale(1.06); }
+.cardWrap:hover .destaqueBtn:hover { transform: translateY(-7px); }
 
 .adMedia { position: relative; height: 180px; overflow: hidden; background: #e9eef6; }
 
