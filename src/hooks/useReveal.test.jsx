@@ -44,6 +44,20 @@ describe('useReveal', () => {
     expect(observe).toHaveBeenCalled()
   })
 
+  it('fica visível imediatamente quando já está na viewport na montagem', () => {
+    stubMatchMedia(false)
+    // Simula um elemento já parcialmente visível ao montar (ex.: "Sobre a
+    // viagem" logo abaixo do hero no celular). Deve revelar sem depender do
+    // callback do observer.
+    const spy = vi
+      .spyOn(Element.prototype, 'getBoundingClientRect')
+      .mockReturnValue({ top: 100, bottom: 400, left: 0, right: 0, width: 0, height: 300 })
+    render(<Probe />)
+    expect(screen.getByTestId('el').dataset.visible).toBe('true')
+    expect(observe).not.toHaveBeenCalled()
+    spy.mockRestore()
+  })
+
   it('fica visível imediatamente quando o usuário prefere movimento reduzido', () => {
     stubMatchMedia(true)
     render(<Probe />)
