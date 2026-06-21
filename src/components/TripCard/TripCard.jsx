@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom'
 import { slug } from '../../utils/slug.js'
 import { statusMeta, vagasLabel } from '../../utils/viagemMeta.js'
+import { imagemUrl } from '../../utils/imagemUrl.js'
 import { useFlight } from '../FlightTransition/FlightTransition.jsx'
 import s from './TripCard.module.css'
 
-function bgStyle(viagem) {
+function bgStyle(viagem, largura) {
+  const img = imagemUrl(viagem.imagem, largura)
   return {
-    backgroundImage: viagem.imagem ? `url('${viagem.imagem}')` : undefined,
+    backgroundImage: img ? `url('${img}')` : undefined,
     backgroundPosition: `${viagem.capaPosX ?? 50}% ${viagem.capaPosY ?? 50}%`,
     transform: `scale(${viagem.capaZoom || 1})`,
   }
@@ -36,7 +38,7 @@ export default function TripCard({ viagem }) {
   return (
     <Link to={to} onClick={handleClick} className={s.card}>
       <div className={s.media}>
-        <div className={s.bg} style={bgStyle(viagem)} />
+        <div className={s.bg} style={bgStyle(viagem, 600)} />
         <div className={s.scrim} />
         <div className={s.price}>
           <small>a partir de</small>
@@ -78,7 +80,7 @@ export function FeaturedCard({ viagem, layout = 'tall' }) {
     return (
       <Link to={to} onClick={handleClick} className={s.wide}>
         <div className={s.wideMedia}>
-          <div className={s.bg} style={bgStyle(viagem)} />
+          <div className={s.bg} style={bgStyle(viagem, 1200)} />
           <div className={s.scrim} />
           <span className={s.highlight}><i className="ph ph-fire" />DESTAQUE</span>
           <div className={s.mediaText}>
@@ -107,7 +109,7 @@ export function FeaturedCard({ viagem, layout = 'tall' }) {
 
   return (
     <Link to={to} onClick={handleClick} className={s.tall}>
-      <div className={s.bg} style={bgStyle(viagem)} />
+      <div className={s.bg} style={bgStyle(viagem, 1200)} />
       <div className={s.scrimTall} />
       <div className={s.tallTop}>
         <span className={s.highlight}><i className="ph ph-fire" />DESTAQUE</span>

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { imagemUrl } from '../../utils/imagemUrl.js'
 import s from './Lightbox.module.css'
 
 export default function Lightbox({ images, initialIndex = 0, onClose }) {
@@ -121,7 +122,7 @@ export default function Lightbox({ images, initialIndex = 0, onClose }) {
             <div className={s.slide} key={slot} style={{ width: w }}>
               <img
                 className={s.img}
-                src={images[imgI]}
+                src={imagemUrl(images[imgI], 1600)}
                 alt={`Foto ${imgI + 1}`}
                 draggable={false}
                 onClick={e => e.stopPropagation()}

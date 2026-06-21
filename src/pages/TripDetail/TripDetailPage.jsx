@@ -8,6 +8,7 @@ import Reveal from '../../components/Reveal/Reveal.jsx'
 import { slug } from '../../utils/slug.js'
 import { waLink } from '../../utils/waLink.js'
 import { statusMeta, vagasLabel } from '../../utils/viagemMeta.js'
+import { imagemUrl } from '../../utils/imagemUrl.js'
 import s from './TripDetailPage.module.css'
 
 // "Dia 1 — Chegada e check-in" → { num: '1', title: 'Chegada e check-in' }
@@ -55,8 +56,9 @@ export default function TripDetailPage({ viagens, loading }) {
   const allImages = [viagem.imagem, ...(viagem.galeria || [])].filter(Boolean)
   const msgReserva = `Olá! Quero reservar minha vaga na viagem para ${viagem.titulo} (${viagem.data}). Como faço para garantir?`
   const msgDuvidas = `Olá! Tenho interesse na viagem para ${viagem.titulo} (${viagem.data}). Pode me passar mais informações?`
+  const heroImg = imagemUrl(viagem.imagem, 1600)
   const heroBg = {
-    backgroundImage: viagem.imagem ? `url('${viagem.imagem}')` : undefined,
+    backgroundImage: heroImg ? `url('${heroImg}')` : undefined,
     backgroundPosition: `${viagem.capaPosX ?? 50}% ${viagem.capaPosY ?? 50}%`,
   }
 
@@ -114,7 +116,7 @@ export default function TripDetailPage({ viagens, loading }) {
                     <div
                       key={img}
                       className={s.gItem}
-                      style={{ backgroundImage: `url('${img}')` }}
+                      style={{ backgroundImage: `url('${imagemUrl(img, 600)}')` }}
                       onClick={() => setLbIndex(allImages.indexOf(img))}
                     />
                   ))}

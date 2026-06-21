@@ -4,22 +4,9 @@
 // Cloudinary) e então mandamos o arquivo direto para o Cloudinary — sem
 // passar pela função serverless, o que evita o limite de tamanho dela.
 
+import { imagemUrl } from './imagemUrl.js'
+
 const TAMANHO_MAX = 10 * 1024 * 1024 // 10 MB
-
-// Transformação de ENTREGA: pedimos ao Cloudinary o melhor formato (WebP/AVIF
-// conforme o navegador) e a melhor qualidade automática. Fica na URL servida —
-// e o resultado é cacheado no CDN.
-const ENTREGA = 'f_auto,q_auto'
-
-// Insere a transformação de entrega logo após "/upload/" na URL do Cloudinary,
-// para que toda renderização da imagem já saia otimizada e no formato moderno.
-function comEntregaOtimizada(url) {
-  const marcador = '/upload/'
-  const i = url.indexOf(marcador)
-  if (i === -1 || url.includes(`${marcador}${ENTREGA}/`)) return url
-  const corte = i + marcador.length
-  return `${url.slice(0, corte)}${ENTREGA}/${url.slice(corte)}`
-}
 
 export async function uploadImagem(file) {
   if (!file || !file.type?.startsWith('image/')) {
@@ -54,5 +41,7 @@ export async function uploadImagem(file) {
     throw new Error('Falha ao enviar a imagem. Tente de novo.')
   }
   const data = await up.json()
-  return comEntregaOtimizada(data.secure_url)
+  // Guarda a URL com formato/qualidade automáticos; o dimensionamento por
+  // contexto é aplicado depois, na renderização (ver imagemUrl).
+  return imagemUrl(data.secure_url)
 }

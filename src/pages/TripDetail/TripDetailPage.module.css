@@ -304,15 +304,17 @@
 .priceLbl { font-size: 14px; color: #7A8BA8; }
 
 .priceVal {
-  font-size: 38px;
+  font-size: clamp(22px, 6vw, 38px);
   font-weight: 800;
   color: var(--navy);
-  line-height: 1;
+  line-height: 1.05;
   font-family: 'Plus Jakarta Sans', sans-serif;
   display: flex;
   align-items: center;
   gap: 8px;
-  white-space: nowrap;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .priceNote {
@@ -450,7 +452,7 @@
   .gItem { height: 130px; }
   .mapFrame { height: 240px; }
   .block h2 { font-size: 26px; }
-  .priceVal { font-size: 34px; }
+  .priceVal { font-size: clamp(20px, 7vw, 34px); }
 }
 
 @media (max-width: 400px) {
