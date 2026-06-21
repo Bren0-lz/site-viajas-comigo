@@ -1,0 +1,18 @@
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 140px 5vw 120px;
+  text-align: center;
+}
+
+.wrap h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(32px, 5vw, 52px);
+  color: var(--navy);
+  margin-bottom: 14px;
+}
+
+.wrap p {
+  color: var(--muted-l);
+  margin-bottom: 22px;
+}
