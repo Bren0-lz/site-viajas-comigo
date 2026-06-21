@@ -126,7 +126,7 @@ export default function AdminPage(props) {
 
 /* ─────────────── EDIÇÃO INLINE (lápis por campo) ─────────────── */
 
-function EditText({ v, set, ph, area }) {
+function EditText({ v, set, ph, area, cls }) {
   const [editing, setEditing] = useState(false)
 
   if (editing) {
@@ -143,7 +143,7 @@ function EditText({ v, set, ph, area }) {
         ) : (
           <input
             autoFocus
-            className={s.inlineInput}
+            className={`${s.inlineInput} ${cls || ''}`}
             value={v}
             placeholder={ph}
             onChange={e => set(e.target.value)}
@@ -370,7 +370,7 @@ function Editor({ trip, upd, onError }) {
         <aside className={t.side}>
           <div className={t.cardPrice}>
             <span className={t.priceLbl}>a partir de</span>
-            <div className={t.priceVal}>R$ <EditText v={trip.preco} set={x => upd('preco', x)} ph="0.000" /></div>
+            <div className={t.priceVal}>R$ <EditText v={trip.preco} set={x => upd('preco', x)} ph="0.000" cls={s.priceInput} /></div>
             <div className={t.priceNote}>por pessoa · parcelamos em até 12x</div>
             <div className={t.divider} />
             <ul className={t.facts}>

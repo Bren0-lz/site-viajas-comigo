@@ -304,6 +304,10 @@
   color: var(--navy);
   line-height: 1;
   font-family: 'Plus Jakarta Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
 }
 
 .priceNote {
