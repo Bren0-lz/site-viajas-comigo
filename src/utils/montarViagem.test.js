@@ -44,7 +44,7 @@ describe('buildMensagemViagem', () => {
       dataFim: '2026-07-18',
     })
     expect(msg).toContain('📍 Destino: Paris')
-    expect(msg).toContain('🗓️ Período: 12/07/2026 a 18/07/2026 (7 dias)')
+    expect(msg).toContain('📅 Período: 12/07/2026 a 18/07/2026 (7 dias)')
   })
 
   it('omite o período quando não há datas', () => {

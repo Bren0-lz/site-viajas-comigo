@@ -43,6 +43,12 @@ function linhas(v) {
   return (v || '').split('\n').map(x => x.trim()).filter(Boolean)
 }
 
+/* "Dia 1 — Chegada" → "Chegada" (o número do dia vem da posição na lista). */
+function descDia(linha) {
+  const partes = (linha || '').split('—')
+  return partes.length > 1 ? partes.slice(1).join('—').trim() : (linha || '').trim()
+}
+
 /* ───────────────────────── LOGIN ───────────────────────── */
 
 function LoginScreen({ onSuccess }) {
@@ -214,6 +220,57 @@ function EditList({ value, onChange, ph, children }) {
   )
 }
 
+/* ─── Editor da programação: uma bolinha "Dia X" + campo por dia ─── */
+
+function RoteiroEditor({ value, onChange }) {
+  const dias = value || []
+
+  // Mantém o formato "Dia X — descrição" usado pela página pública.
+  const setDesc = (i, desc) =>
+    onChange(dias.map((d, j) => (j === i ? `Dia ${i + 1} — ${desc}` : d)))
+
+  const addDia = () =>
+    onChange([...dias, `Dia ${dias.length + 1} — `])
+
+  // Ao remover, renumera os dias seguintes.
+  const removeDia = (i) =>
+    onChange(dias.filter((_, j) => j !== i).map((d, j) => `Dia ${j + 1} — ${descDia(d)}`))
+
+  return (
+    <div className={s.roteiro}>
+      {dias.length > 0 && (
+        <div className={s.roteiroList}>
+          {dias.map((linha, i) => (
+            <div key={i} className={s.roteiroDay}>
+              <div className={s.roteiroNum}>{i + 1}</div>
+              {i < dias.length - 1 && <div className={s.roteiroBar} />}
+              <div className={s.roteiroField}>
+                <span className={s.roteiroLabel}>Dia {i + 1}</span>
+                <textarea
+                  className={s.roteiroInput}
+                  value={descDia(linha)}
+                  placeholder="O que acontece neste dia? Ex: Chegada e check-in"
+                  rows={2}
+                  onChange={e => setDesc(i, e.target.value)}
+                />
+              </div>
+              <button
+                type="button"
+                className={s.roteiroDel}
+                title="Remover este dia"
+                onClick={() => removeDia(i)}
+              >×</button>
+            </div>
+          ))}
+        </div>
+      )}
+      <button type="button" className={s.roteiroAdd} onClick={addDia}>
+        <i className="ph ph-plus" />Adicionar dia
+      </button>
+    </div>
+  )
+}
+
 /* ─────────────── EDITOR (cara da página de detalhes) ─────────────── */
 
 function Editor({ trip, upd, onError }) {
@@ -315,22 +372,7 @@ function Editor({ trip, upd, onError }) {
 
           <div className={t.block}>
             <h2>Programação dia a dia</h2>
-            <EditList value={trip.roteiro} onChange={x => upd('roteiro', x)} ph="Um dia por linha. Ex: Dia 1 — Chegada">
-              {trip.roteiro?.length ? (
-                <ul className={s.edList}>
-                  {trip.roteiro.map(linha => {
-                    const partes = linha.split('—')
-                    return (
-                      <li key={linha}>
-                        {partes.length > 1
-                          ? <><b>{partes[0].trim()}</b> — {partes.slice(1).join('—').trim()}</>
-                          : linha}
-                      </li>
-                    )
-                  })}
-                </ul>
-              ) : <p className={s.ph}>Nada cadastrado ainda.</p>}
-            </EditList>
+            <RoteiroEditor value={trip.roteiro} onChange={x => upd('roteiro', x)} />
           </div>
 
           <div className={t.block}>

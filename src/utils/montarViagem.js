@@ -64,7 +64,7 @@ export function buildMensagemViagem({ local, dataInicio, dataFim } = {}) {
   const linhas = ['Olá! Montei uma viagem no site da Viajas Comigo e gostaria de um orçamento:', '']
 
   if (destino) linhas.push(`📍 Destino: ${destino}`)
-  if (periodo) linhas.push(`🗓️ Período: ${periodo}`)
+  if (periodo) linhas.push(`📅 Período: ${periodo}`)
 
   linhas.push('')
   linhas.push('Podemos conversar sobre os valores?')
