@@ -326,6 +326,20 @@
   font-weight: 800;
   font-family: inherit;
   line-height: 1;
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s, border-color 0.2s, color 0.2s;
+}
+
+/* Aparecem ao passar o mouse (ou focar) no card */
+.cardWrap:hover .destaqueTag,
+.cardWrap:focus-within .destaqueTag,
+.cardWrap:hover .destaqueBtn,
+.cardWrap:focus-within .destaqueBtn {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 .destaqueTag {
