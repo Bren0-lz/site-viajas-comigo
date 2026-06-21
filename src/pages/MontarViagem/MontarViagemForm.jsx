@@ -14,9 +14,8 @@ function hojeISO() {
   return `${d.getFullYear()}-${mes}-${dia}`
 }
 
-// Formulário de "Montar a minha viagem". Reaproveitado na página dedicada
-// (/montar-viagem) e como seção dentro da Home. `headingTag` controla o nível
-// do título (h1 na página dedicada, h2 quando é só mais uma seção da Home).
+// Formulário de "Montar a minha viagem". Renderizado como seção dentro da Home.
+// `headingTag` controla o nível do título (h2 por ser mais uma seção da Home).
 export default function MontarViagemForm({ id, headingTag: Heading = 'h2' }) {
   const [local, setLocal] = useState('')
   const [dataInicio, setDataInicio] = useState('')
