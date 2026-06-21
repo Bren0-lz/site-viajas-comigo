@@ -139,7 +139,9 @@
 .igBtn i {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   line-height: 1;
+  font-size: 1.15em;
 }
 
 .igBtn:hover {
