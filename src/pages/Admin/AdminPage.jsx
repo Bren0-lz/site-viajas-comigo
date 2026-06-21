@@ -496,7 +496,7 @@ function Editor({ trip, upd, onError }) {
         <aside className={t.side}>
           <div className={t.cardPrice}>
             <span className={t.priceLbl}>a partir de</span>
-            <div className={t.priceVal}>R$ <EditText v={trip.preco} set={x => upd('preco', formatPreco(x))} ph="0.000" cls={s.priceInput} grow /></div>
+            <div className={t.priceVal}>R$ <EditText v={trip.preco} set={x => upd('preco', formatPreco(x))} ph="0,00" cls={s.priceInput} grow /></div>
             <div className={t.priceNote}>por pessoa</div>
             <div className={t.divider} />
             <ul className={t.facts}>
