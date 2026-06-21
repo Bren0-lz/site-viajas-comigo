@@ -460,7 +460,8 @@
   .gItem {
     flex: 0 0 100%;
     width: 100%;
-    height: clamp(200px, 56vw, 300px);
+    aspect-ratio: 1 / 1;
+    height: auto;
     scroll-snap-align: center;
     border-radius: 18px;
   }
