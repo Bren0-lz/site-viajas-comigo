@@ -126,6 +126,7 @@
 /* Botão do Instagram com as cores da marca */
 .igBtn {
   background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  background-clip: padding-box; /* confina o gradiente ao padding-box e evita o sliver no canto direito */
   color: #fff;
   border-color: transparent;
 }

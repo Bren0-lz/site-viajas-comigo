@@ -507,13 +507,14 @@
 
 .inlineInput:focus, .inlineArea:focus { outline: none; box-shadow: 0 0 0 3px rgba(255, 122, 69, 0.18); }
 
-/* Campo de preço: não herda os 38px do .priceVal nem o min-width largo */
+/* Campo de preço: não herda os 38px do .priceVal nem o min-width largo.
+   A largura vem de um estilo inline em ch (cresce conforme o número digitado). */
 .priceInput {
   font-size: 30px;
   font-weight: 800;
-  width: 6ch;
   min-width: 0;
   padding: 2px 10px;
+  box-sizing: content-box;
 }
 
 .listView { position: relative; }
