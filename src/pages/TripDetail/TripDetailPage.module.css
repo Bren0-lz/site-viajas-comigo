@@ -261,6 +261,11 @@
 
 .gItem:hover { transform: scale(1.03); }
 
+/* setinha de "deslize" — só aparece no carrossel mobile */
+.galeriaHint {
+  display: none;
+}
+
 .gItem img {
   width: 100%;
   height: 100%;
@@ -442,14 +447,47 @@
 
 @media (max-width: 600px) {
   .inclusos { grid-template-columns: 1fr; }
-  .galeria { grid-template-columns: 1fr 1fr; }
+
+  /* Galeria vira carrossel com swipe */
+  .galeria {
+    display: flex;
+    grid-template-columns: none;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scroll-padding: 0 5vw;
+    /* sangra até as bordas da tela usando o gutter da página (5vw) */
+    margin: 0 -5vw;
+    padding: 4px 5vw 14px;
+    scrollbar-width: none;
+  }
+  .galeria::-webkit-scrollbar { display: none; }
+
+  .gItem {
+    flex: 0 0 82%;
+    height: 240px;
+    scroll-snap-align: center;
+    border-radius: 20px;
+  }
+  .gItem:hover { transform: none; }
+
+  .galeriaHint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--muted, #7a7f87);
+  }
+
   .heroContent { padding: 22px 20px; }
   .heroContent h1 { font-size: 30px; }
   .region { font-size: 11px; letter-spacing: 1px; }
   .meta { gap: 16px; font-size: 13px; }
   .main { gap: 32px; }
   .hero { min-height: 300px; border-radius: 22px; }
-  .gItem { height: 130px; }
   .mapFrame { height: 240px; }
   .block h2 { font-size: 26px; }
   .priceVal { font-size: clamp(20px, 7vw, 34px); }

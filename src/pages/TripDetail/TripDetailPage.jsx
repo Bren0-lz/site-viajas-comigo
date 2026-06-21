@@ -116,11 +116,17 @@ export default function TripDetailPage({ viagens, loading }) {
                     <div
                       key={img}
                       className={s.gItem}
-                      style={{ backgroundImage: `url('${imagemUrl(img, 600)}')` }}
+                      style={{ backgroundImage: `url('${imagemUrl(img, 900)}')` }}
                       onClick={() => setLbIndex(allImages.indexOf(img))}
                     />
                   ))}
                 </div>
+                {viagem.galeria.length > 1 && (
+                  <div className={s.galeriaHint}>
+                    <i className="ph ph-hand-swipe-left" />
+                    Deslize para ver mais fotos
+                  </div>
+                )}
               </Reveal>
             )}
 
