@@ -5,11 +5,22 @@ import t from '../TripDetail/TripDetailPage.module.css'
 import { statusMeta, vagasLabel } from '../../utils/viagemMeta.js'
 import { slug } from '../../utils/slug.js'
 import { formatPreco } from '../../utils/formatPreco.js'
+import { formatPeriodo } from '../../utils/formatPeriodo.js'
 import ImageUpload from '../../components/ImageUpload/ImageUpload.jsx'
+
+// Data de hoje em "YYYY-MM-DD" (horário local), usada como mínimo dos campos.
+function hojeISO() {
+  const d = new Date()
+  const mes = String(d.getMonth() + 1).padStart(2, '0')
+  const dia = String(d.getDate()).padStart(2, '0')
+  return `${d.getFullYear()}-${mes}-${dia}`
+}
 
 const NOVA_VIAGEM = {
   titulo: 'Nova viagem',
   data: '',
+  dataInicio: '',
+  dataFim: '',
   descricao: '',
   preco: '',
   vagas: '',
@@ -182,6 +193,74 @@ function EditText({ v, set, ph, area, cls, grow }) {
   )
 }
 
+/* Seletor de período por calendário: data de saída e de chegada. Gera a string
+   formatada em `trip.data` (exibida nas páginas públicas) e guarda as datas ISO
+   em `dataInicio`/`dataFim` para reabrir o calendário no ponto certo. */
+function EditDateRange({ trip, upd, ph }) {
+  const [editing, setEditing] = useState(false)
+  const hoje = hojeISO()
+  const inicio = trip.dataInicio || ''
+  const fim = trip.dataFim || ''
+
+  function setInicio(valor) {
+    upd('dataInicio', valor)
+    // Se a chegada ficou antes da nova saída, descarta a chegada.
+    const novoFim = fim && valor && fim < valor ? '' : fim
+    if (novoFim !== fim) upd('dataFim', novoFim)
+    upd('data', formatPeriodo(valor, novoFim))
+  }
+
+  function setFim(valor) {
+    const minimo = inicio || hoje
+    if (valor && valor < minimo) return
+    upd('dataFim', valor)
+    upd('data', formatPeriodo(inicio, valor))
+  }
+
+  if (editing) {
+    return (
+      <span className={s.editingBlock}>
+        <span className={s.dateRange}>
+          <label className={s.dateField}>
+            <span>Saída</span>
+            <input
+              type="date"
+              className={s.inlineInput}
+              min={hoje}
+              value={inicio}
+              onChange={e => setInicio(e.target.value)}
+            />
+          </label>
+          <label className={s.dateField}>
+            <span>Chegada</span>
+            <input
+              type="date"
+              className={s.inlineInput}
+              min={inicio || hoje}
+              value={fim}
+              onChange={e => setFim(e.target.value)}
+            />
+          </label>
+        </span>
+        <button
+          type="button"
+          className={`${s.pencil} ${s.pencilOk}`}
+          onMouseDown={e => e.preventDefault()}
+          onClick={() => setEditing(false)}
+          title="Pronto"
+        >✓</button>
+      </span>
+    )
+  }
+
+  return (
+    <span className={s.editable}>
+      {trip.data ? <span>{trip.data}</span> : <span className={s.ph}>{ph}</span>}
+      <button type="button" className={s.pencil} onClick={() => setEditing(true)} title="Editar as datas">✎</button>
+    </span>
+  )
+}
+
 function EditList({ value, onChange, ph, children }) {
   const [editing, setEditing] = useState(false)
   const [text, setText] = useState('')
@@ -312,7 +391,7 @@ function Editor({ trip, upd, onError }) {
           <div className={t.heroContent}>
             <h1><EditText v={trip.titulo} set={x => upd('titulo', x)} ph="Título da viagem" /></h1>
             <div className={t.meta}>
-              <span><EditText v={trip.data} set={x => upd('data', x)} ph="Datas" /></span>
+              <span><EditDateRange trip={trip} upd={upd} ph="Datas" /></span>
               <span><EditText v={trip.local} set={x => upd('local', x)} ph="Local" /></span>
             </div>
           </div>
@@ -420,10 +499,10 @@ function Editor({ trip, upd, onError }) {
           <div className={t.cardPrice}>
             <span className={t.priceLbl}>a partir de</span>
             <div className={t.priceVal}>R$ <EditText v={trip.preco} set={x => upd('preco', formatPreco(x))} ph="0.000" cls={s.priceInput} grow /></div>
-            <div className={t.priceNote}>por pessoa · parcelamos em até 12x</div>
+            <div className={t.priceNote}>por pessoa</div>
             <div className={t.divider} />
             <ul className={t.facts}>
-              <li><span><i className="ph ph-calendar-blank" />Datas</span><b><EditText v={trip.data} set={x => upd('data', x)} ph="A definir" /></b></li>
+              <li><span><i className="ph ph-calendar-blank" />Datas</span><b><EditDateRange trip={trip} upd={upd} ph="A definir" /></b></li>
               <li><span><i className="ph ph-map-pin" />Local</span><b><EditText v={trip.local} set={x => upd('local', x)} ph="—" /></b></li>
               <li><span><i className="ph ph-users-three" />Vagas</span><b><EditText v={trip.vagas} set={x => upd('vagas', x)} ph="Consultar" /></b></li>
             </ul>

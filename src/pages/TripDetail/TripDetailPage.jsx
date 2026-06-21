@@ -176,7 +176,7 @@ export default function TripDetailPage({ viagens, loading }) {
             <Reveal className={s.cardPrice} variant="fade">
               <span className={s.priceLbl}>a partir de</span>
               <div className={s.priceVal}>R$ {viagem.preco || '—'}</div>
-              <div className={s.priceNote}>por pessoa · parcelamos em até 12x</div>
+              <div className={s.priceNote}>por pessoa</div>
               <div className={s.divider} />
               <ul className={s.facts}>
                 <li><span><i className="ph ph-calendar-blank" />Datas</span><b>{viagem.data || 'A definir'}</b></li>

@@ -507,6 +507,21 @@
 
 .inlineInput:focus, .inlineArea:focus { outline: none; box-shadow: 0 0 0 3px rgba(255, 122, 69, 0.18); }
 
+/* Seletor de período (saída / chegada) */
+.dateRange { display: flex; flex-wrap: wrap; gap: 12px; }
+
+.dateField { display: flex; flex-direction: column; gap: 4px; }
+
+.dateField > span {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dateField .inlineInput { min-width: 150px; }
+
 /* Campo de preço: não herda os 38px do .priceVal nem o min-width largo.
    A largura vem de um estilo inline em ch (cresce conforme o número digitado). */
 .priceInput {
