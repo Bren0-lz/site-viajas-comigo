@@ -95,7 +95,8 @@
   transform: scale(1.06);
 }
 
-.body .status {
+.body .status,
+.widePanel .status {
   align-self: flex-start;
 }
 

@@ -21,7 +21,12 @@
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.back:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(11, 46, 99, 0.1); }
+.back:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(229, 57, 53, 0.18);
+  border-color: #e53935;
+  color: #e53935;
+}
 
 .backIcon {
   width: 18px;
