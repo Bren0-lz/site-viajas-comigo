@@ -61,7 +61,7 @@ export default function Footer() {
 
           <div className={s.col}>
             <div className={s.colTitle}>Contato</div>
-            <a href="https://instagram.com/viajascomigo" target="_blank" rel="noopener">
+            <a href="https://instagram.com/viajascomigo" target="_blank" rel="noopener" className={s.igLink}>
               <i>
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />

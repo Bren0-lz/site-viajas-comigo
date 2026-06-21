@@ -19,7 +19,7 @@ export default function CTASection() {
           <Link to="/montar-viagem" className="btn btn-ghost">
             <i className="ph ph-map-trifold" />Montar minha viagem
           </Link>
-          <a href="https://instagram.com/viajascomigo" target="_blank" rel="noopener" className="btn btn-ghost">
+          <a href="https://instagram.com/viajascomigo" target="_blank" rel="noopener" className={`btn ${s.igBtn}`}>
             <i className="ph ph-instagram-logo" />@viajascomigo
           </a>
         </div>
