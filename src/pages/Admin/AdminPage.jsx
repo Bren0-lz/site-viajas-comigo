@@ -60,6 +60,13 @@ function descDia(linha) {
   return partes.length > 1 ? partes.slice(1).join('—').trim() : (linha || '').trim()
 }
 
+/* Igual a descDia, mas preserva os espaços — usado no campo em edição, onde
+   trimar reescreveria o value e engoliria o espaço recém-digitado. */
+function descDiaEdit(linha) {
+  const m = /^Dia \d+ — /.exec(linha || '')
+  return m ? (linha || '').slice(m[0].length) : descDia(linha)
+}
+
 /* ───────────────────────── LOGIN ───────────────────────── */
 
 function LoginScreen({ onSuccess }) {
@@ -455,7 +462,7 @@ function RoteiroEditor({ value, onChange }) {
                 <span className={s.roteiroLabel}>Dia {i + 1}</span>
                 <textarea
                   className={s.roteiroInput}
-                  value={descDia(linha)}
+                  value={descDiaEdit(linha)}
                   placeholder="O que acontece neste dia? Ex: Chegada e check-in"
                   rows={2}
                   onChange={e => setDesc(i, e.target.value)}
