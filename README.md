@@ -1,5 +1,12 @@
 # Viajas Comigo
 
+![React](https://img.shields.io/badge/React%2018-20232A?logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel%20Serverless-000?logo=vercel&logoColor=white)
+![Redis](https://img.shields.io/badge/Upstash%20Redis-DC382D?logo=redis&logoColor=white)
+![Testes](https://img.shields.io/badge/Vitest-99%20testes%20passando-6E9F18?logo=vitest&logoColor=white)
+![Licença](https://img.shields.io/badge/Licen%C3%A7a-Todos%20os%20direitos%20reservados-red)
+
 Site de viagens em grupo: página inicial, páginas de detalhes de cada viagem e um
 painel de administração (`/admin`) para cadastrar e editar as viagens — tudo sem
 precisar mexer em código.
@@ -7,6 +14,30 @@ precisar mexer em código.
 Aplicação **React + Vite** no front-end, com **funções serverless da Vercel** no
 back-end. As viagens ficam guardadas no **Upstash Redis** e as fotos no
 **Cloudinary**. O painel é protegido por senha.
+
+## Comprovação de experiência
+
+| | |
+|---|---|
+| **Autor** | Breno Luiz Silva do Carmo — único autor dos 50 commits deste repositório |
+| **Tipo** | Item de portfólio de autoria própria — site completo (front-end + API + painel administrativo) com deploy na Vercel |
+| **Período de desenvolvimento** | 20/06/2026 a 26/07/2026 |
+| **Verificação** | `npm install && npm test` → **16 arquivos, 99 testes passando** (Vitest + Testing Library) |
+
+### Competências técnicas evidenciadas
+
+| Competência | Onde verificar neste repositório |
+|---|---|
+| **React** | [`src/`](src/) — React 18 com React Router, componentes reutilizáveis, hooks próprios (`useViagens`, `useCidades`, `useReveal`, `useSeamlessLoop`), `ErrorBoundary` e carregamento sob demanda com nova tentativa ([`lazyWithRetry.js`](src/utils/lazyWithRetry.js)) |
+| **Testes automatizados** | 99 testes com Vitest, `@testing-library/react` e `jsdom` — componentes, hooks, utilitários e a autenticação do back-end ([`api/_lib/auth.test.js`](api/_lib/auth.test.js)) |
+| **Banco de dados** | [`api/_lib/store.js`](api/_lib/store.js) — persistência das viagens e da senha do painel no Upstash Redis |
+| **Back-end / APIs** | [`api/`](api/) — funções serverless da Vercel: login/logout com cookie de sessão assinado, CRUD de viagens, troca de senha e assinatura de upload para o Cloudinary |
+| **Outros frameworks de desenvolvimento web** | Vite (build, otimização de imagens com `vite-plugin-image-optimizer`), CSS Modules |
+| **Segurança web** | [`vercel.json`](vercel.json) — Content-Security-Policy, HSTS, `X-Frame-Options`, `Permissions-Policy`; segredos só no servidor |
+| **Design e prototipagem de interfaces** | Painel `/admin` com edição inline para usuário não técnico; layout responsivo com otimização para celular; identidade visual em [`docs/brand/`](docs/brand/) e especificações em [`docs/superpowers/specs/`](docs/superpowers/specs/) |
+| **GitHub / versionamento** | 50 commits; deploy contínuo da Vercel a partir deste repositório |
+
+---
 
 ## Estrutura do projeto
 
@@ -16,6 +47,7 @@ src/                    Aplicação React (o site em si)
   pages/
     Home/               Página inicial
     TripDetail/         Página de detalhes de uma viagem (capa, galeria, mapa)
+    MontarViagem/       Formulário para o cliente montar uma viagem sob medida
     Admin/              Painel de administração (/admin)
   hooks/                Hooks (ex.: useViagens — busca/salva as viagens via API)
   utils/                Funções auxiliares (upload de imagem, link de WhatsApp…)
@@ -106,3 +138,22 @@ primeiro deploy.
 
 A página de detalhes embute o Google Maps pela busca de texto do campo **Local** —
 não precisa de chave de API nem de faturamento.
+
+## Testes
+
+```bash
+npm test          # roda a suíte uma vez
+npm run test:watch
+```
+
+## Autor
+
+**Breno Luiz Silva do Carmo**
+[LinkedIn](https://www.linkedin.com/in/breno-luiz-silva-do-carmo-19451a243/) ·
+[GitHub](https://github.com/Bren0-lz)
+
+## Licença
+
+Copyright (c) 2026 Breno Luiz Silva do Carmo. Todos os direitos reservados.
+Nenhuma parte deste código pode ser utilizada, reproduzida, distribuída ou modificada sem
+autorização prévia por escrito do autor. Veja [LICENSE](LICENSE).
